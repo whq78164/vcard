@@ -30,6 +30,6 @@ phpunit.phar
 
 # composer vendor dir
 /vendor
-!/vendor/callmez/
-!/vendor/tbhome/
-!/vendor/phpqrcode/
+!vendor/callmez/
+!vendor/tbhome/
+!vendor/phpqrcode/
