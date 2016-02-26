@@ -29,7 +29,7 @@ phpunit.phar
 /phpunit.xml
 
 # composer vendor dir
-/vendor
-!vendor/callmez/
-!vendor/tbhome/
-!vendor/phpqrcode/
+#/vendor
+#!vendor/callmez/
+#!vendor/tbhome/
+#!vendor/phpqrcode/

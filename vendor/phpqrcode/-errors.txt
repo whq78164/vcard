@@ -1,0 +1,1 @@
+2016-02-18 02:23:02: imagepng(): Filename cannot be empty2016-02-18 02:23:04: imagepng(): Filename cannot be empty2016-02-18 02:23:42: imagepng(): Filename cannot be empty2016-02-18 02:23:43: imagepng(): Filename cannot be empty
