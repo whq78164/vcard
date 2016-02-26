@@ -15,8 +15,7 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
-# composer vendor dir
-/vendor
+
 
 # composer itself is not needed
 composer.phar
@@ -29,6 +28,8 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
+# composer vendor dir
+/vendor
 !/vendor/callmez/
 !/vendor/tbhome/
 !/vendor/phpqrcode/
