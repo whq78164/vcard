@@ -22,8 +22,8 @@ use yii\helpers\Html;
 
 
 <?php
-if (!isset($model)){
-    $modelid=0;
+if (!isset($model) || !isset($model->id)){
+    $modelid=time();
 }else{
     $modelid=$model->id;
 }

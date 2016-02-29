@@ -54,7 +54,7 @@ class ProductController extends Controller
         $model = new Product();
         $uid=Yii::$app->user->id;
         $model->uid = $uid;
-       // $image=new Upload();
+        $image=new Upload();
 
         if ($model->load(Yii::$app->request->post()) ) {
             if($model->price==null) $model->price=0;
@@ -68,9 +68,50 @@ class ProductController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-         //       'image'=>$image,
+               'image'=>$image,
             ]);
         }
+    }
+
+
+
+
+    public function actionNewupload(){
+        $con=Yii::$app->getDb();
+        $sql="SELECT max(id) FROM tbhome_product";
+        $command = $con->createCommand($sql);
+        $codeData=$command->queryScalar();//返回数组，表anti_code_uid
+        $id=$codeData+1;
+
+        $image = new Upload();
+        $uid = Yii::$app->user->id;
+
+        if (Yii::$app->request->isPost) {
+            $productid=$id;
+            $image->imageFile = UploadedFile::getInstance($image, 'imageFile');//上传!
+            $filename = 'product_'.$productid .'_'. time();
+            $dir = 'Uploads/'.$uid.'/products/';
+            //     if (!file_exists($dir)) mkdir($dir, true);//is_dir
+            if ($image->upload($filename, $dir)) {//新建目录和文件信息保存！
+                // 文件上传成功
+                $url = $dir. $filename . '.' . $image->imageFile->extension;
+                $product = new Product();
+                $product->id = $productid;
+                $product->uid=$uid;
+                $product->image = $url;
+                $product->save();
+                Yii::$app->getSession()->setFlash('success', '上传成功！');
+                return $this->redirect(['product/update', 'id'=>$id]);
+            } else {
+                Yii::$app->getSession()->setFlash('danger', '上传失败！');
+                return $this->redirect(['user']);
+            }
+
+        }
+
+
+
+
     }
 
 

@@ -135,7 +135,7 @@ class m130524_201442_init extends Migration
             'id' => Schema::TYPE_PK,
             'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
             'moduleid' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'module_satus' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
+            'module_status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
         ], $tableOptions);
         $this->createIndex('uid', '{{%usermodule}}', ['uid']);
         $this->createIndex('moduleid', '{{%usermodule}}', ['moduleid']);

@@ -11,12 +11,10 @@ $this->title = Yii::t('tbhome', 'Usermodules');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="usermodule-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('tbhome', 'Create Usermodule'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('tbhome', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

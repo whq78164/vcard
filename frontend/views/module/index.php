@@ -11,10 +11,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="module-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('tbhome', 'Create Module'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('tbhome', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'module_label',
             'module_des:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template'=>'{view}{update}'],
         ],
     ]); ?>
 

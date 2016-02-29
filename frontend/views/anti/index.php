@@ -1,10 +1,8 @@
 <?php
 /* @var $this yii\web\View */
-//use frontend\assets\AmazeAsset;
-//AmazeAsset::register($this);
 //use yii\helpers\Html;
 //use common\widgets\Alert;
-
+use yii\helpers\Url;
 use frontend\assets\AppAsset;
 
 AppAsset::register($this);
@@ -23,44 +21,7 @@ AppAsset::register($this);
     <meta name="csrf-token" content="<?= Yii::$app->request->csrfToken ?>">
     <title><?=$antireply->tag?></title>
     <!-- Bootstrap core CSS -->
-    <script Charset="UTF-8" type="text/javascript">
-        /*
-        $(document).ready(function(){
-            $("button").click(function(){
 
-//                var FWcode = document.getElementById('FWcode').value;
-            var FWcode = $("#FWcode").val();
-//                var FWuid = document.getElementById('FWuid').value;
-            var FWuid = $("#FWuid").val();
-                $.post("<?=yii\helpers\Url::to(['anti/antiquery'],true)?>", {
-                    FWcode: FWcode,
-                    FWuid: FWuid
-                }, function(data,status){
-                    document.getElementById('ReturnResult').innerHTML = data;
-                });
-          });
-
-        });
-         */
-        function fwcx() {
-//var FWcode = document.getElementById('FWcode').value;
-            var FWcode = $("#FWcode").val();
-//var FWuid = document.getElementById('FWuid').value;
-            var FWuid = $("#FWuid").val();
-            var replyid = $("#replyid").val();
-
-//alert (FWcode1);
-            $.post("<?=yii\helpers\Url::to(['anti/antiquery'],true)?>", {
-                FWcode: FWcode,
-                replyid: replyid,
-                FWuid: FWuid
-            }, function(data,status){
-                document.getElementById('ReturnResult').innerHTML = data;
-                //alert("Data: " + data + "\nStatus: " + status);
-            });
-        }
-
-    </script>
 
     <style type = "text/css">
         img{max-width:100%;}
@@ -83,7 +44,7 @@ AppAsset::register($this);
     <br>
     <INPUT type="hidden" id="replyid" name="replyid" value="<?=$replyid?>" />
     <INPUT type="hidden" id="FWuid" name="FWuid" value="<?=$antireply->uid?>" />
-    <button id="button" class="btn btn-lg btn-primary btn-block" onclick="fwcx()" >点击验证</button>
+    <button id="button" class="btn btn-lg btn-primary btn-block">点击验证</button>
     <br>
     <div class="alert alert-info" id="ReturnResult">
 
@@ -92,5 +53,64 @@ AppAsset::register($this);
 </div>
 <?php $this->endBody() ?>
 </body>
+
+<script Charset="UTF-8" type="text/javascript">
+
+     $(document).ready(function(){
+
+     $("#button").click(function(){
+     //                var FWcode = document.getElementById('FWcode').value;
+
+         var FWcode = $("#FWcode").val();
+         var FWuid = $("#FWuid").val();
+         var replyid = $("#replyid").val();
+         var url="<?=Url::to(['anti/antiquery'],true)?>";
+         var data={
+             FWcode: FWcode,
+             replyid: replyid,
+             FWuid: FWuid
+         };
+
+//         $.post(url, data, function(data,status){
+  //           document.getElementById('ReturnResult').innerHTML = data;});
+
+         $.ajax({
+             type: 'POST',
+             url: url ,
+             data: data ,
+             success: function(data,status){
+                 document.getElementById('ReturnResult').innerHTML = data;//+status;
+             }
+             //   dataType: html
+         });
+
+
+     });
+
+
+
+
+
+     });
+
+
+     /*
+    function fwcx() {
+//var FWcode = document.getElementById('FWcode').value;
+        var FWcode = $("#FWcode").val();
+//var FWuid = document.getElementById('FWuid').value;
+        var FWuid = $("#FWuid").val();
+        var replyid = $("#replyid").val();
+
+//alert (FWcode1);onclick="fwcx()"
+        $.post("url, data, function(data,status){
+                    document.getElementById('ReturnResult').innerHTML = data;
+          //  $("#ReturnResult").innerHTML=data;
+            //alert("Data: " + data + "\nStatus: " + status);
+        });
+    }
+*/
+</script>
+
 </html>
 <?php $this->endPage() ?>

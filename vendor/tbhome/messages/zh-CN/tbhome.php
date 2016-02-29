@@ -228,6 +228,16 @@ return [
 
     'Workers'=>'员工',
     'Worker'=>'员工',
+    'Modules'=>'扩展模块',
+    'Modulename'=>'模块标识',
+    'Module Label'=>'模块名',
+    'Module Des'=>'模块简介',
+    'Module status'=>'模块启用状态',
+    'Usermodules'=>'用户模块授权',
+    'Usermodule'=>'用户模块',
+    'Moduleid'=>'模块',
+
+
 
 
 

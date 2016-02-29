@@ -1,5 +1,5 @@
 <?php
-
+use yii\gii\Module;
 $config = [
     'bootstrap' => ['log'],
 

@@ -411,7 +411,7 @@ CREATE TABLE `tbhome_usermodule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `moduleid` int(11) NOT NULL,
-  `module_satus` smallint(6) NOT NULL DEFAULT '10',
+  `module_status` smallint(6) NOT NULL DEFAULT '10',
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `moduleid` (`moduleid`)

@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            ['attribute'=>'image', 'format'=>'html', 'value'=>Html::img($model->image)],
 //            'id',
   //          'uid',
     //        'share',
@@ -42,6 +43,5 @@ $this->params['breadcrumbs'][] = $this->title;
  //           'hot',
         ],
     ]) ?>
-    <img src="<?=$model->image?>">
 
 </div>
