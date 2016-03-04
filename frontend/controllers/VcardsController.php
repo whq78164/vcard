@@ -61,8 +61,9 @@ http://localhost/index.php?r=site/page&view=about
 
       if($setting->tpl==1){
           return $this->renderPartial('card1', [
-              'user01'=>$user01,
-              'user02'=>$user02,
+          //    'user01'=>$user01,
+          //    'user02'=>$user02,
+              'user'=>$user,
           ]);
       }else{
           return $this->renderPartial('index',

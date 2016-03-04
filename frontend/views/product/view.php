@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             ['attribute'=>'image', 'format'=>'html', 'value'=>Html::img($model->image)],
-//            'id',
+           'id',
   //          'uid',
     //        'share',
      //      'image:html',

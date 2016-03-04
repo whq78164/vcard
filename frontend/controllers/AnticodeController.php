@@ -52,8 +52,23 @@ class AnticodeController extends Controller
             return $this->redirect(['anti/gencode']);
         }else{
             $product=Product::find()->where(['uid'=>$uid])->all();
-            $listProduct=ArrayHelper::map($product, 'id', 'name');
+
+
+
+
+
+            $listProduct1=ArrayHelper::map($product, 'id', 'name');
+            $listProduct2=ArrayHelper::map($product, 'id', 'specification');
+            $listProduct=array();
+            foreach($listProduct1 as $key1=>$value1){
+
+                $listProduct[$key1]=$value1.' '.$listProduct2[$key1];
+            }
             $listProduct['']='全部';
+
+
+
+
             $searchModel = new AntiCodeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -187,7 +202,12 @@ class AnticodeController extends Controller
             $createTime=date('Y-m-d H:m:s', $data[$arrid]->create_time);
             $queryTime =$data[$arrid]->query_time==0 ? 0 : date('Y-m-d H:m:s', $data[$arrid]->query_time);
 
-            $url=Url::to(['/anti/antipage', 'replyid'=>$data[$arrid]->replyid, 'productid'=>$data[$arrid]->productid, 'code'=>$data[$arrid]->code], true);
+            $url=Url::to([
+                '/anti/antipage',
+                'replyid'=>$data[$arrid]->replyid,
+              //  'productid'=>$data[$arrid]->productid,
+                'code'=>$data[$arrid]->code
+            ], true);
 
 
             $objActivSheet->setCellValue('A'.$i, $data[$arrid]->code)
@@ -236,7 +256,12 @@ class AnticodeController extends Controller
 
             for ($i = 0; $i < $num; $i++) {
                 //   $url = $data[$i]->url;
-                $url=Url::to(['/anti/antipage', 'replyid'=>$data[$i]->replyid, 'productid'=>$data[$i]->productid, 'code'=>$data[$i]->code], true);
+                $url=Url::to([
+                    '/anti/antipage',
+                    'replyid'=>$data[$i]->replyid,
+                 //   'productid'=>$data[$i]->productid,
+                    'code'=>$data[$i]->code
+                ], true);
 
                 $id = $data[$i]->id;
                 \QRcode::png($url, $dirPath . $id . '.png', 'M', 6, 1);

@@ -10,7 +10,7 @@ use frontend\models\Micropage;
 $this->title = Yii::t('tbhome', 'Micropages');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="">
+<div class="row">
 
     <h1><?//= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

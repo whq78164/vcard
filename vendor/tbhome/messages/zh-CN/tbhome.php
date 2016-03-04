@@ -236,6 +236,8 @@ return [
     'Usermodules'=>'用户模块授权',
     'Usermodule'=>'用户模块',
     'Moduleid'=>'模块',
+    'Wechatgh'=>'微信公众号',
+    'Wechatghs'=>'微信公众号',
 
 
 

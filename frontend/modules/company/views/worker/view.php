@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use frontend\modules\company\models\Department;
 use frontend\modules\company\models\Company;
+use yii\helpers\Url;
 
 $company_id=$model->company_id;
 $company=Company::findOne($company_id);
@@ -17,10 +18,9 @@ $department=Department::findOne($department_id);
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('tbhome', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$mpurl=Url::to(['/company/worker/mp', 'id'=>$model->id], true);
 ?>
 <div class="worker-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('tbhome', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -42,6 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
   //          'company_id',
+            [
+                'attribute'=> '名片网址',
+                'format' => 'html',
+                'value'=>Html::a($mpurl,$mpurl,['target'=>'_blank']),
+
+            ],
+
 
             [
                 'attribute'=> Yii::t('tbhome', 'Company'),

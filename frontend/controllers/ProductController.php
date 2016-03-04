@@ -104,7 +104,7 @@ class ProductController extends Controller
                 return $this->redirect(['product/update', 'id'=>$id]);
             } else {
                 Yii::$app->getSession()->setFlash('danger', '上传失败！');
-                return $this->redirect(['user']);
+                return $this->redirect(['/product/index']);
             }
 
         }

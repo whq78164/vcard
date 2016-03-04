@@ -18,7 +18,7 @@ class AdminController extends \yii\web\Controller
 
             if (Yii::$app->user->identity->role!==100) {
                 Yii::$app->getSession()->setFlash('danger', '您不是管理员');
-                return $this->goBack(['/user/index']);
+                return $this->goBack(['/site/login']);
             }
 /*
             if ($this->remoteMsg->status == 9){

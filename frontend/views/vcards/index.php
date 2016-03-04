@@ -511,7 +511,7 @@ $vcardsmpqr="BEGIN:VCARD%0AVERSION:3.0%0AN:". $userdata['name'] .'%0AORG:'. $use
 ?>
                     <div id="j-content-qr" class="tab-cont">
                         <input type="hidden" id="mpContentQRCodeUrl"
-                               value="<?=genqrcode($vcardsmpqr)?>">
+                               value="<?=genqr($vcardsmpqr)?>">
                         <div class=" tc" ><img id="mpContentQRCode" style="width:80%;" src=""/></div>
                         <div class="fs-16 tc mt-10">
                             两种方法保存至通讯录：

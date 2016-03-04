@@ -12,7 +12,7 @@ use yii\grid\GridView;
 $this->title = Yii::t('tbhome', 'Products');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="product-index col-md-12">
+<div class="row">
 
         <!--div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>

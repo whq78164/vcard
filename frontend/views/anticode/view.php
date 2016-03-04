@@ -24,7 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) */?>
     </p>
 <?php
-$urlval=yii\helpers\Url::to(['anti/antipage', 'code'=>$model->code, 'replyid'=>$model->replyid, 'productid'=>$model->productid], true);
+$urlval=yii\helpers\Url::to([
+    '/anti/antipage',
+    'code'=>$model->code,
+    'replyid'=>$model->replyid,
+  //  'productid'=>$model->productid
+], true);
 //$urlval=urlencode($urlval);
 //$src='http://www.vcards.top/qrcode.php?value='.$urlval;
 $src=genqrcode($urlval);
@@ -34,7 +39,7 @@ $img= Html::img($src, ['width'=>'200px']);
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
- //           'id',
+           'id',
  //           'uid',
             'code',
             'replyid',

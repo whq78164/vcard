@@ -24,6 +24,7 @@ class AntiController extends \yii\web\Controller
     {
 
         if (parent::beforeAction($action)) {
+
             $Connection = \Yii::$app->db;
             $data = '`tbhome_anti_code_'.\Yii::$app->user->id.'`';
     //        $this->table=$data;
@@ -46,6 +47,16 @@ class AntiController extends \yii\web\Controller
 
         return false;
     }
+
+
+
+    public function init(){
+
+
+    }
+
+
+
 
     public $layout='user';
 //    public $data;
@@ -96,11 +107,19 @@ class AntiController extends \yii\web\Controller
             $idend=intval($_POST['AntiCodenew']['idend']);
             $model->load(Yii::$app->request->post());
             $idstart=intval($model->id);
-            $exe=$Connection->createCommand()->update($table, ['prize'=>$model->prize, 'remark'=>$model->remark], "id>=$idstart AND id<=$idend")->execute();
+            $exe=$Connection->createCommand()->update($table, [
+                'prize'=>$model->prize,
+                'remark'=>$model->remark,
+                'replyid'=>$model->replyid,
+                'productid'=>$model->productid,
+            ], "id>=$idstart AND id<=$idend")->execute();
             if($exe){
             $successMsg='成功修改'.$exe.'条数据！';
             Yii::$app->getSession()->setFlash('success', $successMsg);
             return $this->redirect(['anti/modifycode']);
+            }else{
+                Yii::$app->getSession()->setFlash('success', '数据未修改，修改失败！');
+                return $this->redirect(['anti/modifycode']);
             }
 
         }else{
@@ -114,10 +133,28 @@ class AntiController extends \yii\web\Controller
 
     public function actionGencode()
     {
+
+
+
+
+
+
+
+
+
         $uid=Yii::$app->user->id;
         $role=Yii::$app->user->identity->role;
         $product=Product::find()->where(['uid'=>$uid])->all();
-        $listData=ArrayHelper::map($product, 'id', 'name');
+        $listData1=ArrayHelper::map($product, 'id', 'name');
+        $listData2=ArrayHelper::map($product, 'id', 'specification');
+        $listData=array();
+        foreach($listData1 as $key1=>$value1){
+
+            $listData[$key1]=$value1.' '.$listData2[$key1];
+        }
+
+
+
         $reply=AntiReply::find()->where(['uid'=>$uid])->all();
         $listReply=ArrayHelper::map($reply, 'id', 'tag');
 
@@ -299,19 +336,26 @@ echo $rows;
             $query_time=date('Y/m/d  H:m:s', $codeData['query_time']);
             if ($codeData['query_time']==0){$query_time='现为首次查询';}
 
-//查询地区
-            $userArea=($codeData['query_area']=='0.0.0.0') ? '无' : get_ip_data($codeData['query_area']);
 
-            $diypage=$reply->content;
+            $userArea=($codeData['query_area']=='0.0.0.0') ? '无' : get_ip_data($codeData['query_area']);//查询地区
+
+            $diypage=$reply->content;//自定义网页
 
             $urlval=Url::to(['anti/antipage', 'code'=>$code, 'replyid'=>$replyid, 'productid'=>$productid], true);
             $src=genqrcode($urlval);
-            $qrcodeimg= Html::img($src, ['width'=>'100px']);
+            $qrcodeimg= Html::img($src, ['width'=>'100px']);//查询结果页的二维码图片
+
+
+          //  $model = AntiCodenew::findOne(['code'=>$code]);
+            $remarkform=$this->renderPartial('_remarkform', [
+                'codeData' => $codeData,
+                'replyid' =>$replyid
+            ]);//备注字段修改
 
             $reply->success=str_replace([
-                '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{追溯信息}}', '{{自定义网页}}', '{{二维码}}', '{{地区}}'
+                '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{追溯信息}}', '{{自定义网页}}', '{{二维码}}', '{{地区}}','{{修改备注}}'
             ], [
-                $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit, $traceaReply, $diypage, $qrcodeimg, $userArea
+                $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit, $traceaReply, $diypage, $qrcodeimg, $userArea, $remarkform
             ], $reply->success);
 
             $reply->fail=str_replace([
@@ -325,6 +369,9 @@ echo $rows;
                 $queryResult=$reply->fail;
                 return $queryResult;
             }else{
+
+             //   $reply->success .= $tempform;
+
                 $queryResult=$reply->success;
                 return $queryResult;
             }
@@ -332,6 +379,9 @@ echo $rows;
         }
 
     }
+
+
+
 
     public function actionAntipage($code='798904845', $replyid=1 )
     {
@@ -346,7 +396,6 @@ echo $rows;
                 'queryResult'=>$queryResult,
             ]
         );
-
 
 
     }
@@ -367,13 +416,29 @@ echo $rows;
     }
 
 
+    public function actionUpdateremark($id, $replyid)
+    {
+        $remark=trim($_POST['remark']);
 
+        $reply=AntiReply::findOne($replyid);
+        $uid=$reply->uid;
+        $table='tbhome_anti_code_'.$uid;
 
+        $connection=Yii::$app->db;
+        $result=$connection->createCommand()->update($table, [
+            'remark' => $remark,
+        ],
+            "id =".$id)->execute();
 
-
-
-
-
+        //       $model->uid=Yii::$app->user->id;
+        if ($result) {
+            Yii::$app->getSession()->setFlash('success', '谢谢！已收到您的提交！');
+            return   $this->goBack(\Yii::$app->request->headers['Referer']);
+        } else {
+            Yii::$app->getSession()->setFlash('danger', '提交失败，请稍后再试！');
+            return   $this->goBack(\Yii::$app->request->headers['Referer']);
+        }
+    }
 
 
 

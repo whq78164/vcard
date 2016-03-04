@@ -13,6 +13,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use frontend\models\Upload;
 use yii\web\UploadedFile;
+use frontend\models\Wechatgh;
+use tbhome\wechat\Wechat;
 
 /**
  * WorkerController implements the CRUD actions for Worker model.
@@ -85,11 +87,8 @@ class WorkerController extends Controller
         $companys=Company::find()->where(['uid'=>$uid])->all();
         $listCompanys=ArrayHelper::map($companys, 'id', 'company');
 
-
-
         $departments=Department::find()->where(['uid'=>$uid])->all();
         $listDepartments=ArrayHelper::map($departments, 'id', 'department');
-
 
         $model = new Worker();
 
@@ -205,11 +204,35 @@ class WorkerController extends Controller
         $worerArr=$workerObjet->attributes;
         $company=Company::findOne($workerObjet->company_id)->attributes;
         $department=Department::findOne($workerObjet->department_id)->attributes;
-        $worerInfo=ArrayHelper::merge($worerArr,$company,$department);
+        $worerInfo=ArrayHelper::merge($company,$department,$worerArr);
         //$user = array_merge($user1, $user2);
 
+        ////////////////////////////微信公众号分享接口start
+        $uid=$worerInfo['uid'];
+        $wechatgh=Wechatgh::findOne(['uid'=>$uid]);
 
+        $jssdk=new Wechat();
+        $jssdk->appId=$wechatgh->appid;
+        $jssdk->appSecret=$wechatgh->appsecret;
+        $jsconfig=$jssdk->jsApiConfig([
+            'debug' => false,
+            'jsApiList' => [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                  ]
+        ]);//// wx.config(..= json_encode($wehcat->jsApiConfig()) );.. // 默认全权限
+
+
+
+
+
+        ///////////////////////////微信公众号分享接口end
         if($worerInfo['tpl']==1){
+            return $this->renderPartial('card1', [
+                'worker'=>$worerInfo,
+                'jsconfig'=>$jsconfig
+            ]);
+        }else{
             return $this->renderPartial('card1', [
                 'worker'=>$worerInfo
             ]);

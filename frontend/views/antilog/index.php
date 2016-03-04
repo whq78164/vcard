@@ -10,9 +10,9 @@ use yii\grid\GridView;
 $this->title = Yii::t('tbhome', '生产记录');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="anti-log-index col-md-10">
+<div class="row">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -48,5 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
 
 </div>

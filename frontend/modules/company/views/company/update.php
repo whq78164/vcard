@@ -14,8 +14,6 @@ $this->params['breadcrumbs'][] = Yii::t('tbhome', 'Update');
 ?>
 <div class="row">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
@@ -25,7 +23,7 @@ $this->params['breadcrumbs'][] = Yii::t('tbhome', 'Update');
     <div class="col-md-4">
 
         <?= $this->render('_form_image', [
-            'title' => '微信回复图片(宽度500px)',
+            'title' => '微信回复图片(900 X 450)',
             'image' => $image,
             'thumImage'=>$model->image,
             //        'model'=>$model,

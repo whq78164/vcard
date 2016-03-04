@@ -1,8 +1,18 @@
 <?php
 function genqrcode($value)
 {
-    $qrApi = $picUrl = \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/qrcode.php?value=';
+    $qrApi =  \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/qrcode.php?value=';
+	//$qrApi = 'http://www.vcards.top/qrcode.php?value=';
     $value = urlencode($value);
+    $qrcodeurl = $qrApi . $value;
+    return $qrcodeurl;
+}
+
+function genqr($value)
+{
+    $qrApi =  \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/qrcode.php?value=';
+	//$qrApi = 'http://www.vcards.top/qrcode.php?value=';
+  //  $value = urlencode($value);
     $qrcodeurl = $qrApi . $value;
     return $qrcodeurl;
 }

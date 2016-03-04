@@ -10,9 +10,8 @@ use yii\grid\GridView;
 $this->title = Yii::t('tbhome', 'Clouds');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cloud-index col-md-10">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="row">
+<div class="col-md-10">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -44,4 +43,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+</div>
 </div>

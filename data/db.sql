@@ -431,3 +431,20 @@ CREATE TABLE `tbhome_anti_log` (
 -- ----------------------------
 -- Records of tbhome_usermodule
 -- ----------------------------
+DROP TABLE IF EXISTS `tbhome_wechatgh`;
+CREATE TABLE `tbhome_wechatgh` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `appid` varchar(255) DEFAULT NULL,
+  `appsecret` varchar(255) DEFAULT NULL,
+  `mchid` varchar(255) DEFAULT NULL,
+  `mchsecret` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `aeskey` varchar(255) DEFAULT NULL,
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `appid` (`appid`),
+  KEY `mchid` (`mchid`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

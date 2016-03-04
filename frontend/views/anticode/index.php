@@ -39,14 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     //   return Html::a("请求地址", $model->productid);
                 },
             ],
-            'prize',
+
+
+
+           ['attribute' =>  'prize', 'format'=>'html'],
+
 
 
             ['attribute' => 'create_time', 'format' => ['date', 'php:Y-m-d']],
-
+           ['attribute' =>  'remark', 'format'=>'html'],
 
             'clicks',
-            'remark',
+
    /*      [
                 'header'=>'二维码图片', 'format' => 'html', 'value'=>function($data){
                 $urlval=yii\helpers\Url::to(['anti/antipage', 'code'=>$data->code, 'replyid'=>$data->replyid, 'productid'=>$data->replyid], true);

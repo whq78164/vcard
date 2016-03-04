@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('tbhome', '微名片'), 'url
 $this->title = Yii::t('tbhome', 'Microlinks');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="microlink-index">
+<div class="row">
 
     <h1><?//= Html::encode($this->title) ?></h1>
 

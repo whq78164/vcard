@@ -66,8 +66,12 @@ class SignupForm extends Model
             $user = new User();
             $user->username = $this->username;
             $user->email = $this->email;
+            $user->name='请填写姓名';
+            $user->qq=798904845;
+            $user->login=1;
             $user->mobile = $this->mobile;
             $user->created_ip = Yii::$app->request->userIP;
+            $user->updated_ip = Yii::$app->request->userIP;
     //        $user->created_at=time();
             $user->setPassword($this->password);
             $user->generateAuthKey();

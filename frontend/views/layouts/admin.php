@@ -25,9 +25,13 @@ $userInfo=Yii::$app->user->identity;
 $role=$userInfo->role;
 $loginuid=$userInfo->id;
 
-if ($role!==100) {
-    header('location: /');
+if (Yii::$app->user->isGuest) {
+    $redirecturl=Yii::$app->request->baseUrl;
+    header("location: $redirecturl");
+    Yii::$app->getSession()->setFlash('danger', '请登录账户！');
+    exit;
 }
+
 
 ?>
 <?php $this->beginPage() ?>

@@ -12,6 +12,15 @@ use frontend\assets\AdminlteAsset;
 //use mdm\admin\components\MenuHelper;
 use linslin\yii2\curl;
 
+
+if (Yii::$app->user->isGuest) {
+    $redirecturl=Yii::$app->request->baseUrl;
+    header("location: $redirecturl");
+    Yii::$app->getSession()->setFlash('danger', '请登录账户！');
+    exit;
+}
+
+
 $curl = new curl\Curl();
 $url='http://www.vcards.top/index.php?r=cloud/site';
 $response = $curl->get($url);
@@ -22,19 +31,6 @@ AdminlteAsset::register($this);
 $userInfo=Yii::$app->user->identity;
 $role=$userInfo->role;
 $loginuid=$userInfo->id;
-/*
-function get_ip_data($ip){
-//    $ip=file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=".$ip);//get_client_ip());
-    file_get_contents("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=".$ip);
-
-    $ip = json_decode($remote_ip_info);
-    if($ip->code){
-        return false;
-    }
-    $data = (array) $ip->data;
-    return $data['region'].$data['city'];
-}
-*/
 
 ?>
 <?php $this->beginPage() ?>
@@ -523,6 +519,28 @@ NavBar::begin([
 
                     </ul>
                 </li>
+
+
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cog"></i>
+                        <span>微信公众号</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="<?=Url::to(['/wechatgh/index'], true)?>"><i class="fa fa-circle-o"></i> 公众号设置</a></li>
+
+                    </ul>
+                </li>
+
+
+
+
+
+
+
                 <!--li>
                     <a href="pages/widgets.html">
                         <i class="fa fa-th"></i> <span>Widgets</span>
