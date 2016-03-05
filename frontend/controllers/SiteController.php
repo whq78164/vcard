@@ -222,9 +222,9 @@ class SiteController extends Controller
     public function actionLogin()
     {
 
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+   //     if (!\Yii::$app->user->isGuest) {
+     //       return $this->goHome();
+       // }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -240,6 +240,8 @@ class SiteController extends Controller
 
 
             return $this->redirect(['user/index']);
+        }elseif(!Yii::$app->user->isGuest){
+            return $this->redirect(['/user/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,

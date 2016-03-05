@@ -42,14 +42,18 @@ class WorkerController extends Controller
     {
         $uid=Yii::$app->user->id;
 
+      //  $listCompanys=array();
         $companys=Company::find()->where(['uid'=>$uid])->all();
         $listCompanys=ArrayHelper::map($companys, 'id', 'company');
         $listCompanys['']='全部';
 
 
+
+    //    $listDepartments=array();
         $departments=Department::find()->where(['uid'=>$uid])->all();
         $listDepartments=ArrayHelper::map($departments, 'id', 'department');
         $listDepartments['']='全部';
+
 
 
         $searchModel = new WorkerSearch();
@@ -94,8 +98,18 @@ class WorkerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->uid=$uid;
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+
+
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('success', '职员信息创建成功，请上传图片！');
+                return $this->redirect(['update', 'id' => $model->id]);
+            }else{
+                Yii::$app->getSession()->setFlash('success', '创建失败，请稍后重试！');
+                return $this->refresh();
+            }
+
+
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -126,8 +140,17 @@ class WorkerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->uid=$uid;
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('success', '职员信息修改成功！');
+                return $this->refresh();
+            //    return $this->redirect(['update', 'id' => $model->id]);
+            }else{
+                Yii::$app->getSession()->setFlash('danger', '保存失败，请稍后重试！');
+                return $this->refresh();
+            }
+
+
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -185,11 +208,20 @@ class WorkerController extends Controller
                 $model=$this->findModel($id);
                 $model->uid = $uid;
                 $model->head_img = $url;
-                $model->save();
-                Yii::$app->getSession()->setFlash('success', '上传成功！');
-                return $this->redirect(['update', 'id'=>$model->id]);
+
+                if($model->save()){
+                    Yii::$app->getSession()->setFlash('success', '图片上传成功！');
+                    return $this->redirect(['update', 'id'=>$model->id]);
+                }else{
+                    Yii::$app->getSession()->setFlash('danger', '保存失败，请稍后重试！');
+                //    return $this->redirect(['update']);
+                    return $this->refresh();
+                }
+
+
+
             } else {
-                Yii::$app->getSession()->setFlash('danger', '上传失败！');
+                Yii::$app->getSession()->setFlash('danger', '上传失败，请稍后重试！');
                 return $this->redirect(['update']);
             }
 
@@ -221,9 +253,6 @@ class WorkerController extends Controller
                 'onMenuShareAppMessage',
                   ]
         ]);//// wx.config(..= json_encode($wehcat->jsApiConfig()) );.. // 默认全权限
-
-
-
 
 
         ///////////////////////////微信公众号分享接口end

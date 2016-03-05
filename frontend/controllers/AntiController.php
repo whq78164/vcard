@@ -50,10 +50,9 @@ class AntiController extends \yii\web\Controller
 
 
 
-    public function init(){
-
-
-    }
+  //  public function init(){
+//
+    //  }
 
 
 
