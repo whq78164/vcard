@@ -3,7 +3,8 @@
 namespace frontend\models;
 
 use Yii;
-
+//use yii\behaviors\AttributeBehavior;
+use \yii\db\ActiveRecord;
 /**
  * This is the model class for table "{{%anti_code}}".
  *
@@ -20,8 +21,11 @@ use Yii;
  * @property string $remark
  * @property string $prize
  */
-class AntiCode extends \yii\db\ActiveRecord
+class AntiCode extends ActiveRecord
 {
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -29,6 +33,26 @@ class AntiCode extends \yii\db\ActiveRecord
     {
         return '{{%anti_code}}';
     }
+
+/*
+ public function behaviors()
+  {
+      return [
+          [
+              'class' => AttributeBehavior::className(),
+              'attributes' => [
+                  ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
+             //     ActiveRecord::EVENT_BEFORE_UPDATE => 'attribute2',
+              ],
+       //       'value' => function ($event) {
+         //            return 'some value';
+           //      },
+          ],
+      ];
+  }
+*/
+
+
 
     /**
      * @inheritdoc
@@ -38,12 +62,26 @@ class AntiCode extends \yii\db\ActiveRecord
         return [
   //          [['uid', 'code', 'replyid', 'productid', 'query_time', 'clicks', 'prize'
     //        ], 'required'],
+            [['code'], 'required'],
               [['id', 'uid', 'replyid', 'traceabilityid', 'productid', 'create_time', 'query_time', 'clicks'], 'integer'],
             [['code', 'url'], 'string', 'max' => 255],
             [['prize', 'remark'], 'string'],
-            [['code'], 'unique']
+            [['code'], 'unique'],
+            ['uid', 'default', 'value' => Yii::$app->user->id],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['remark', 'default', 'value' => ''],
+            ['prize', 'default', 'value' => ''],
+            ['traceabilityid', 'default', 'value' => 1],
+            ['query_time', 'default', 'value' => 0],
+            ['clicks', 'default', 'value' => 0],
+            ['productid', 'default', 'value' => 1],
+
+
         ];
     }
+
+
+
 
     /**
      * @inheritdoc

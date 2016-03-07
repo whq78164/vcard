@@ -63,6 +63,7 @@ class m130524_201442_init extends Migration
               'vip' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
               'upline' => Schema::TYPE_INTEGER . ' NOT NULL',
               'status' => Schema::TYPE_SMALLINT.' NOT NULL DEFAULT 10',
+              'leader' => Schema::TYPE_INTEGER . ' NOT NULL',
         ], $tableOptions);
 
 
@@ -80,6 +81,9 @@ class m130524_201442_init extends Migration
             'location' => Schema::TYPE_STRING . '(30) NOT NULL',
             'wechat_account' => Schema::TYPE_STRING . '(20) NOT NULL',
             'wechat_qrcode' => Schema::TYPE_STRING . ' NOT NULL',
+            'work_tel' => Schema::TYPE_STRING . '(20) NOT NULL',
+            'latitude' => Schema::TYPE_DOUBLE . '(30) NOT NULL',
+            'longitude' => Schema::TYPE_DOUBLE . '(30) NOT NULL',
         ], $tableOptions);
 
         $this->createTable('{{%tel}}', [

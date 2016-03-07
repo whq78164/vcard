@@ -16,6 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
 
+    <p>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('tbhome', 'Add'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
     <?= GridView::widget([
        'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

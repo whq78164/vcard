@@ -132,8 +132,12 @@ class AdminController extends \yii\web\Controller
             //  $this->actionGetremote();
             $response = $this->remoteMsg;
 //var_dump($response);
+        $site=Site::findOne(['id'=>1]);
 
-            return $this->render('index', ['model'=>$response]);
+            return $this->render('index', [
+                'model'=>$response,
+                'site'=>$site,
+            ]);
 
     }
 

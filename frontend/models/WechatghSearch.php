@@ -41,7 +41,7 @@ class WechatghSearch extends Wechatgh
      */
     public function search($params)
     {
-        $query = Wechatgh::find();
+        $query = Wechatgh::find()->where(['uid' =>Yii::$app->user->id ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

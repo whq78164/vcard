@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\AntiCode;
+use frontend\models\AntiReply;
 use frontend\models\AntiCodeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -32,6 +33,16 @@ class AnticodeController extends Controller
         ];
     }
 */
+
+    private function createNonceStr($length = 25) {
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+
     /**
      * Lists all AntiCode models.
      * @return mixed
@@ -100,13 +111,43 @@ class AnticodeController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AntiCode();
-        $model->uid=Yii::$app->user->id;
+        $model = new AntiCodenew();
+        $uid=Yii::$app->user->id;
+        $model->uid=$uid;
+        $model->create_time=time();
+   //     $model->clicks=3;
+    //    $model->query_time=time()-(3600*24);
+
+
+
+        $reply=AntiReply::find()->where(['uid'=>$uid])->all();
+        $listReply=ArrayHelper::map($reply, 'id', 'tag');
+//        $list2=ArrayHelper::map($reply, 'id', 'specification');
+  //      $listReply=array();
+//        foreach($list1 as $key1=>$value1){
+  //          $listReply[$key1]=$value1.' '.$list2[$key1];
+ //       }
+
+        $product=Product::find()->where(['uid'=>$uid])->all();
+        $listData1=ArrayHelper::map($product, 'id', 'name');
+        $listData2=ArrayHelper::map($product, 'id', 'specification');
+        $listProduct=array();
+        foreach($listData1 as $key1=>$value1){
+
+            $listProduct[$key1]=$value1.' '.$listData2[$key1];
+        }
+
+
+
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'listReply'=>$listReply,
+                'listProduct'=>$listProduct
             ]);
         }
     }
@@ -120,12 +161,37 @@ class AnticodeController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->uid=Yii::$app->user->id;
+        $uid=Yii::$app->user->id;
+        $model->uid=$uid;
+
+        $reply=AntiReply::find()->where(['uid'=>$uid])->all();
+        $listReply=ArrayHelper::map($reply, 'id', 'tag');
+//        $list2=ArrayHelper::map($reply, 'id', 'specification');
+  //      $listReply=array();
+//        foreach($list1 as $key1=>$value1){
+  //          $listReply[$key1]=$value1.' '.$list2[$key1];
+//        }
+
+        $product=Product::find()->where(['uid'=>$uid])->all();
+        $listData1=ArrayHelper::map($product, 'id', 'name');
+        $listData2=ArrayHelper::map($product, 'id', 'specification');
+        $listProduct=array();
+        foreach($listData1 as $key1=>$value1){
+
+            $listProduct[$key1]=$value1.' '.$listData2[$key1];
+        }
+
+
+
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'listReply'=>$listReply,
+                'listProduct'=>$listProduct
             ]);
         }
     }

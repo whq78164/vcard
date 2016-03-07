@@ -182,20 +182,24 @@ QRCardAsset::register($this);
                                     </li>
 <?php
 if ($userdata['address']){
-    $addr = <<<EFO
+    ?>
+
+
+
 <li>
-                                        <i class="iconfont i-arrow"></i>
-                                        <div class="cont">
-                                            <div class="m-address num">
-                                              ==add
+    <a href="http://api.map.baidu.com/marker?location=<?=$userdata['latitude']?>,<?=$userdata['longitude']?>&title=<?=$userdata['unit']//urlencode($userdata['unit'])?>&content=<?=$userdata['unit']?>&output=html">
+    <i class="iconfont i-arrow"></i>
+    <div class="cont">
+        <div class="m-address num">
+            <?=$userdata['address']?>
+        </div>
+    </div>
+    </a>
+</li>
 
-                                            </div>
-                                        </div>
-                                    </li>;
-
-EFO;
-    echo str_replace('==add', $userdata['address'], $addr);
+<?php
 }
+?>
 
 ?>
 

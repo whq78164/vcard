@@ -104,7 +104,7 @@ Card1Asset::register($this);
                     </li>
                     <li class="card-content-item">
 
-                        <a href="http://api.map.baidu.com/marker?location=<?=$user['location']?>&title=<?=$user['unit']?>&content=<?=$user['unit']?>&output=html">
+                        <a href="http://api.map.baidu.com/marker?location=<?=$user['latitude']?>,<?=$user['longitude']?>&title=<?=$user['unit']?>&content=<?=$user['unit']?>&output=html">
                         <span class="card-content-item-tips m_address"></span>
                        <?=$user['address']?>
                         </a>

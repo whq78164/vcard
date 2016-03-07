@@ -10,7 +10,7 @@ $this->title = Yii::t('tbhome', 'Create Product');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('tbhome', 'Products'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
+<div class="row container">
 
     <div class="col-sm-12 col-md-8">
 

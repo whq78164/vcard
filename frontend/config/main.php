@@ -25,8 +25,25 @@ return [
         'i18n' => require(__DIR__ . '/components/i18n.php'),
         'mailer' => require(__DIR__ . '/components/mailer.php'),
 
-      // 'assetManger' => ['basePath' => '@webroot/frontend/web/assets',
-      //     'baseUrl' => '@web/frontend/web/assets'],
+      // 'assetManger' => [],
+
+       'assetManager' => [
+         //  'basePath' => '@webroot/frontend/web/assets',
+           //     'baseUrl' => '@web/frontend/web/assets'
+           'bundles' => [
+               'yii\bootstrap\BootstrapPluginAsset' => [
+               //jQuery,bootstrap.css,bootstrap.js
+                   'jsOptions' => [
+                       'position' => \yii\web\View::POS_HEAD,
+                   ]
+               ],
+               'yii\web\JqueryAsset' => [
+                   'jsOptions' => [
+                       'position' => \yii\web\View::POS_HEAD,
+                   ]
+               ],
+           ],
+       ],
 
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // 使用数据库管理配置文件

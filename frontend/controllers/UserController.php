@@ -163,7 +163,7 @@ class UserController extends Controller
                 Yii::$app->getSession()->setFlash('danger', '设置失败，请重试');
             };
 
-            $this->refresh();
+           return $this->refresh();
 
 
         }else{

@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = Yii::t('tbhome', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
+        'listReply'=>$listReply,
+        'listProduct'=>$listProduct
     ]) ?>
 
 </div>

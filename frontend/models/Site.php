@@ -22,6 +22,7 @@ use Yii;
  * @property string $copyright
  * @property string $icp
  * @property string $ip
+ * @property float $version
  * @property integer $status
  */
 class Site extends \yii\db\ActiveRecord
@@ -44,6 +45,7 @@ class Site extends \yii\db\ActiveRecord
             ], 'required'],
             [['qq', 'status'], 'integer'],
             [['keywords'], 'string'],
+            [['version'], 'number'],
             [['admin_user', 'ip'], 'string', 'max' => 25],
             [['user_password', 'sitetitle', 'address', 'logo', 'siteurl'], 'string', 'max' => 255],
             [['company', 'email'], 'string', 'max' => 50],

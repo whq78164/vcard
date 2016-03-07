@@ -68,7 +68,7 @@ class m130524_201443_init extends Migration
             'image' => Schema::TYPE_STRING . ' NOT NULL',
             'factory' => Schema::TYPE_STRING . '(30) NOT NULL',
             'name' => Schema::TYPE_STRING . '(10) NOT NULL',
-            'describe' => Schema::TYPE_TEXT . ' NOT NULL',
+            'describe' => Schema::TYPE_TEXT . ' NOT NULL',//产品描述
             'specification' => Schema::TYPE_STRING . ' NOT NULL',
             'unit' => Schema::TYPE_STRING . '(10) NOT NULL',
             'brand' => Schema::TYPE_STRING . '(20) NOT NULL',

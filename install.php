@@ -42,7 +42,8 @@ if($action == 'license') {
     tpl_install_license();
 }
 
-
+//echo IA_ROOT.'<br/>';
+//echo IA_ROOT.'/../';
 
 if($action == 'env') {
     if($ispost) {
@@ -307,10 +308,8 @@ if($action == 'db') {
             file_put_contents(IA_ROOT . '/common/config/db.php', $config);//$commonconfig);
 
 
-//$user['username']
-            //$user['password']
 
-
+/*
             $link->query("SET character_set_connection=utf8, character_set_results=utf8, character_set_client=binary");
             $link->query("SET sql_mode=''");
             $link->query('set names "utf8"');
@@ -324,9 +323,9 @@ if($action == 'db') {
     touch(IA_ROOT . '/data/install.lock');
     header('location: ?refresh');
     exit();
-
-
-
+*/
+            touch(IA_ROOT . '/data/install.lock');
+            header('location: frontend/web/index.php?r=install/finish');
 
         }
 
@@ -361,133 +360,12 @@ if($action == 'finish') {
     tpl_install_finish();
 }
 
-function local_writeable($dir) {
-    $writeable = 0;
-    if(!is_dir($dir)) {
-        @mkdir($dir, 0777);
-    }
-    if(is_dir($dir)) {
-        if($fp = fopen("$dir/test.txt", 'w')) {
-            fclose($fp);
-            unlink("$dir/test.txt");
-            $writeable = 1;
-        } else {
-            $writeable = 0;
-        }
-    }
-    return $writeable;
-}
-
-function local_salt($length = 8) {
-    $result = '';
-    while(strlen($result) < $length) {
-        $result .= sha1(uniqid('', true));
-    }
-    return substr($result, 0, $length);
-}
-
-//数据库配置文件
-function local_config() {
-    $cfg = <<<EOF
-<?php
-
-return [
-            'class' => 'yii\db\Connection',
-            'dsn'=>'mysql:host={db-server};dbname={db-name};port={db-port}',
-            'username' => '{db-username}',
-            'password' => '{db-password}',
-            'charset' => 'utf8',
-            'tablePrefix' => 'tbhome_',
-
-];
-
-EOF;
-    return trim($cfg);
-}
-
-function common_config() {
-    $cfg = <<<EOF
-<?php
-\$config = [
-    'components' => [
-        'db' => [
-            'class' => 'yii\db\Connection',
-            'dsn'=>'mysql:host={db-server};dbname={db-name};port={db-port}',
-            'username' => '{db-username}',
-            'password' => '{db-password}',
-            'charset' => 'utf8',
-            'tablePrefix' => 'tbhome_',
-        ],
-         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
-        ],
-    
-    ],
-];
-return \$config;
-
-EOF;
-    return trim($cfg);
-}
-
-
-//上面是数据库配置文件内容。
-function local_mkdirs($path) {
-    if(!is_dir($path)) {
-        local_mkdirs(dirname($path));
-        mkdir($path);
-    }
-    return is_dir($path);
-}
-
-function local_run($sql) {
-    global $link, $db;
-
-    if(!isset($sql) || empty($sql)) return;
-
-    $sql = str_replace("\r", "\n", str_replace(' ims_', ' '.$db['prefix'], $sql));
-    $sql = str_replace("\r", "\n", str_replace(' `ims_', ' `'.$db['prefix'], $sql));
-    $ret = array();
-    $num = 0;
-    foreach(explode(";\n", trim($sql)) as $query) {
-        $ret[$num] = '';
-        $queries = explode("\n", trim($query));
-        foreach($queries as $query) {
-            $ret[$num] .= (isset($query[0]) && $query[0] == '#') || (isset($query[1]) && isset($query[1]) && $query[0].$query[1] == '--') ? '' : $query;
-        }
-        $num++;
-    }
-    unset($sql);
-    foreach($ret as $query) {
-        $query = trim($query);
-        if($query) {
-            if(!mysql_query($query, $link)) {
-                echo mysql_errno() . ": " . mysql_error() . "<br />";
-                exit($query);
-            }
-        }
-    }
-}
-
-function local_create_sql($schema) {
-    $pieces = explode('_', $schema['charset']);
-    $charset = $pieces[0];
-    $engine = $schema['engine'];
-    $sql = "CREATE TABLE IF NOT EXISTS `{$schema['tablename']}` (\n";
-
-    return $sql;
-}
-
-
 function tpl_frame() {
+    //Yii::$app->session['mymodule'] = $modulemap;
     global $action, $actions;
     $action = $_COOKIE['action'];
     $step = array_search($action, $actions);
+    //array_search() 函数在数组中搜索某个键值，并返回对应的键名。
     $steps = array();
     for($i = 0; $i <= $step; $i++) {
         if($i == $step) {
@@ -948,6 +826,128 @@ function tpl_resources() {
         	'logo' => 'http://weixin.tbhome.com.cn/uploads/a/admin/5/6/9/a/thumb_55790313af011.png',
     );
     return $res;
+}
+
+
+function local_writeable($dir) {
+    $writeable = 0;
+    if(!is_dir($dir)) {
+        @mkdir($dir, 0777);
+    }
+    if(is_dir($dir)) {
+        if($fp = fopen("$dir/test.txt", 'w')) {
+            fclose($fp);
+            unlink("$dir/test.txt");
+            $writeable = 1;
+        } else {
+            $writeable = 0;
+        }
+    }
+    return $writeable;
+}
+
+function local_salt($length = 8) {
+    $result = '';
+    while(strlen($result) < $length) {
+        $result .= sha1(uniqid('', true));
+    }
+    return substr($result, 0, $length);
+}
+
+//数据库配置文件
+function local_config() {
+    $cfg = <<<EOF
+<?php
+
+return [
+            'class' => 'yii\db\Connection',
+            'dsn'=>'mysql:host={db-server};dbname={db-name};port={db-port}',
+            'username' => '{db-username}',
+            'password' => '{db-password}',
+            'charset' => 'utf8',
+            'tablePrefix' => 'tbhome_',
+
+];
+
+EOF;
+    return trim($cfg);
+}
+
+function common_config() {
+    $cfg = <<<EOF
+<?php
+\$config = [
+    'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn'=>'mysql:host={db-server};dbname={db-name};port={db-port}',
+            'username' => '{db-username}',
+            'password' => '{db-password}',
+            'charset' => 'utf8',
+            'tablePrefix' => 'tbhome_',
+        ],
+         'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
+        ],
+
+    ],
+];
+return \$config;
+
+EOF;
+    return trim($cfg);
+}
+
+//上面是数据库配置文件内容。
+function local_mkdirs($path) {
+    if(!is_dir($path)) {
+        local_mkdirs(dirname($path));
+        mkdir($path);
+    }
+    return is_dir($path);
+}
+
+function local_run($sql) {
+    global $link, $db;
+
+    if(!isset($sql) || empty($sql)) return;
+
+    $sql = str_replace("\r", "\n", str_replace(' ims_', ' '.$db['prefix'], $sql));
+    $sql = str_replace("\r", "\n", str_replace(' `ims_', ' `'.$db['prefix'], $sql));
+    $ret = array();
+    $num = 0;
+    foreach(explode(";\n", trim($sql)) as $query) {
+        $ret[$num] = '';
+        $queries = explode("\n", trim($query));
+        foreach($queries as $query) {
+            $ret[$num] .= (isset($query[0]) && $query[0] == '#') || (isset($query[1]) && isset($query[1]) && $query[0].$query[1] == '--') ? '' : $query;
+        }
+        $num++;
+    }
+    unset($sql);
+    foreach($ret as $query) {
+        $query = trim($query);
+        if($query) {
+            if(!mysql_query($query, $link)) {
+                echo mysql_errno() . ": " . mysql_error() . "<br />";
+                exit($query);
+            }
+        }
+    }
+}
+
+function local_create_sql($schema) {
+    $pieces = explode('_', $schema['charset']);
+    $charset = $pieces[0];
+    $engine = $schema['engine'];
+    $sql = "CREATE TABLE IF NOT EXISTS `{$schema['tablename']}` (\n";
+
+    return $sql;
 }
 
 function showerror($errno, $message = '') {

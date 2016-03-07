@@ -238,6 +238,10 @@ return [
     'Moduleid'=>'模块',
     'Wechatgh'=>'微信公众号',
     'Wechatghs'=>'微信公众号',
+    'Latitude'=>'纬度',
+    'Longitude'=>'经度',
+
+
 
 
 

@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-    <p>微信接口（公众号内，回复工号，即可获取名片）：
+    <p>第三方微信接口（公众号内，回复工号，即可获取名片）：
         <?= Html::label(Url::to(['/wechatapi/api', 'uid'=>Yii::$app->user->id], true)) ?>
     </p>
 

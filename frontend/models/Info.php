@@ -20,6 +20,9 @@ use Yii;
  * @property string $wechat_qrcode
  * @property string $fax
  * @property string $location
+ * @property string $work_tel
+ * @property double $latitude
+ * @property double $longitude
  *
  */
 class Info extends \yii\db\ActiveRecord
@@ -41,6 +44,7 @@ class Info extends \yii\db\ActiveRecord
         return [
          //   [['card_title', 'unit', 'face_box', 'department', 'position', 'address', 'business', 'signature', 'wechat_account', 'wechat_qrcode', 'fax', 'location'], 'required'],
             [['business', 'signature'], 'string'],
+            [['latitude', 'longitude'], 'number'],
             [['card_title', 'department', 'position'], 'string', 'max' => 50],
             [['unit'], 'string', 'max' => 80],
             [['face_box', 'address', 'wechat_qrcode'], 'string', 'max' => 255],
@@ -71,6 +75,8 @@ class Info extends \yii\db\ActiveRecord
             'location' => Yii::t('tbhome', 'Location'),
             'imageFile'=>'二维码',
             'work_tel' => '工作电话',
+            'latitude' => Yii::t('tbhome', 'Latitude'),
+            'longitude' => Yii::t('tbhome', 'Longitude'),
         ];
     }
 

@@ -133,14 +133,6 @@ class AntiController extends \yii\web\Controller
     public function actionGencode()
     {
 
-
-
-
-
-
-
-
-
         $uid=Yii::$app->user->id;
         $role=Yii::$app->user->identity->role;
         $product=Product::find()->where(['uid'=>$uid])->all();

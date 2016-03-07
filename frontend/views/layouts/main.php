@@ -13,7 +13,7 @@ use common\widgets\Alert;
 //UeditorAsset::register($this);
 use linslin\yii2\curl;
 
-use mdm\admin\components\MenuHelper;
+//use mdm\admin\components\MenuHelper;
 
 
 $curl = new curl\Curl();
