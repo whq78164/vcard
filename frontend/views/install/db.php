@@ -8,6 +8,42 @@ if(!empty($error)) {
 ?>
 
 
+<div class="col-xs-3">
+    <div class="progress" title="安装进度">
+        <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="<?=$progress?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$progress?>%;">
+            <?=$progress?>%
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            安装步骤
+        </div>
+        <ul class="list-group">
+            <a href="javascript:;" class="list-group-item list-group-item-success">
+                <span class="glyphicon glyphicon-copyright-mark"></span>
+                &nbsp; 许可协议
+            </a>
+            <a href="javascript:;" class="list-group-item list-group-item-success">
+                <span class="glyphicon glyphicon-eye-open"></span>
+                &nbsp; 环境监测
+            </a>
+            <a href="javascript:;" class="list-group-item list-group-item-info">
+                <span class="glyphicon glyphicon-cog"></span>
+                &nbsp; 参数配置
+            </a>
+            <a href="javascript:;" class="list-group-item ">
+                <span class="glyphicon glyphicon-ok"></span>
+                &nbsp; 成功
+            </a>
+        </ul>
+    </div>
+</div>
+<div class="col-xs-9">
+
+
+
+
+
     <?=$message?>
 <form class="form-horizontal" method="post" role="form">
 
@@ -34,12 +70,12 @@ if(!empty($error)) {
                 </div>
             </div>
 
-            <!--div class="form-group">
+            <div class="form-group">
                 <label class="col-sm-2 control-label">表前缀</label>
                 <div class="col-sm-4">
-                    <input class="form-control" type="text" name="db[prefix]" value="ims_">
+                    <input class="form-control" type="text" name="db[prefix]" value="tbhome_">
                 </div>
-            </div-->
+            </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">数据库名称</label>
@@ -76,7 +112,12 @@ if(!empty($error)) {
 
     <input type="hidden" name="do" id="do" />
     <ul class="pager">
-        <li class="previous"><a href="javascript:;" onclick="$('#do').val('back');$('form')[0].submit();"><span class="glyphicon glyphicon-chevron-left"></span> 返回</a></li>
+        <li class="previous">
+            <a href="javascript:;" >
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                返回
+            </a>
+        </li>
         <li class="previous"><a href="javascript:;" onclick="if(check(this)){jQuery('#do').val('continue');$('form')[0].submit();}">继续 <span class="glyphicon glyphicon-chevron-right"></span></a></li>
     </ul>
 
@@ -111,4 +152,16 @@ if(!empty($error)) {
         $(obj).html('正在执行安装');
         return true;
     }
+
+
+    $(document).ready(function () {
+        $("#back").click(function(){
+            window.history.back(-1);
+        })
+    })
+
+
 </script>
+
+
+    </div>

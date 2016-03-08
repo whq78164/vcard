@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 //use yii\grid\ActionColumn;
 use frontend\models\Product;

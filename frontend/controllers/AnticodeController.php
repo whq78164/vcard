@@ -13,6 +13,7 @@ use frontend\models\AntiCodenew;
 use yii\helpers\ArrayHelper;
 use frontend\models\Product;
 use yii\helpers\Url;
+//use yii\db\Schema;
 
 
 /**
@@ -34,13 +35,22 @@ class AnticodeController extends Controller
     }
 */
 
-    private function createNonceStr($length = 25) {
-        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        $str = "";
-        for ($i = 0; $i < $length; $i++) {
-            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+    public function init(){
+    //    $uid=Yii::$app->user->id;
+      //  $tableCode='{{%anti_code_'.$uid.'}}';
+        //$column='query_area';
+   //     $type=Schema::TYPE_DOUBLE.'(10,6) NOT NULL';
+     ///   $this->addColumn($tableCode,$column,$type);
+    }
+
+    protected function addColumn($table, $column, $type){
+
+        $sql="Describe $table $column";
+        $con=Yii::$app->db->createCommand($sql)->queryOne();
+        if($con['Field']==null){
+            Yii::$app->db->createCommand()->addColumn($table, $column, $type)->execute();
         }
-        return $str;
+
     }
 
     /**

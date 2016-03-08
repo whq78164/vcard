@@ -20,13 +20,14 @@ use yii\helpers\Url;
 
 
         <?php
-   //     if($model->status>9) {
+        if($model->status>9) {
             ?>
 
-            <?= Html::button('一键更新', ['id' => 'update', 'class' => 'btn btn-success']) ?>
+            <?= Html::button('一键更新', ['id' => 'update', 'class' => 'pull-left btn btn-success']) ?>
+            <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'pull-right btn btn-danger']) ?>
             <br>
             <?php
- //       }
+       }
         ?>
         <div class="alert " id="ReturnResult">
 
@@ -83,7 +84,7 @@ use yii\helpers\Url;
             };
 
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: url ,
                 data: data ,
                 success: function(data,status){
@@ -93,6 +94,43 @@ use yii\helpers\Url;
             });
 
         });
+
+        $("#clearv").click(function(){
+            if(confirm("确认清除？提示：请在技术人员指导下操作！")){
+
+                var url="<?=Url::to(['update/clearv'],true)?>";
+                var csrfToken = $('meta[name="csrf-token"]').attr("content");
+                var data={
+                    _csrf: csrfToken
+                };
+                    $.ajax({
+                        type: 'POST',
+                        url: url ,
+                        data: data ,
+                        success: function(data,status){
+                            document.getElementById('ReturnResult').innerHTML = data;//+status;
+                        }
+                    });
+
+                }
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     });
 </script>

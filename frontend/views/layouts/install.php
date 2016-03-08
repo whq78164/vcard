@@ -20,15 +20,6 @@ if($action == 'license') {
 }
 */
 
-$classGo1 = isset($_COOKIE['steps'][0]) ? $_COOKIE['steps'][0]:'';
-$classGo2 = isset($_COOKIE['steps'][1]) ? $_COOKIE['steps'][1]:'';
-$classGo3 = isset($_COOKIE['steps'][2]) ? $_COOKIE['steps'][2]:'';
-$classGo4 = isset($_COOKIE['steps'][3]) ? $_COOKIE['steps'][3]:'';
-
-
-
-
-
 
 
 
@@ -41,7 +32,14 @@ $classGo4 = isset($_COOKIE['steps'][3]) ? $_COOKIE['steps'][3]:'';
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>安装系统 - 唯卡微名片 - 开源微商应用平台</title>
         <!--link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"-->
+
         <?php $this->head() ?>
+
+
+        <link href="tbhome/pace/themes/pace-theme-barber-shop.css" rel="stylesheet" />
+
+
+
         <style>
             html,body{font-size:13px;font-family:"Microsoft YaHei UI", "微软雅黑", "宋体";}
             .pager li.previous a{margin-right:10px;}
@@ -67,42 +65,13 @@ $classGo4 = isset($_COOKIE['steps'][3]) ? $_COOKIE['steps'][3]:'';
             <img src="http://weixin.vcards.top/attachment/images/1/2015/10/wAr0fGUuqyV1shYqD5raHSs7CqJAoa.png" />
         </div>
         <div class="row well" style="margin:auto 0;">
-            <div class="col-xs-3">
-                <div class="progress" title="安装进度">
-                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="<?=Yii::$app->session['progress']?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=Yii::$app->session['progress']?>%;">
-                        <?=Yii::$app->session['progress']?>%
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        安装步骤
-                    </div>
-                    <ul class="list-group">
-                        <a href="javascript:;" class="list-group-item <?=$classGo1?>">
-                            <span class="glyphicon glyphicon-copyright-mark"></span>
-                            &nbsp; 许可协议
-                        </a>
-                        <a href="javascript:;" class="list-group-item <?=$classGo2?>">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                            &nbsp; 环境监测
-                        </a>
-                        <a href="javascript:;" class="list-group-item <?=$classGo3?>">
-                            <span class="glyphicon glyphicon-cog"></span>
-                            &nbsp; 参数配置
-                        </a>
-                        <a href="javascript:;" class="list-group-item <?=$classGo4?>">
-                            <span class="glyphicon glyphicon-ok"></span>
-                            &nbsp; 成功
-                        </a>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-xs-9">
-                <?= Alert::widget() ?>
 
-<?=$content?>
 
-            </div>
+            <?= Alert::widget() ?>
+
+            <?=$content?>
+
+
         </div>
         <div  style="margin:15px auto;">
             <div  class="text-center">
@@ -117,6 +86,6 @@ $classGo4 = isset($_COOKIE['steps'][3]) ? $_COOKIE['steps'][3]:'';
     <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script-->
     <?php $this->endBody() ?>
     </body>
-
+    <script src="tbhome/pace/pace.js"></script>
     </html>
 <?php $this->endPage() ?>

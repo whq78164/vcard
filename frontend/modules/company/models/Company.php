@@ -15,6 +15,8 @@ use Yii;
  * @property string $tpl
  * @property string $image
  *  @property string $url
+ * @property double $latitude
+ * @property double $longitude
  */
 class Company extends \yii\db\ActiveRecord
 {
@@ -34,7 +36,8 @@ class Company extends \yii\db\ActiveRecord
         return [
             [['uid'], 'required'],
             [['uid'], 'integer'],
-            [['company', 'image', 'url', 'address', 'location', 'tpl'], 'string', 'max' => 255]
+            [['latitude', 'longitude'], 'number'],
+            [['company', 'image', 'url', 'address', 'tpl'], 'string', 'max' => 255]
         ];
     }
 
@@ -46,9 +49,11 @@ class Company extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('tbhome', 'ID'),
             'uid' => Yii::t('tbhome', 'Uid'),
-            'company' => Yii::t('tbhome', 'Company'),
+            'company' => Yii::t('tbhome', '公司名'),
             'address' => Yii::t('tbhome', 'Address'),
-            'location' => Yii::t('tbhome', 'Location'),
+
+            'latitude'=>Yii::t('tbhome', 'Latitude'),
+            'longitude'=>Yii::t('tbhome', 'Longitude'),
             'tpl' => Yii::t('tbhome', 'Tpl'),
             'image' => Yii::t('tbhome', 'Image'),
             'url' => Yii::t('tbhome', 'Url'),

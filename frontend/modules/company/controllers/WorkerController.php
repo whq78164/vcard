@@ -34,6 +34,11 @@ class WorkerController extends Controller
         ];
     }
 
+    public function init(){
+        parent::init();
+
+    }
+
     /**
      * Lists all Worker models.
      * @return mixed
@@ -232,6 +237,16 @@ class WorkerController extends Controller
 
     public function actionMp($id=1)
     {
+
+
+        $wechatgh=Wechatgh::findOne(['uid'=>Yii::$app->user->id]);
+        if ($wechatgh==null){
+            Yii::$app->getSession()->setFlash('danger','请设置公众号信息！');
+            return $this->redirect(['/wechatgh/create']);
+        }
+
+
+
         $workerObjet=$this->findModel($id);//Worker::findOne($id);
         $worerArr=$workerObjet->attributes;
         $company=Company::findOne($workerObjet->company_id)->attributes;

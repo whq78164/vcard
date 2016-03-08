@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
       //      'uid',
             'company',
             'address',
-            'location',
             'tpl',
             'url:url',
             ['attribute'=>'image', 'format'=>'html', 'value'=>Html::img($model->image, ['style'=>'width:500px'])],

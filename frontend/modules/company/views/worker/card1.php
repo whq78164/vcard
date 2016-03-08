@@ -140,7 +140,7 @@ Card1Asset::register($this);
 
 
                     <li class="card-content-item">
-                        <a href="http://api.map.baidu.com/marker?location=<?=$worker['location']?>&title=<?=$worker['company']?>&content=<?=$worker['company']?>&output=html">
+                        <a href="http://api.map.baidu.com/marker?location=<?=$worker['latitude']?>,<?=$worker['longitude']?>&title=<?=$worker['company']?>&content=<?=$worker['company']?>&output=html">
                         <span class=" fa-stack ">
   <i class="fa fa-location-arrow fa-stack-1x"></i>
   <i class="fa fa-circle-thin fa-stack-2x"></i>

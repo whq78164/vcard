@@ -11,47 +11,22 @@ use linslin\yii2\curl;
 class AdminController extends \yii\web\Controller
 {
 
-    public function beforeAction($action)
-    {
-        if (parent::beforeAction($action)) {
-            $this->actionGetremote();
-
-            if (Yii::$app->user->identity->role!==100) {
-                Yii::$app->getSession()->setFlash('danger', '您不是管理员');
-                return $this->goBack(['/site/login']);
-            }
-/*
-            if ($this->remoteMsg->status == 9){
-                $actionID = Yii::$app->controller->action->id;
-                if($actionID!=="site"){
-                    Yii::$app->getSession()->setFlash('danger', '请设置站点信息');
-                    return  $this->redirect(['site']);
-                }
-            }
-*/
-            if ($this->enableCsrfValidation && Yii::$app->getErrorHandler()->exception === null && !Yii::$app->getRequest()->validateCsrfToken()) {
-                throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-
     public $layout='admin';
     public $remoteMsg;
     public $postSite='http://www.vcards.top/index.php?r=cloud/site';
 
-    public function actionGetremote(){
-        $curl = new curl\Curl();
-        $url='http://www.vcards.top/index.php?r=cloud/index';
-        $response = $curl->get($url);
+    public function init(){
+        parent :: init();
+
+        $url=Yii::$app->params['updateApi'];
+        $response=httpGet($url);
         $response=json_decode($response);//转码成对象数据；
         $this->remoteMsg=$response;
-        return $response;
+
+        if (Yii::$app->user->identity->role!==100) {
+            Yii::$app->getSession()->setFlash('danger', '您不是管理员');
+            return $this->goBack(['/site/login']);
+        }
 
     }
 
@@ -60,15 +35,19 @@ class AdminController extends \yii\web\Controller
     {
 
 
-
         $url=$this->postSite;
-        $curl = new curl\Curl();
-        $response = $curl->get($url);
-        //     var_dump($response);
+        $response=httpGet($url);
+ //       $curl = new curl\Curl();
+   //     $response = $curl->get($url);
+
         $response=json_decode($response);
         $modelRemote=$response;
 
-        $model = new Site();
+        $model=Site::findOne(['id'=>1]);
+if($model==null){
+    $model = new Site();
+}
+
         $model->sitetitle=$modelRemote->sitetitle;
         $model->company=$modelRemote->company;
         $model->tel= $modelRemote->tel;
@@ -80,14 +59,12 @@ class AdminController extends \yii\web\Controller
         $model->ip=$modelRemote->ip;
 
 
-
         if (Yii::$app->request->post()) {
 
-            $model = new Site();
+          //  $model = new Site();
             $model->load(Yii::$app->request->post());
             if ($model->validate()) {
-
-
+              $curl = new curl\Curl();
                 $response=$curl->setOption(
                     CURLOPT_POSTFIELDS,
                     http_build_query([
@@ -104,11 +81,11 @@ class AdminController extends \yii\web\Controller
                             */
                     ])
                 )->post($url);
-
-                $model->save();// form inputs are valid, do something here
-                Yii::$app->getSession()->setFlash('success', $response);
-                return $this->goBack(['admin/index']);//redirect(['user/user']);
-
+                $model->id=1;
+                if($model->save()){
+                    Yii::$app->getSession()->setFlash('success', $response);
+                    return $this->goBack(['admin/index']);//redirect(['user/user']);
+                };// form inputs are valid, do something here
 
             }
         }else{
@@ -197,14 +174,7 @@ class AdminController extends \yii\web\Controller
         $request = Yii::$app->request;
         $model = $model->findIdentity($id);
         if ($request->isPost) {
-
-
-            //      $post = $request->post();
-            //      var_dump($_POST);
             $password=$_POST['User']['password'];
-
-
-
             $model->load($request->post());
             if (strlen($password)>5){
                 $password_hash = Yii::$app->security->generatePasswordHash($password);

@@ -4,13 +4,17 @@
 
 use yii\helpers\Html;
 
-use linslin\yii2\curl;
 
+/*
+use linslin\yii2\curl;
 $curl = new curl\Curl();
 $url='http://www.vcards.top/index.php?r=cloud/site';
 $response = $curl->get($url);
 $response=json_decode($response);
+*/
 
+use frontend\models\Site;
+$response=Site::findOne(['id'=>1]);
 
 
 $this->title = Yii::t('tbhome', 'About').'我们';

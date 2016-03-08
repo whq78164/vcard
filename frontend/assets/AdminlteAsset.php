@@ -37,7 +37,7 @@ class AdminlteAsset extends AssetBundle
   //      'bootstrap/js/bootstrap.min.js',//3.3.5
         "http://api.map.baidu.com/api?v=1.5&ak=ULZzR8MYgQwHvkOeFTk0Or0l",
         'tbhome/AdminLTE/dist/js/app.min.js',
-        'tbhome/map/locate.js'
+   //     'tbhome/map/locate.js'
     ];
 
     public $depends = [

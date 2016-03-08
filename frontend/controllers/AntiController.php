@@ -14,51 +14,51 @@ use frontend\models\TraceabilityInfonew;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\db\Schema;
 
 
 
 class AntiController extends \yii\web\Controller
 {
 
-    public function beforeAction($action)
-    {
 
-        if (parent::beforeAction($action)) {
+    public function init(){
+ //       parent::init();
+        $Connection = \Yii::$app->db;
+        $uid=Yii::$app->user->id;
 
-            $Connection = \Yii::$app->db;
-            $data = '`tbhome_anti_code_'.\Yii::$app->user->id.'`';
-    //        $this->table=$data;
-            $moban = '`tbhome_anti_code`';
-            $sql = 'CREATE TABLE IF NOT EXISTS '.$data.' LIKE '.$moban;
-            $command=$Connection->createCommand($sql);
-            $command->execute();
-            $logmoban='`tbhome_anti_log`';
-            $log='`tbhome_anti_log_'.\Yii::$app->user->id.'`';
-            $logsql = 'CREATE TABLE IF NOT EXISTS '.$log.' LIKE '.$logmoban;
-            $command=$Connection->createCommand($logsql);
-            $command->execute();
+        $data = '`tbhome_anti_code_'.$uid.'`';
+        $moban = '`tbhome_anti_code`';
+        $sql = 'CREATE TABLE IF NOT EXISTS '.$data.' LIKE '.$moban;
+        $command=$Connection->createCommand($sql);
+        $command->execute();
 
+        $logmoban='`tbhome_anti_log`';
+        $log='`tbhome_anti_log_'.$uid.'`';
+        $logsql = 'CREATE TABLE IF NOT EXISTS '.$log.' LIKE '.$logmoban;
+        $command=$Connection->createCommand($logsql);
+        $command->execute();
 
-            if ($this->enableCsrfValidation && Yii::$app->getErrorHandler()->exception === null && !Yii::$app->getRequest()->validateCsrfToken()) {
-                throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
-            }
-            return true;
-        }
+        $tableCode='{{%anti_code_'.$uid.'}}';
+        $column='query_area';
+        $type=Schema::TYPE_DOUBLE.'(10,6) NOT NULL';
+        $this->addColumn($tableCode,$column,$type);
 
-        return false;
     }
 
 
-
-  //  public function init(){
-//
-    //  }
-
-
-
-
     public $layout='user';
-//    public $data;
+
+
+    protected function addColumn($table, $column, $type){
+
+        $sql="Describe $table $column";
+        $con=Yii::$app->db->createCommand($sql)->queryOne();
+        if($con['Field']==null){
+            Yii::$app->db->createCommand()->addColumn($table, $column, $type)->execute();
+        }
+
+}
 
     public function actionIndex($replyid=1)
     {
@@ -259,14 +259,6 @@ class AntiController extends \yii\web\Controller
 echo $rows;
 
 
-//        if (!empty($list)) {
-  //          echo count($list);
-    //    }else{
-      //      echo '0';
-      //  }
-
-
-
     }
 
     protected function codeQuery($code='798904845', $replyid=1){
@@ -343,11 +335,17 @@ echo $rows;
                 'replyid' =>$replyid
             ]);//备注字段修改
 
-            $reply->success=str_replace([
+
+
+            $inputArr=[
                 '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{追溯信息}}', '{{自定义网页}}', '{{二维码}}', '{{地区}}','{{修改备注}}'
-            ], [
+            ];
+
+            $replaceArr=[
                 $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit, $traceaReply, $diypage, $qrcodeimg, $userArea, $remarkform
-            ], $reply->success);
+            ];
+
+            $reply->success=str_replace($inputArr, $replaceArr, $reply->success);
 
             $reply->fail=str_replace([
                 '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{追溯信息}}', '{{自定义网页}}'
@@ -355,14 +353,13 @@ echo $rows;
                 $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit, $traceaReply,  $diypage
             ], $reply->fail);
 
+
             $validClicks=$reply->valid_clicks;
             if ($codeData['clicks']>=$validClicks){
                 $queryResult=$reply->fail;
                 return $queryResult;
             }else{
-
              //   $reply->success .= $tempform;
-
                 $queryResult=$reply->success;
                 return $queryResult;
             }

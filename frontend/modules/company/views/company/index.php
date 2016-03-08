@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'uid',
             'company',
             'address',
-            'location',
+    //        'location',
              'tpl',
 
             ['class' => 'yii\grid\ActionColumn', 'template'=>'{view}{update}'],

@@ -10,8 +10,14 @@ use frontend\assets\AdminlteAsset;
 //use yii\bootstrap\NavBar;
 //use frontend\assets\Mobile_Detect;
 //use mdm\admin\components\MenuHelper;
-use linslin\yii2\curl;
-
+//use linslin\yii2\curl;
+use frontend\models\Site;
+$response=Site::findOne(['id'=>1]);
+/*
+$url=Yii::$app->params['updateApi'];
+$response=httpGet($url);
+$response=json_decode($response);
+*/
 
 if (Yii::$app->user->isGuest) {
     $redirecturl=Yii::$app->request->baseUrl;
@@ -20,11 +26,6 @@ if (Yii::$app->user->isGuest) {
     exit;
 }
 
-
-$curl = new curl\Curl();
-$url='http://www.vcards.top/index.php?r=cloud/site';
-$response = $curl->get($url);
-$response=json_decode($response);
 
 AdminlteAsset::register($this);
 //$mobile=new Mobile_Detect();

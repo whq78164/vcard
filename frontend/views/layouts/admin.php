@@ -3,13 +3,18 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
-
-use linslin\yii2\curl;
 use frontend\assets\AdminlteAsset;
+/*
+use linslin\yii2\curl;
 $curl = new curl\Curl();
 $url='http://www.vcards.top/index.php?r=cloud/index';
 $response = $curl->get($url);
 $response=json_decode($response);
+*/
+$url=Yii::$app->params['updateApi'];
+$response=httpGet($url);
+$response=json_decode($response);
+
 switch ($response->status){
     case 9 :// header('location: '.Yii::$app->homeUrl);
         Yii::$app->getSession()->setFlash('danger', $response->msg);

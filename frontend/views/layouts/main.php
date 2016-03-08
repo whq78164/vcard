@@ -8,28 +8,24 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
-//use frontend\assets\UeditorAsset;
 use common\widgets\Alert;
-//UeditorAsset::register($this);
-use linslin\yii2\curl;
-
+use frontend\models\Site;
 //use mdm\admin\components\MenuHelper;
 
-
-$curl = new curl\Curl();
-$url='http://www.vcards.top/index.php?r=cloud/index';
-$response = $curl->get($url);
-$response=json_decode($response);
-
+$response=Site::findOne(['id'=>1]);
+//$url=Yii::$app->params['updateApi'];
+//$response=httpGet($url);
+//$response=json_decode($response);
+/*
 switch ($response->status){
     case 9 :// header('location: '.Yii::$app->homeUrl);
-        Yii::$app->getSession()->setFlash('danger', $response->msg);
+      //  Yii::$app->getSession()->setFlash('danger', $response->msg);
         break;
-    case 0 :  Yii::$app->getSession()->setFlash('danger', $response->msg);
+    case 0 :  //Yii::$app->getSession()->setFlash('danger', $response->msg);
 
         break;
 }
-
+*/
 
 AppAsset::register($this);
 

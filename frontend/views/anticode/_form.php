@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'replyid')->dropDownList($listReply)->label('回复语模板') ?>
     <?= $form->field($model, 'traceabilityid')->textInput() ?>
 
-    <?= $form->field($model, 'productid')->dropDownList($listProduct)->label('产品序号') ?>
+    <?= $form->field($model, 'productid')->dropDownList($listProduct)->label('选择产品') ?>
 
     <?= $form->field($model, 'query_time')->textInput() ?>
 
