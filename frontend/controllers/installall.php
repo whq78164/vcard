@@ -281,8 +281,26 @@ $this->createTable('{{%traceability_data}}', [
 $this->createIndex('uid', '{{%traceability_data}}', ['uid']);
 
 
+if(!$this->tableExist('{{%column}}')){
+    $this->createTable('{{%column}}', [
+        'id' => Schema::TYPE_PK,
+        'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
+        'type' => Schema::TYPE_STRING . '(20) NOT NULL',
+        'column' => Schema::TYPE_STRING . '(30) NOT NULL',
+        'label' => Schema::TYPE_STRING . '(50) NOT NULL',
+        'value' => Schema::TYPE_STRING . ' NOT NULL',
+        'remark' => Schema::TYPE_STRING . ' NOT NULL',
+    ], $tableOptions);
+    $this->createIndex('uid', '{{%column}}', ['uid']);
+}else{
+    echo'column数据表已存在！无需创建';
+}
 
-////////////////////////模块扩展
+
+
+///////////////////////////////////////////////////////////////扩展模块开始
+
+///////////////企业名片模块
 $this->createTable('{{%company}}', [
     'id' => Schema::TYPE_PK,
     'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -329,6 +347,67 @@ $this->createIndex('uid', '{{%company_worker}}', ['uid']);
 $this->createIndex('job_id', '{{%company_worker}}', ['job_id']);
 $this->createIndex('company_id', '{{%company_worker}}', ['company_id']);
 $this->createIndex('department_id', '{{%company_worker}}', ['department_id']);
+///////////企业名片模块
+
+
+///////////二维码管理系统
+$this->createTable('{{%qrcode_reply}}', [
+    'id' =>  Schema::TYPE_PK,
+    'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'tag' => Schema::TYPE_STRING . '(50) NOT NULL',
+    'success' => Schema::TYPE_TEXT . ' NOT NULL',
+    'wechat_reply' => Schema::TYPE_STRING . ' NOT NULL',
+    'fail' => Schema::TYPE_STRING . ' NOT NULL',
+    'content' => Schema::TYPE_TEXT . ' NOT NULL',
+    'valid_clicks' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
+    'remark'=>Schema::TYPE_STRING . ' NOT NULL',
+
+], $tableOptions);
+$this->createIndex('uid', '{{%qrcode_reply}}', ['uid']);
+
+$this->createTable('{{%qrcode_log}}', [
+    'id' =>  Schema::TYPE_PK,
+    'startid' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'endid' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'url' => Schema::TYPE_STRING . '(255) NOT NULL',
+    'time' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'remark' => Schema::TYPE_STRING . '(255) NOT NULL',
+], $tableOptions);
+
+$this->createTable('{{%qrcode_data}}', [
+    'id' => Schema::TYPE_PK,
+    'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'code' => Schema::TYPE_STRING . ' NOT NULL',
+    'replyid' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+    'productid' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+  //  'traceabilityid' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',//追溯
+    'query_time' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'clicks' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'prize' => Schema::TYPE_STRING . ' NOT NULL',
+    'remark' => Schema::TYPE_STRING . ' NOT NULL',
+    'query_area' => Schema::TYPE_STRING . '(20) NOT NULL DEFAULT 127',
+    'url' => Schema::TYPE_STRING . ' NOT NULL',
+    'create_time' => Schema::TYPE_INTEGER.' NOT NULL',
+    'status' => Schema::TYPE_SMALLINT.' NOT NULL DEFAULT 10',
+], $tableOptions);
+$this->createIndex('uid', '{{%qrcode_data}}', ['uid']);
+$this->createIndex('code', '{{%qrcode_data}}', ['code'],true);
+
+///////////二维码管理系统
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////扩展模块结束
+
 
 
 
@@ -424,13 +503,27 @@ $this->insert('{{%module}}',[
     'id'=>1, //id字段如不设置，则默认自增
     'modulename'=>'company',
     'module_label'=>'公司',
-    'module_des'=>'公司职员管理'
+    'module_des'=>'公司职员管理，微信员工导航名片'
 ]);
+
+$this->insert('{{%module}}',[
+    'id'=>2, //id字段如不设置，则默认自增
+    'modulename'=>'qrcode',
+    'module_label'=>'二维码管理系统New',
+    'module_des'=>'防伪、追溯，自定义字段添加...'
+]);
+
 
 
 $this->insert('{{%usermodule}}',[
     'id'=>1, //id字段如不设置，则默认自增
     'uid'=>1,
     'moduleid'=>1,
+    'module_status'=>10
+]);
+$this->insert('{{%usermodule}}',[
+    'id'=>2, //id字段如不设置，则默认自增
+    'uid'=>1,
+    'moduleid'=>2,
     'module_status'=>10
 ]);

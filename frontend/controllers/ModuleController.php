@@ -24,9 +24,7 @@ class ModuleController extends Controller
                 //   'only' => ['logout', 'signup'],
                 'rules' => [
 
-                    // 允许认证用户
 
-                    // 默认禁止其他用户
                     [//   'actions' => ['index','update','logout',],
                         'allow' => true,
                         'roles' => ['@'],

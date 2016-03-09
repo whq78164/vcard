@@ -22,6 +22,7 @@ $this->title='批量生成防伪码';
             <input class="form-control" name="slen" id="" type="text" value="10">&nbsp;&nbsp;建议8-20位以内
         </div>
 
+
         <div class="form-group">
         <label class="control-label">
         生成数量</label>
@@ -48,7 +49,7 @@ $this->title='批量生成防伪码';
     </div>
 
     <script type="text/javascript">
-          function checkstr(sStr){
+         function checkstr(sStr){
               var csrfToken = $('meta[name="csrf-token"]').attr("content");
   //  var dat='';
     $.ajax({
@@ -74,6 +75,38 @@ $this->title='批量生成防伪码';
 
 
     }
+
+
+
+/*
+          $(document).ready(function(){
+              $("#sStr").keyup(function(){
+                  var sstr=$("#sStr").val();
+                  var csrfToken = $('meta[name="csrf-token"]').attr("content");
+                  //  var dat='';
+                  $.ajax({
+                      type: "POST",
+                      url: "<?=yii\helpers\Url::to(['anti/checkstr'], true)?>",
+                      data: {
+                          sStr:sStr,
+                          _csrf:csrfToken
+                      },
+                      dataType: "json",
+                      success: function(data){
+
+                          if (data >= '1') {
+                              document.getElementById("txtHint").innerHTML='<span class="alert alert-danger">数据库中已存在相同前缀的数据'+data+'条,请修改</span>';
+                          }else{
+                              document.getElementById("txtHint").innerHTML='<span class="alert alert-success">前缀可用</span>';
+                          }
+
+                      }
+
+                  });
+              });
+          });
+
+*/
     </script>
 
 

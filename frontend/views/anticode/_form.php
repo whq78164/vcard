@@ -25,7 +25,11 @@ use yii\widgets\ActiveForm;
 
 
     <?= $form->field($model, 'replyid')->dropDownList($listReply)->label('回复语模板') ?>
-    <?= $form->field($model, 'traceabilityid')->textInput() ?>
+    <?php
+    if (Yii::$app->user->identity->role>=60) {
+        echo $form->field($model, 'traceabilityid')->dropDownList($listTraceability);
+    }
+    ?>
 
     <?= $form->field($model, 'productid')->dropDownList($listProduct)->label('选择产品') ?>
 

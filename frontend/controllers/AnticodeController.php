@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Product;
 use yii\helpers\Url;
 //use yii\db\Schema;
+use frontend\models\TraceabilityInfonew;
 
 
 /**
@@ -114,6 +115,33 @@ class AnticodeController extends Controller
         ]);
     }
 
+    protected function listTraceability(){
+        $uid=Yii::$app->user->id;
+        $role=Yii::$app->user->identity->role;
+
+        if ($role>=60){
+            $traceaInfo='tbhome_traceability_info_'.$uid;
+            $mobanInfo = 'tbhome_traceability_info';
+            $sqlInfo = 'CREATE TABLE IF NOT EXISTS '.$traceaInfo.' LIKE '.$mobanInfo;
+            $commandInfo=Yii::$app->db->createCommand($sqlInfo);
+            $commandInfo->execute();
+
+            $traceabiliy=TraceabilityInfonew::find()->all();
+            $listTraceability=ArrayHelper::map($traceabiliy, 'id', 'label');
+            if (!$listTraceability){
+                Yii::$app->getSession()->setFlash('danger', '请先添加追溯信息！');
+                return $this->redirect(['traceabilityinfo/create']);
+            }else{
+                return $listTraceability;
+            }
+
+        }else{
+           return array();
+        }
+
+
+    }
+
     /**
      * Creates a new AntiCode model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -121,29 +149,35 @@ class AnticodeController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new AntiCodenew();
         $uid=Yii::$app->user->id;
         $model->uid=$uid;
         $model->create_time=time();
-   //     $model->clicks=3;
-    //    $model->query_time=time()-(3600*24);
+        //     $model->clicks=3;
+        //    $model->query_time=time()-(3600*24);
 
 
 
         $reply=AntiReply::find()->where(['uid'=>$uid])->all();
         $listReply=ArrayHelper::map($reply, 'id', 'tag');
 //        $list2=ArrayHelper::map($reply, 'id', 'specification');
-  //      $listReply=array();
+        //      $listReply=array();
 //        foreach($list1 as $key1=>$value1){
-  //          $listReply[$key1]=$value1.' '.$list2[$key1];
- //       }
+        //          $listReply[$key1]=$value1.' '.$list2[$key1];
+        //       }
+
+        //>=60质量追溯
+     $listTraceability=$this->listTraceability();
+
+
+
 
         $product=Product::find()->where(['uid'=>$uid])->all();
         $listData1=ArrayHelper::map($product, 'id', 'name');
         $listData2=ArrayHelper::map($product, 'id', 'specification');
         $listProduct=array();
         foreach($listData1 as $key1=>$value1){
-
             $listProduct[$key1]=$value1.' '.$listData2[$key1];
         }
 
@@ -157,7 +191,8 @@ class AnticodeController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'listReply'=>$listReply,
-                'listProduct'=>$listProduct
+                'listProduct'=>$listProduct,
+                'listTraceability'=>$listTraceability,
             ]);
         }
     }
@@ -191,6 +226,8 @@ class AnticodeController extends Controller
             $listProduct[$key1]=$value1.' '.$listData2[$key1];
         }
 
+        //>=60质量追溯
+        $listTraceability=$this->listTraceability();
 
 
 
@@ -201,7 +238,8 @@ class AnticodeController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'listReply'=>$listReply,
-                'listProduct'=>$listProduct
+                'listProduct'=>$listProduct,
+                'listTraceability'=>$listTraceability,
             ]);
         }
     }

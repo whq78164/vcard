@@ -64,12 +64,12 @@ class AntiCodenew extends ActiveRecord
             [['prize', 'remark'], 'string'],
             [['code'], 'unique'],
             ['uid', 'default', 'value' => Yii::$app->user->id],
-            ['remark', 'default', 'value' => ''],
-            ['prize', 'default', 'value' => ''],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+           ['remark', 'default', 'value' => ''],
+           ['prize', 'default', 'value' => ''],
+           ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['traceabilityid', 'default', 'value' => 1],
-            ['query_time', 'default', 'value' => 0],
-            ['clicks', 'default', 'value' => 0],
+           ['query_time', 'default', 'value' => 0],
+           ['clicks', 'default', 'value' => 0],
             ['productid', 'default', 'value' => 1],
         ];
     }

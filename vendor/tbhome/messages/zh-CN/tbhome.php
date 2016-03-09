@@ -240,6 +240,7 @@ return [
     'Wechatghs'=>'微信公众号',
     'Latitude'=>'纬度',
     'Longitude'=>'经度',
+    'Column'=>'字段',
 
 
 

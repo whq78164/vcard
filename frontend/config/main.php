@@ -17,6 +17,9 @@ return [
       'company' => [
           'class' => 'frontend\modules\company\companyModule',
       ],
+      'qrcode' => [
+          'class' => 'frontend\modules\qrcode\qrcodeModule',
+      ],
  
 	  'authmenu' => require(__DIR__ . '/modules/authmenu.php'),
     ],

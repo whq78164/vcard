@@ -12,13 +12,13 @@ use frontend\assets\AdminlteAsset;
 //use mdm\admin\components\MenuHelper;
 //use linslin\yii2\curl;
 use frontend\models\Site;
-$response=Site::findOne(['id'=>1]);
+
 /*
 $url=Yii::$app->params['updateApi'];
 $response=httpGet($url);
 $response=json_decode($response);
 */
-
+$response=Site::findOne(['id'=>1]);
 if (Yii::$app->user->isGuest) {
     $redirecturl=Yii::$app->request->baseUrl;
     header("location: $redirecturl");
@@ -26,6 +26,17 @@ if (Yii::$app->user->isGuest) {
     exit;
 }
 
+$uid=Yii::$app->user->id;
+$sql="SELECT * FROM {{%usermodule}} WHERE uid=$uid AND module_status=10";
+$modules=Yii::$app->db->createCommand($sql)->queryAll();
+//print_r($modules);
+$usermodule=array();
+foreach($modules as $module){
+    $sql="SELECT * FROM {{%module}} WHERE id=".$module['moduleid'];
+    $usermodule[]= Yii::$app->db->createCommand($sql)->queryOne();
+}
+//print_r(count($usermodule));
+//print_r($usermodule);
 
 AdminlteAsset::register($this);
 //$mobile=new Mobile_Detect();
@@ -515,8 +526,11 @@ NavBar::begin([
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a href="<?=yii\helpers\Url::to(['/user/setting'], true)?>"><i class="fa fa-circle-o"></i> 安全设置</a></li>
-                        <li><a href="<?=yii\helpers\Url::to(['/user/specialsetting'], true)?>"><i class="fa fa-circle-o"></i> 个性设置</a></li>
+                        <li class=""><a href="<?=Url::to(['/user/setting'], true)?>"><i class="fa fa-circle-o"></i> 安全设置</a></li>
+                        <li><a href="<?=Url::to(['/user/specialsetting'], true)?>"><i class="fa fa-circle-o"></i> 个性设置</a></li>
+
+                        <li><a href="<?=Url::to(['/user/user'], true)?>"><i class="fa fa-circle-o"></i> 基本信息</a></li>
+
 
                     </ul>
                 </li>
@@ -526,8 +540,9 @@ NavBar::begin([
 
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-cog"></i>
+                        <i class="fa fa-weixin"></i>
                         <span>微信公众号</span>
+                        <small class="label pull-right bg-red">New</small>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -537,35 +552,58 @@ NavBar::begin([
                 </li>
 
 
+                <li>
+                    <a href="<?=Url::to(['/product'], true)?>">
+                        <i class="fa fa-circle"></i> <span>产品管理</span>
 
-
-
-
-
-                <!--li>
-                    <a href="pages/widgets.html">
-                        <i class="fa fa-th"></i> <span>Widgets</span>
-                        <small class="label pull-right bg-green">new</small>
                     </a>
-                </li-->
-                <li class="treeview">
+                </li>
+                <li>
+                    <a href="<?=Url::to(['/column'], true)?>">
+                        <i class="fa fa-th"></i> <span>自定义字段</span>
+                        <small class="label pull-right bg-red">New</small>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="<?=Url::to(['/user/vcards'], true)?>">
+                        <i class="fa fa-circle-o"></i>
+                        二维码微名片
+                    </a>
+                </li>
+
+                <?php
+                if($role>=40) {
+                    ?>
+
+                    <li>
+                        <a href="<?= Url::to(['/user/anti'], true) ?>">
+                            <i class="fa fa-circle-o"></i> 二维码管理系统
+                        </a>
+                    </li>
+                    <?php
+                }
+                ?>
+
+
+
+
+
+
+                <!--li class="treeview">
                     <a href="#">
                         <i class="fa fa-pie-chart"></i>
                         <span>个人资料</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?=yii\helpers\Url::to(['/user/user'], true)?>"><i class="fa fa-circle-o"></i> 基本信息</a></li>
+                        <li><a href="<?//=yii\helpers\Url::to(['/user/user'], true)?>"><i class="fa fa-circle-o"></i> 基本信息</a></li>
 
                     </ul>
-                </li>
-
-                <!--li>
-                    <a href="pages/calendar.html">
-                        <i class="fa fa-calendar"></i> <span>Calendar</span>
-                        <small class="label pull-right bg-red">3</small>
-                    </a>
                 </li-->
+
+
 
 
                 <li class="active treeview">
@@ -576,64 +614,74 @@ NavBar::begin([
                     </a>
                     <ul class="treeview-menu">
 
-                        <li>
-                            <a href="<?=yii\helpers\Url::to(['/user/vcards'], true)?>">
-                                <i class="fa fa-circle-o"></i>
-                                二维码微名片
-                            </a>
-                        </li>
-
-
                         <?php
-                        if($role>=40) {
-                            ?>
-
+                        foreach($usermodule as $module){?>
                             <li>
-                                <a href="<?= Url::to(['/user/anti'], true) ?>">
-                                    <i class="fa fa-circle-o"></i> 二维码管理系统
+                                <a href="<?=Url::to(['/'.$module['modulename']], true)?>">
+                                    <i class="fa fa-circle-o"></i>
+                                    <?=$module['module_label']?>
                                 </a>
                             </li>
+
                             <?php
                         }
                         ?>
 
 
- <?php
- if (isset(\Yii::$app->session['mymodule'][1])){
-
- ?>
-
+<!--
                         <li>
                             <a href="#">
                                 <i class="fa fa-circle-o"></i>
                                 企业名片(员工管理)
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
+
                             <ul class="treeview-menu">
+
                                 <li><a href="<?= Url::to(['/company/company/index'], true) ?>">
                                         <i class="fa fa-circle-o"></i>公司信息</a>
+
                                 </li>
+
                                 <li>
-                                    <a href="<?= Url::to(['/company/department/index'], true) ?>"><i class="fa fa-circle-o"></i>部门管理</a>
+                                    <a href="<?= Url::to(['/company/department/index'], true) ?>">
+                                        <i class="fa fa-circle-o"></i>部门管理
+                                    </a>
+
                                 </li>
-                                <li
-                                    ><a href="<?= Url::to(['/company/worker/index'], true) ?>"><i class="fa fa-circle-o"></i>职员列表</a>
+
+                                <li>
+                                    <a href="<?= Url::to(['/company/worker/index'], true) ?>">
+                                        <i class="fa fa-circle-o"></i>职员列表
+                                    </a>
                                 </li>
 
 
-                                <!--li>
-                                    <a href="#"><i class="fa fa-circle-o"></i> Level Two <i class="fa fa-angle-left pull-right"></i></a>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        Level Two
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </a>
                                     <ul class="treeview-menu">
-                                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-circle-o"></i>
+                                                Level Three
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-circle-o"></i>
+                                                Level Three
+                                            </a>
+                                        </li>
                                     </ul>
-                                </li-->
+                                </li>
                             </ul>
-                        </li>
-<?php
- }
-?>
 
+                        </li>
+-->
 
                     </ul>
                 </li>

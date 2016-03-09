@@ -48,7 +48,9 @@ if($action == 'license') {
 if($action == 'env') {
     if($ispost) {
         setcookie('action', $_POST['do'] == 'continue' ? 'db' : 'license');
-        header('location: ?refresh');
+    //    header('location: ?refresh');
+    //    touch(IA_ROOT . '/data/install.lock');
+        header('location: frontend/web/index.php?r=install/db');
         exit;
     }
     $ret = array();
@@ -142,6 +144,18 @@ if($action == 'env') {
         $ret['php']['ssl']['class'] = 'danger';
         $ret['php']['ssl']['failed'] = true;
         $ret['php']['ssl']['remark'] = '没有启用OpenSSL, 将无法访问公众平台的接口, 系统无法正常运行. <!--a target="_blank" href="http://bbs.we7.cc/forum.php?mod=redirect&goto=findpost&ptid=3564&pid=58109">详情</a-->';
+    }
+
+
+    $ret['php']['fileinfo']['ok'] = extension_loaded('fileinfo');
+    if($ret['php']['fileinfo']['ok']) {
+        $ret['php']['fileinfo']['value'] = '<span class="glyphicon glyphicon-ok text-success"></span>';
+        $ret['php']['fileinfo']['class'] = 'success';
+    } else {
+        $ret['php']['fileinfo']['value'] = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+        $ret['php']['fileinfo']['class'] = 'danger';
+        $ret['php']['fileinfo']['failed'] = true;
+        $ret['php']['fileinfo']['remark'] = '没有启用fileinfo, 不能识别上传文件类型, 无法上传头像. <!--a target="_blank" href="http://bbs.we7.cc/forum.php?mod=redirect&goto=findpost&ptid=3564&pid=58109">详情</a-->';
     }
 
     $ret['php']['gd']['ok'] = extension_loaded('gd');
@@ -599,6 +613,12 @@ function tpl_install_env($ret = array()) {
 					<td>{$ret['php']['ssl']['value']}</td>
 					<td>{$ret['php']['ssl']['remark']}</td>
 				</tr>
+				<tr class="{$ret['php']['fileinfo']['class']}">
+					<td>fileInfo</td>
+					<td>支持</td>
+					<td>{$ret['php']['fileinfo']['value']}</td>
+					<td>{$ret['php']['fileinfo']['remark']}</td>
+				</tr>
 				<tr class="{$ret['php']['gd']['class']}">
 					<td>GD2</td>
 					<td>支持</td>
@@ -686,12 +706,12 @@ function tpl_install_db($error = '') {
 					</div>
 				</div>
 
-				<!--div class="form-group">
+				<div class="form-group">
 					<label class="col-sm-2 control-label">表前缀</label>
 					<div class="col-sm-4">
-						<input class="form-control" type="text" name="db[prefix]" value="ims_">
+						<input class="form-control" type="text" name="db[prefix]" value="tbhome_">
 					</div>
-				</div-->
+				</div>
 
 				<div class="form-group">
 					<label class="col-sm-2 control-label">数据库名称</label>
@@ -865,7 +885,7 @@ return [
             'username' => '{db-username}',
             'password' => '{db-password}',
             'charset' => 'utf8',
-            'tablePrefix' => 'tbhome_',
+            'tablePrefix' => '{db-tablepre}',
 
 ];
 

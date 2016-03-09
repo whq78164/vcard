@@ -46,8 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'moduleid', $listModules, ['class' => 'form-control']),
                 'value' => function ($model) {
                     $moduleid=$model->moduleid;
-                    $module=\frontend\models\Module::findOne($moduleid);
-                    return Html::a($module->module_label, ['/module/view', 'id'=>$moduleid]);
+                 //   return $moduleid;
+                    $module=frontend\models\Module::findOne($moduleid);
+                    return $module['module_label'];
+                    //return Html::a($module->module_label, ['/module/view', 'id'=>$moduleid]);
                 },
             ],
 

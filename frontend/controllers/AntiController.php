@@ -152,7 +152,7 @@ class AntiController extends \yii\web\Controller
 
 
 
-        $model = new AntiCode();
+        $model = new AntiCodenew();
         if (!$listReply){
             Yii::$app->getSession()->setFlash('danger', '回复语未填写！');
             return $this->redirect(['antireply/onereply']);
@@ -203,27 +203,81 @@ class AntiController extends \yii\web\Controller
         $table='tbhome_anti_code_'.Yii::$app->user->id;
 
 
-        $model = new AntiCode();
+        $model = new AntiCodenew();
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
+        //    print_r($model);
+            $uid=Yii::$app->user->id;
+            $traceabilityid= intval($model->traceabilityid)? intval($model->traceabilityid) : 1;
+            $productid= intval($model->productid)? intval($model->productid) : 1;
+            $replyid= intval($model->replyid)? intval($model->replyid) : 1;
+
+            $create_time=time();
+            $prize =  isset($model->prize) ? $model->prize : '';
+            $remark =  isset($model->remark) ? $model->remark : '';
+
+            //'query_time', 'clicks', 'status', 'traceabilityid', 'url', 'remark'
+
+      //      if ($model->validate()) {
 
                 $date=date('Y_m_d_Hms', time());
                 $dirPath='Uploads/'.Yii::$app->user->id.'/GenQRcode/'.$date.'/';
                 if (!file_exists($dirPath)) {mkdir($dirPath, 0777, true);}
-                $traceabilityid=intval($model->traceabilityid) ? intval($model->traceabilityid) : 1;
 
-                $time=time();
+                $tableColumn=array();
                 for ($i=0; $i<=(intval($_POST['sNum'])-1); $i++) {
                     $code = $this->random(intval($_POST['slen']), $_POST['rule'], false);
-                    $url=Url::to(['/anti/antipage', 'replyid'=>intval($model->replyid), 'productid'=>intval($model->productid), 'code'=>$_POST['sStr'].$code], true);
-                    $tableColumn[$i]=[Yii::$app->user->id, $_POST['sStr'].$code, intval($model->productid), intval($model->replyid), $model->prize, $time, 0, 0, 10, $traceabilityid, $url, $model->remark];
+                    $url=Url::to([
+                        '/anti/antipage',
+                        'replyid'=>$replyid,
+                  //      'productid'=>intval($model->productid),
+                        'code'=>$_POST['sStr'].$code
+                    ], true);
+
+                    $tableColumn[$i]=[
+                        $uid,
+                        $_POST['sStr'].$code,
+                        $productid,
+                        $replyid,
+                        $prize,
+                        $create_time,
+                        0,//querytime
+                        0,//clicks
+                        10,//status
+                        $traceabilityid,
+                        $url,
+                        $remark
+                    ];
 
    //                 \QRcode::png($url,$dirPath.$_POST['sStr'].$code.'.png','M',6,1);
                 }
 
 
-                $result=$Connection->createCommand()->batchInsert($table, ['uid', 'code', 'productid', 'replyid', 'prize', 'create_time', 'query_time', 'clicks', 'status', 'traceabilityid', 'url', 'remark'], $tableColumn)->execute();
-                $logData= AntiCodenew::find()->where(['create_time'=>$time])->all();
+                $result=$Connection->createCommand()->batchInsert($table, [
+                    'uid',
+                    'code',
+                    'productid',
+                    'replyid',
+                    'prize',
+                    'create_time',
+                    'query_time',
+                    'clicks',
+                    'status',
+                    'traceabilityid',
+                    'url',
+                    'remark'
+                ], $tableColumn)->execute();
+
+
+                if (!$result){
+                    $Msg='数据插入失败！';
+                    //$i++;
+                }else{
+                    $Msg='成功生成'.$_POST['sNum'].'条数据！';
+                }
+
+
+
+                $logData= AntiCodenew::find()->where(['create_time'=>$create_time])->all();
               $startid=$logData[0]->id;
                 $endid=$logData[intval($_POST['sNum'])-1]->id;
                // var_dump($startid);
@@ -234,15 +288,21 @@ class AntiController extends \yii\web\Controller
                 $log->endid=$endid;
                 $log->remark=$model->remark;
                 $log->save();
-                if (!$result){echo '数据插入失败！';}
-                //$i++;
-            }else{echo '数据无效';}
+
+
+
+  //     }else{
+   //             $Msg='数据无效！';
+   //         }
+         //   Yii::$app->session->setFlash('danger', '数据未设置');
+         //
+        }else{
+            $Msg='数据未设置';
         }
+        Yii::$app->session->setFlash('info', $Msg);
 
-       $successMsg='成功生成'.$_POST['sNum'].'条数据！';
 
-        Yii::$app->getSession()->setFlash('success', $successMsg);
-     return $this->redirect(['anti/gencode']);
+   return $this->redirect(['anti/gencode']);
 
     }
 
