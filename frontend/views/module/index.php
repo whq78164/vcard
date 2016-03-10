@@ -21,10 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+          //  'id',
             'modulename',
             'module_label',
-            'module_des:ntext',
+            'icon',
+            'markclass',
 
             ['class' => 'yii\grid\ActionColumn', 'template'=>'{view}{update}'],
         ],

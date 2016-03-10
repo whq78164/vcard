@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="col-md-10">
+<div class="col-md-8">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -33,23 +33,78 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clicks')->textInput() ?>
 
-    <?= $form->field($model, 'prize')->textarea() ?>
-    <?= $form->field($model, 'remark')->widget('frontend\assets\UeditorWidget',[
-        'serverparam'=>[
-            'myuploadpath'=> Yii::getAlias('@web/Uploads/').Yii::$app->user->id,
-        ],
-        'options'=>[///&lt;br/&gt;为换行符号。
-            'focus'=>true,
-            'toolbars'=> [
-                ['fullscreen', 'source', 'undo', 'redo','paragraph','fontfamily','fontsize', 'justifyleft', 'justifyright', 'justifycenter','link','unlink','emotion', 'simpleupload', 'insertimage', 'map','print', 'spechars','horizontal'],
-                ['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'cleardoc','drafts', 'background', 'preview']
-            ],
-        ],
 
-        'attributes'=>[
-            'style'=>'height:80px'
-        ]
-    ]); ?>
+
+        <div class="box box-info collapsed-box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">数据字段</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-info"></i> 提示!</h4>
+                    回复语模板中设置的变量字段，将被该选项替换
+                </div>
+
+                <?= $form->field($model, 'prize')->textarea() ?>
+                <?= $form->field($model, 'remark')->widget('frontend\assets\UeditorWidget',[
+                    'serverparam'=>[
+                        'myuploadpath'=> Yii::getAlias('@web/Uploads/').Yii::$app->user->id,
+                    ],
+                    'options'=>[///&lt;br/&gt;为换行符号。
+                        'focus'=>true,
+                        'toolbars'=> [
+                            ['fullscreen', 'source', 'undo', 'redo','paragraph','fontfamily','fontsize', 'justifyleft', 'justifyright', 'justifycenter','link','unlink','emotion', 'simpleupload', 'insertimage', 'map','print', 'spechars','horizontal'],
+                            ['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'cleardoc','drafts', 'background', 'preview']
+                        ],
+                    ],
+
+                    'attributes'=>[
+                        'style'=>'height:80px'
+                    ]
+                ]); ?>
+
+
+
+                <?php
+
+                if (!empty($model->dataColumns())){
+                    $Mycolumn=$model->dataColumns();
+                    
+                    foreach($Mycolumn as $key => $value){
+
+                        echo $form->field($model, $key)->textarea();
+                    }
+
+                }
+
+              ?>
+
+
+
+
+
+
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+
+
+
+
+
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('tbhome', 'Create') : Yii::t('tbhome', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

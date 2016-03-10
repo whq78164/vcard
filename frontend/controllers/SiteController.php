@@ -14,8 +14,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use frontend\models\Usermodule;
-use yii\helpers\ArrayHelper;
+//use frontend\models\Usermodule;
+//use yii\helpers\ArrayHelper;
 
 
 /**
@@ -232,12 +232,6 @@ class SiteController extends Controller
             $lastIp = \Yii::$app->user->identity->updated_ip;
             $area = $this->findLocation($lastIp);
             \Yii::$app->session['area'] = $area;
-
-            $uid = Yii::$app->user->id;
-            $module = Usermodule::find()->where(['uid' => $uid, 'module_status' => 10])->all();
-            $modulemap = ArrayHelper::map($module, 'moduleid', 'module_status');
-            Yii::$app->session['mymodule'] = $modulemap;
-
 
             return $this->redirect(['user/index']);
         }elseif(!Yii::$app->user->isGuest){

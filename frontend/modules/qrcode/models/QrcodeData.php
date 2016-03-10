@@ -4,6 +4,7 @@ namespace frontend\modules\qrcode\models;
 use Yii;
 //use yii\behaviors\AttributeBehavior;
 use \yii\db\ActiveRecord;
+use yii\db\Schema;
 /**
  * This is the model class for table "{{%anti_code}}".
  *
@@ -12,7 +13,6 @@ use \yii\db\ActiveRecord;
  * @property string $code
  * @property integer $replyid
  * @property integer $productid
- *  @property integer $traceabilityid
  * @property integer $query_time
  * @property integer $create_time
  * @property integer $status
@@ -24,27 +24,69 @@ class QrcodeData extends ActiveRecord
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+   // public $listDiyColumns=array();
 
-/*    public function behaviors()
-    {
-        return [
-            [
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
-                    //     ActiveRecord::EVENT_BEFORE_UPDATE => 'attribute2',
-                ],
-                //       'value' => function ($event) {
-                //            return 'some value';
-                //      },
-            ],
-        ];
+    protected function columnExist($table, $column){
+        $sql="Describe $table $column";
+        $con=Yii::$app->db->createCommand($sql)->queryOne();
+        if($con['Field']==$column){
+            return true;
+        }else{
+            return false;
+        }
     }
-*/
 
-    /**
-     * @inheritdoc
-     */
+    protected function addColumn($table, $column, $type)
+    {
+        $columnExist=$this->columnExist($table, $column);
+        if(!$columnExist){
+            Yii::$app->db->createCommand()->addColumn($table, $column, $type)->execute();
+        }
+    }
+
+
+    public function dataColumns($type='attribute'){
+        $uid=Yii::$app->user->id;
+        $sql="SELECT * FROM {{%column}} WHERE uid=$uid AND type='qrcode'";
+        $qrcodeColumns=Yii::$app->db->createCommand($sql)->queryAll();
+
+if (!empty($qrcodeColumns)){
+
+    $qrcodeColumn=array();
+    $listDiyColumns=array();
+    foreach($qrcodeColumns as $key => $value){//$qrcodeColumns as $qrcodeColumn
+        $tempColumn=[$value['column']=>$value['label']];
+        $qrcodeColumn=array_merge($qrcodeColumn,$tempColumn);//$myarr[]=$addarry,不可使用，否则索引为数字！
+        $listDiyColumns[]=$value['column'];
+    }
+    $labelExts=$qrcodeColumn;
+    //$this->listDiyColumns=$listDiyColumns;
+
+
+    foreach($labelExts as $key => $value){
+      $this->addColumn(self::tableName(), strval($key), Schema::TYPE_STRING.' NOT NULL');
+    }
+
+
+
+}else{
+    $labelExts=array();
+    $listDiyColumns=array();
+}
+
+        switch($type){
+            case 'attribute':
+                return $labelExts;
+            break;
+            case 'rules':
+                return $listDiyColumns;
+            break;
+            default :
+                return $labelExts;
+        }
+
+    }
+
     public static function tableName()
     {
         return 'tbhome_qrcode_data_'.Yii::$app->user->id;
@@ -56,12 +98,15 @@ class QrcodeData extends ActiveRecord
      */
     public function rules()
     {
+        $stringRule=$this->dataColumns('rules');
+      //  $stringRule[]=['prize', 'remark'];
         return [
     //        [['uid', 'code', 'replyid', 'productid', 'query_time', 'clicks', 'prize'], 'required'],
             [['code'], 'required'],
             [['id', 'uid', 'replyid',  'productid', 'create_time', 'query_time', 'clicks'], 'integer'],
-            [['code', 'url'], 'string', 'max' => 255],
-            [['prize', 'remark'], 'string'],
+            [['code', 'url', 'prize', 'remark'], 'string', 'max' => 255],
+          //  array('email, username', 'length', 'max'=>64),
+            [$stringRule, 'string'],
             [['code'], 'unique'],
             ['uid', 'default', 'value' => Yii::$app->user->id],
            ['remark', 'default', 'value' => ''],
@@ -79,10 +124,10 @@ class QrcodeData extends ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
+        $labelBase=[
             'id' => Yii::t('tbhome', 'ID'),
             'uid' => Yii::t('tbhome', 'Uid'),
-            'code' => Yii::t('tbhome', '防伪码'),
+            'code' => Yii::t('tbhome', '唯一码'),
             'replyid' => Yii::t('tbhome', 'Replyid'),
             'productid' => Yii::t('tbhome', 'Productid'),
             'query_time' => Yii::t('tbhome', 'Query Time'),
@@ -92,6 +137,14 @@ class QrcodeData extends ActiveRecord
             'create_time' => Yii::t('tbhome', 'create time'),
             'status' => Yii::t('tbhome', 'status'),
         ];
+
+
+        $labelExts=$this->dataColumns('attribute');
+
+        $newLabels=array_merge($labelBase,$labelExts);
+
+        return $newLabels;
+
     }
 
 

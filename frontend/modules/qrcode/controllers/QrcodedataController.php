@@ -259,37 +259,63 @@ class QrcodedataController extends Controller
 
     public function actionExcelall(){
 
+        $uid=Yii::$app->user->id;
+        $sql="SELECT * FROM {{%column}} WHERE uid=$uid AND type='qrcode'";
+        $qrcodeColumns=Yii::$app->db->createCommand($sql)->queryAll();
+
+/*
+        if (!empty($qrcodeColumns)){
+            $i='I';
+            foreach($qrcodeColumns as $key => $value){//$qrcodeColumns as $qrcodeColumn
+              echo $value['label'].$i;
+                $i++;
+            }
+        }
+*/
+
         $objPHPExcel=new \PHPExcel();
         $objPHPExcel->getProperties()  //获得文件属性对象，给下文提供设置资源
-        ->setCreator( "798904845")                 //设置文件的创建者
-        ->setLastModifiedBy( "Maarten Balliauw")          //设置最后修改者
-        ->setTitle( "Office 2007 XLSX Test Document" )    //设置标题
-        ->setSubject( "Office 2007 XLSX Test Document" )  //设置主题
-        ->setDescription( "Test document for Office 2007 XLSX, generated using PHP classes.") //设置备注
+        ->setCreator( "tbhome")                 //设置文件的创建者
+        ->setLastModifiedBy( "wuhanqing")          //设置最后修改者
+        ->setTitle( "QRcode infomation" )    //设置标题
+        ->setSubject( "QRcodeData" )  //设置主题
+        ->setDescription( "Think you to usage！") //设置备注
         ->setKeywords( "office 2007 openxml php")        //设置标记
         ->setCategory( "Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0);
         $objActivSheet=$objPHPExcel->getActiveSheet();
-        $objActivSheet->setCellValue('A1', '防伪码')
-            ->setCellValue('B1', '创建时间')
-            ->setCellValue('C1', '查询时间')
-            ->setCellValue('D1', '点击量')
-            ->setCellValue('E1', '奖品')
-            ->setCellValue('F1', '备注')
-            ->setCellValue('G1', '网址')
-            ->setCellValue('H1', '序号');
 
+        $objActivSheet->setCellValue('A1', '序号')
+            ->setCellValue('B1', '防伪码')
+            ->setCellValue('C1', '创建时间')
+            ->setCellValue('D1', '查询时间')
+            ->setCellValue('E1', '点击量')
+            ->setCellValue('F1', '网址')
+            ->setCellValue('G1', '奖品')
+            ->setCellValue('H1', '备注');
+
+
+        if (!empty($qrcodeColumns)){
+          //  $listDiyColumns=array();
+            $i='I';
+            foreach($qrcodeColumns as $key => $value){//$qrcodeColumns as $qrcodeColumn
+                $objActivSheet->setCellValue($i.'1', $value['label']);
+                $i++;
+               // $listDiyColumns=$listDiyColumns+[$value['column']=>$value['label']];
+            }
+
+        }
+   //     print_r($listDiyColumns);
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $start=$_POST['start'];
             $end=$_POST['end'];
-            $data=QrcodeCodenew::find()->where('id>='.$start.' AND id<='.$end);
+            $data=QrcodeData::find()->where('id>='.$start.' AND id<='.$end);
             $num=$data->count();
             $data= $data->all();
         }else{
-
-            $data=QrcodeCodenew::find();//->asArray();
+            $data=QrcodeData::find();//->asArray();
             $num=$data->count();
             $data= $data->all();
         }
@@ -299,21 +325,30 @@ class QrcodedataController extends Controller
             $queryTime =$data[$arrid]->query_time==0 ? 0 : date('Y-m-d H:m:s', $data[$arrid]->query_time);
 
             $url=Url::to([
-                '/Qrcode/Qrcodepage',
+                '/qrcode/qrcode/qrcodepage',
                 'replyid'=>$data[$arrid]->replyid,
               //  'productid'=>$data[$arrid]->productid,
                 'code'=>$data[$arrid]->code
             ], true);
 
+            $objActivSheet->setCellValue('A'.$i, $data[$arrid]->id)
+                ->setCellValue('B'.$i, $data[$arrid]->code)
+                ->setCellValue('C'.$i, $createTime)
+                ->setCellValue('D'.$i, $queryTime)
+                ->setCellValue('E'.$i, $data[$arrid]->clicks)
+                ->setCellValue('F'.$i, $url)
+                ->setCellValue('G'.$i, $data[$arrid]->prize)
+                ->setCellValue('H'.$i,$data[$arrid]->remark);
 
-            $objActivSheet->setCellValue('A'.$i, $data[$arrid]->code)
-                ->setCellValue('B'.$i, $createTime)
-                ->setCellValue('C'.$i, $queryTime)
-                ->setCellValue('D'.$i, $data[$arrid]->clicks)
-                ->setCellValue('E'.$i, $data[$arrid]->prize)
-                ->setCellValue('F'.$i, $data[$arrid]->remark)
-                ->setCellValue('G'.$i, $url)//->setCellValue('G'.$i, $data[$arrid]->url)
-                ->setCellValue('H'.$i, $data[$arrid]->id);
+            if (!empty($qrcodeColumns)){
+                //  $listDiyColumns=array();
+                $j='I';
+                foreach($qrcodeColumns as $key => $value){
+                    $objActivSheet->setCellValue($j.$i, $data[$arrid]->$value['column']);
+                 $j++;
+                }
+            }
+
         }
 
 
@@ -326,7 +361,6 @@ class QrcodedataController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
-
 
     }
 

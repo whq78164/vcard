@@ -42,7 +42,9 @@ class UpdateController extends DbController
                 echo '您的系统已升级成功！版本：1.10，请勿重复升级！';
             }elseif($sys['version']<1.0){//手动清除版本信息，重新升级
 
-
+                $this->addColumn('{{%module}}', 'icon', Schema::TYPE_STRING." NOT NULL DEFAULT '"."fa fa-circle-o'");
+                $this->addColumn('{{%module}}', 'mark', Schema::TYPE_STRING." NOT NULL DEFAULT '"."New'");
+                $this->alterColumn('{{%module}}', 'markclass', Schema::TYPE_STRING." NOT NULL DEFAULT '"."label pull-right bg-green'");
 
 
 
@@ -50,7 +52,7 @@ class UpdateController extends DbController
 
 
 //var_dump($this->indexExist('tbhome_wechatgh', 'uid'));
-                $this->addColumn('{{%column}}', 'value', Schema::TYPE_STRING.' NOT NULL');
+              //  $this->addColumn('{{%column}}', 'value', Schema::TYPE_STRING.' NOT NULL');
       //          $this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL DEFAULT 24.9');
         //       $this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL DEFAULT 118.54');
           //      $this->addColumn('{{%card_info}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
@@ -58,7 +60,7 @@ class UpdateController extends DbController
 
                // $this->insert('{{%module}}',['id'=>1, 'modulename'=>'company','module_label'=>'公司', 'module_des'=>'公司职员管理']);//id字段如不设置，则默认自增
 
-                $this->actionCreatetable();
+             //   $this->actionCreatetable();
                 $this->update('{{%sys}}', ['version'=>1.10], ['id'=>1]);
             }else{
                 echo 'version字段已设置！';

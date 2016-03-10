@@ -20,6 +20,9 @@ return [
       'qrcode' => [
           'class' => 'frontend\modules\qrcode\qrcodeModule',
       ],
+      'column' => [
+          'class' => 'frontend\modules\column\Module',
+      ],
  
 	  'authmenu' => require(__DIR__ . '/modules/authmenu.php'),
     ],

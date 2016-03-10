@@ -137,6 +137,9 @@ $this->createTable('{{%module}}', [
     'modulename' => Schema::TYPE_STRING . '(20) NOT NULL',
     'module_label' => Schema::TYPE_STRING . '(20) NOT NULL',
     'module_des' => Schema::TYPE_TEXT . ' NOT NULL',
+    'icon' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."fa fa-circle-o'",
+    'mark' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."New'",
+    'markclass' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."label pull-right bg-green'",
 ], $tableOptions);
 
 $this->createTable('{{%usermodule}}', [
@@ -144,6 +147,7 @@ $this->createTable('{{%usermodule}}', [
     'uid' => Schema::TYPE_INTEGER . ' NOT NULL',
     'moduleid' => Schema::TYPE_INTEGER . ' NOT NULL',
     'module_status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
+
 ], $tableOptions);
 $this->createIndex('uid', '{{%usermodule}}', ['uid']);
 $this->createIndex('moduleid', '{{%usermodule}}', ['moduleid']);
@@ -503,27 +507,49 @@ $this->insert('{{%module}}',[
     'id'=>1, //id字段如不设置，则默认自增
     'modulename'=>'company',
     'module_label'=>'公司',
-    'module_des'=>'公司职员管理，微信员工导航名片'
+    'module_des'=>'公司职员管理，微信员工导航名片',
+    'icon'=>'fa fa-university',
+    'mark'=>'New',
+    'markclass'=>'label pull-right bg-green',
 ]);
 
 $this->insert('{{%module}}',[
     'id'=>2, //id字段如不设置，则默认自增
     'modulename'=>'qrcode',
-    'module_label'=>'二维码管理系统New',
-    'module_des'=>'防伪、追溯，自定义字段添加...'
+    'module_label'=>'二维码管理系统',
+    'module_des'=>'防伪、追溯，自定义字段添加...',
+    'icon'=>'fa fa-qrcode',
+    'mark'=>'Hot',
+    'markclass'=>'label pull-right bg-red',
 ]);
 
-
+$this->insert('{{%module}}',[
+    'id'=>3, //id字段如不设置，则默认自增
+    'modulename'=>'column',
+    'module_label'=>'自定义字段',
+    'module_des'=>'用于自定义表单，预约，追溯字段，自定义名片模板等......',
+    'icon'=>'fa fa-th',
+    'markclass'=>'label pull-right bg-green',
+]);
 
 $this->insert('{{%usermodule}}',[
     'id'=>1, //id字段如不设置，则默认自增
     'uid'=>1,
     'moduleid'=>1,
-    'module_status'=>10
+    'module_status'=>10,
+
 ]);
 $this->insert('{{%usermodule}}',[
     'id'=>2, //id字段如不设置，则默认自增
     'uid'=>1,
     'moduleid'=>2,
-    'module_status'=>10
+    'module_status'=>10,
+
+]);
+$this->insert('{{%usermodule}}',[
+    'id'=>3, //id字段如不设置，则默认自增
+    'uid'=>1,
+    'moduleid'=>3,
+    'module_status'=>10,
+
 ]);

@@ -30,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'modulename',
             'module_label',
+            'icon',
+            'mark',
+            'markclass',
             'module_des:ntext',
         ],
     ]) ?>

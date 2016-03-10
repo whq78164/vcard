@@ -29,7 +29,7 @@ if (Yii::$app->user->isGuest) {
 $uid=Yii::$app->user->id;
 $sql="SELECT * FROM {{%usermodule}} WHERE uid=$uid AND module_status=10";
 $modules=Yii::$app->db->createCommand($sql)->queryAll();
-//print_r($modules);
+
 $usermodule=array();
 foreach($modules as $module){
     $sql="SELECT * FROM {{%module}} WHERE id=".$module['moduleid'];
@@ -61,29 +61,6 @@ $loginuid=$userInfo->id;
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <?php $this->head() ?>
-    <!-- Bootstrap 3.3.5 ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/">
-    <!-- Font Awesome ->
-    <link rel="stylesheet" href="">
-    <!-- Ionicons ->
-    <link rel="stylesheet" href="">
-    <!-- Theme style ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/">
-    <!-- iCheck ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/iCheck/flat/blue.css">
-    <!-- Morris chart ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/morris/morris.css">
-    <!-- jvectormap ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-    <!-- Date Picker ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- Daterange picker ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css">
-    <!-- bootstrap wysihtml5 - text editor ->
-    <link rel="stylesheet" href="bower_components/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -558,13 +535,6 @@ NavBar::begin([
 
                     </a>
                 </li>
-                <li>
-                    <a href="<?=Url::to(['/column'], true)?>">
-                        <i class="fa fa-th"></i> <span>自定义字段</span>
-                        <small class="label pull-right bg-red">New</small>
-                    </a>
-                </li>
-
 
                 <li>
                     <a href="<?=Url::to(['/user/vcards'], true)?>">
@@ -618,8 +588,11 @@ NavBar::begin([
                         foreach($usermodule as $module){?>
                             <li>
                                 <a href="<?=Url::to(['/'.$module['modulename']], true)?>">
-                                    <i class="fa fa-circle-o"></i>
-                                    <?=$module['module_label']?>
+                                    <i class="<?=$module['icon']?>"></i>
+                                  <span><?=$module['module_label']?></span>
+                                    <small class="<?=$module['markclass']?>">
+                                        <?=$module['mark']?>
+                                    </small>
                                 </a>
                             </li>
 

@@ -331,10 +331,9 @@ echo $rows;
             $reply=QrcodeReply::findOne($replyid);
             $product=Product::findOne($productid);
 
-            $tabletracea='tbhome_traceability_info_'.$uid;
-            $ta=Yii::$app->db->createCommand("SHOW TABLES LIKE '".$tabletracea."'")->queryAll();
+      //      $tabletracea='tbhome_traceability_info_'.$uid;
+        //    $ta=Yii::$app->db->createCommand("SHOW TABLES LIKE '".$tabletracea."'")->queryAll();
             $productImage=Html::img($product->image);
-
 
             $userip=get_client_ip();
             $clicks=intval($codeData['clicks']);
@@ -366,22 +365,52 @@ echo $rows;
 
 
 
-            $inputArr=[
+
+
+            $sql="SELECT * FROM {{%column}} WHERE uid=$uid AND type='qrcode'";
+            $qrcodeColumns=Yii::$app->db->createCommand($sql)->queryAll();
+
+            if (!empty($qrcodeColumns)) {
+                $diyColumns = array();
+                $replaceDiyColumns=array();
+                foreach ($qrcodeColumns as $key => $value) {//$qrcodeColumns as $qrcodeColumn
+                    $tempLabel='{{'.$value['label'].'}}';
+                    $diyColumns[]=$tempLabel;//或array_merge
+                    $tempColumn=isset($codeData[$value['column']]) ? $codeData[$value['column']] : '';
+                    $replaceDiyColumns[]=$tempColumn;
+                }
+
+            }else{
+                $diyColumns = array();
+                $replaceDiyColumns=array();
+            }
+
+
+                $inputArr=[
                 '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{自定义网页}}', '{{二维码}}', '{{地区}}','{{修改备注}}'
             ];
+        //    $inputArr[]=$diyColumns;
+            //$inputArr=$inputArr+$diyColumns;
+            $inputArr=array_merge($inputArr,$diyColumns);
+
 
             $replaceArr=[
                 $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit,  $diypage, $qrcodeimg, $userArea, $remarkform
             ];
+            $replaceArr=array_merge($replaceArr,$replaceDiyColumns);;
+
+         //   print_r($inputArr);
 
             $reply->success=str_replace($inputArr, $replaceArr, $reply->success);
 
+
+           /////////////////////查询失败回复语
             $reply->fail=str_replace([
                 '{{防伪码}}', '{{查询次数}}', '{{生产备注}}', '{{奖品}}', '{{查询时间}}', '{{产品厂家}}', '{{产品名称}}', '{{产品品牌}}', '{{产品规格}}', '{{产品价格}}', '{{产品图片}}', '{{产品详情}}', '{{计量单位}}', '{{自定义网页}}'
             ], [
                 $code, $codeData['clicks'], $codeData['remark'], $codeData['prize'], $query_time, $product->factory, $product->name, $product->brand, $product->specification, $product->price, $productImage, $product->describe, $product->unit,  $diypage
             ], $reply->fail);
-
+             /////////////////////查询失败回复语
 
             $validClicks=$reply->valid_clicks;
             if ($codeData['clicks']>=$validClicks){
@@ -392,6 +421,7 @@ echo $rows;
                 $queryResult=$reply->success;
                 return $queryResult;
             }
+
 
         }
 

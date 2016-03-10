@@ -1,9 +1,9 @@
 <?php
 
-namespace frontend\controllers;
+namespace frontend\modules\column\controllers;
 
 use Yii;
-use frontend\models\Column;
+use frontend\modules\column\models\Column;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
  */
 class ColumnController extends Controller
 {
-    public $layout='user';
+    public $layout='@frontend/views/layouts/user';
     public function behaviors()
     {
         return [

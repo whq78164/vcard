@@ -46,12 +46,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-           ['attribute' =>  'prize', 'format'=>'html'],
+    //       ['attribute' =>  'prize', 'format'=>'html'],
 
 
 
             ['attribute' => 'create_time', 'format' => ['date', 'php:Y-m-d']],
-           ['attribute' =>  'remark', 'format'=>'html'],
+   //        ['attribute' =>  'remark', 'format'=>'html'],
 
             'clicks',
 

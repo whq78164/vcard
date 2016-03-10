@@ -15,8 +15,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'modulename')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'module_label')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'module_des')->textarea(['rows' => 5]) ?>
 
-    <?= $form->field($model, 'module_des')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'icon')->textInput()->hint('选填') ?>
+    <?= $form->field($model, 'mark')->textInput()->hint('选填') ?>
+    <?= $form->field($model, 'markclass')->textInput()->hint('选填') ?>
+
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('tbhome', 'Create') : Yii::t('tbhome', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

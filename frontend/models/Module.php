@@ -29,7 +29,7 @@ class Module extends \yii\db\ActiveRecord
     {
         return [
             [['modulename', 'module_label', 'module_des'], 'required'],
-            [['module_des'], 'string'],
+            [['module_des', 'mark', 'markclass', 'icon'], 'string'],
             [['modulename', 'module_label'], 'string', 'max' => 20]
         ];
     }
@@ -44,6 +44,9 @@ class Module extends \yii\db\ActiveRecord
             'modulename' => Yii::t('tbhome', 'Modulename'),
             'module_label' => Yii::t('tbhome', 'Module Label'),
             'module_des' => Yii::t('tbhome', 'Module Des'),
+            'icon' => '图标样式',
+            'mark' => '标记',
+            'markclass' => '标记样式',
         ];
     }
 }
