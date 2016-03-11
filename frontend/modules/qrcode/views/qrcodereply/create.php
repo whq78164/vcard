@@ -11,9 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('tbhome', 'Anti Replies'), '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="container">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="row">
 
     <?= $this->render('_form', [
         'model' => $model,

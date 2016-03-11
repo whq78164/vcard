@@ -19,7 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=Html::a('批量修改', ['/qrcode/qrcode/modifycode'], ['class'=>'btn btn-warning btn-block'])?>
         </div>
     </div>
+    <div class="col-sm-12 col-md-4">
 
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info"></i> 提示!</h4>
+            巧用<strong>回复语模板</strong>, 配合使用自定义字段，可以让您的二维码应用更加强大！
+        </div>
+
+    </div>
     <div class="col-sm-12 col-md-8 ">
         <div class="panel panel-primary">
             <div class="panel-heading">回复语模板：</div>

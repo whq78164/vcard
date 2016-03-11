@@ -9,26 +9,64 @@ use yii\grid\GridView;
 $this->title = Yii::t('tbhome', 'Modules');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="module-index">
+<div class="row">
+    <div class="col-md-8">
+        <?//= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('tbhome', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <?= Html::a(
+            '<i class="glyphicon glyphicon-plus"></i> '.'安装向导',
+            ['install'], ['class' => 'btn btn-success']) ?>
+    </div>
+
+</div>
 
 
-    <p>
-        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('tbhome', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<div class="row">
+
+    <div class="col-md-8">
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
-          //  'id',
+            'id',
             'modulename',
             'module_label',
-            'icon',
-            'markclass',
+
+            [
+                'header'=>'图标样式',
+                'format' => 'html',
+              'value'=>function($data){
+                return Html::tag('span','',['class'=>$data->icon]);//"<span class='".$data->icon."'></span>";
+            },
+            ],
+
+            [
+                'header'=>'标记和样式',
+                'format' => 'html',
+                'value'=>function($data){
+                    return Html::tag('span',$data->mark,['class'=>$data->markclass]);//"<span class='".$data->icon."'></span>";
+                },
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn', 'template'=>'{view}{update}'],
         ],
     ]); ?>
+
+</div>
+    <div class="col-sm-12 col-md-4">
+        <p></p>
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info"></i> 已安装的模块：</h4>
+
+        </div>
+
+    </div>
 
 </div>

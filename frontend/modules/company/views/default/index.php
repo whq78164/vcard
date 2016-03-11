@@ -21,6 +21,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
+    <div class="col-sm-12 col-md-4">
+
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info"></i> 提示!</h4>
+            设置公众号信息后，在公众号内回复工号，可获取对应的员工名片。
+        </div>
+
+    </div>
+
 </div>
 
 

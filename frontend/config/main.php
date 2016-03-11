@@ -13,26 +13,11 @@ return [
     'controllerNamespace' => 'frontend\controllers',
 //    'language' => 'zh-CN',
     //'charset' => 'UTF-8',
-  'modules' => [
-      'company' => [
-          'class' => 'frontend\modules\company\companyModule',
-      ],
-      'qrcode' => [
-          'class' => 'frontend\modules\qrcode\qrcodeModule',
-      ],
-      'column' => [
-          'class' => 'frontend\modules\column\Module',
-      ],
- 
-	  'authmenu' => require(__DIR__ . '/modules/authmenu.php'),
-    ],
+  'modules' =>require (__DIR__ . '/modules/extmodules.php'),
    'components' => [
         'db' => require(__DIR__ . '/db.php'),
         'i18n' => require(__DIR__ . '/components/i18n.php'),
         'mailer' => require(__DIR__ . '/components/mailer.php'),
-
-      // 'assetManger' => [],
-
        'assetManager' => [
          //  'basePath' => '@webroot/frontend/web/assets',
            //     'baseUrl' => '@web/frontend/web/assets'
@@ -54,6 +39,15 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // 使用数据库管理配置文件
        ],
+/*
+       'as access' => [
+           'class' => 'mdm\admin\components\AccessControl',
+         //  'allowActions' => [
+           //    'site/*',//允许访问的节点，可自行添加
+             //  'admin/*',//允许所有人访问admin节点及其子节点],
+           ],
+*/
+
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

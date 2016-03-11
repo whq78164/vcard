@@ -137,7 +137,7 @@ $this->createTable('{{%module}}', [
     'modulename' => Schema::TYPE_STRING . '(20) NOT NULL',
     'module_label' => Schema::TYPE_STRING . '(20) NOT NULL',
     'module_des' => Schema::TYPE_TEXT . ' NOT NULL',
-    'icon' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."fa fa-circle-o'",
+    'icon' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."fa fa-external-link'",
     'mark' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."New'",
     'markclass' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."label pull-right bg-green'",
 ], $tableOptions);
@@ -169,7 +169,7 @@ $this->createTable('{{%sys}}', [
     'icp' => Schema::TYPE_STRING . '(20) NOT NULL',
     'ip' => Schema::TYPE_STRING . '(30) NOT NULL',
     'status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
-    'version' => Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.0',
+    'version' => Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.10',
 ], $tableOptions);
 //  $this->createIndex('admin_user', '{{%sys}}', ['admin_user']);
 //     $this->createIndex('ip', '{{%sys}}', ['ip']);

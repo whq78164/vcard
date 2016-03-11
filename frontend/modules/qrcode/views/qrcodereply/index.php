@@ -10,7 +10,7 @@ use yii\grid\GridView;
 $this->title = Yii::t('tbhome', 'Anti Replies');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="anti-reply-index col-md-10">
+<div class="col-md-10">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 

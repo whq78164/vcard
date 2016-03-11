@@ -590,9 +590,9 @@ NavBar::begin([
                                 <a href="<?=Url::to(['/'.$module['modulename']], true)?>">
                                     <i class="<?=$module['icon']?>"></i>
                                   <span><?=$module['module_label']?></span>
-                                    <small class="<?=$module['markclass']?>">
+                                    <span class="<?=$module['markclass']?>">
                                         <?=$module['mark']?>
-                                    </small>
+                                    </span>
                                 </a>
                             </li>
 

@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = Yii::t('tbhome', 'Update');
 ?>
 
 
-<div class="container">
+<div class="row">
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

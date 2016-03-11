@@ -2,7 +2,7 @@
 
 namespace frontend\modules\qrcode;
 
-class qrcodeModule extends \yii\base\Module
+class qrcodeModule extends \yii\base\Module//类名必须和文件名一样，如qrcodeModule类，qrcodeModule.php
 {
     public $controllerNamespace = 'frontend\modules\qrcode\controllers';
    // public $defaultRoute='qrcode';
