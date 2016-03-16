@@ -165,3 +165,7 @@ if(!empty($error)) {
 
 
     </div>
+<?php
+//if(Yii::$app->user->isGuest){echo '未登录';};
+var_dump(Yii::$app->user->isGuest);
+?>

@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-//use frontend\models\Micropage;
+use frontend\models\Micropage;
 //use yii\bootstrap\Nav;
 //use yii\bootstrap\NavBar;
 //use yii\widgets\Breadcrumbs;
@@ -187,7 +187,7 @@ if ($userdata['address']){
 
 
 <li>
-    <a href="http://api.map.baidu.com/marker?location=<?=$userdata['latitude']?>,<?=$userdata['longitude']?>&title=<?=$userdata['unit']?>&content=<?=$userdata['unit']?>&output=html">
+    <!--a href="http://api.map.baidu.com/marker?location=<?//=$userdata['l']?>,<?//=$userdata['longitude']?>&title=<?//=$userdata['unit']//urlencode($userdata['unit'])?>&content=<?//=$userdata['unit']?>&output=html"-->
     <i class="iconfont i-arrow"></i>
     <div class="cont">
         <div class="m-address num">

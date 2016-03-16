@@ -6,7 +6,6 @@ Card1Asset::register($this);
 if(!file_exists($worker['head_img'])){
     $worker['head_img']='Uploads/shuhualogo.jpg';
 }
-
 ?>
 
 <?php $this->beginPage() ?>
@@ -22,7 +21,6 @@ if(!file_exists($worker['head_img'])){
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <?php $this->head()?>
 <style type="text/css">
-   <!-- .inline { float:left; display:inline;}-->
 #mcover {
     position: fixed;
     top: 0;
@@ -86,76 +84,43 @@ if(!file_exists($worker['head_img'])){
             </div>
             <div class="card-content">
                 <a class="tpl-bc-map card-company" href="/">
-                    <div class="tpl-bc-company text-center" style="font-size: 18px"> <?=$worker['company']?>
+                    <div class="tpl-bc-company" style="font-size: 18px"> <?=$worker['company']?>
                     </div>
                 </a>
                 <ul class="card-content-view page-bc-con-view">
-
+                <li class="card-content-item">
+                    <span class="card-content-item-tips m_mobile"></span>
+                    <!--span class="card-content-item-tips am-icon-mobile"></span-->
+                    <a href="tel:<?=$worker['mobile']?>" class="blud-font"><?=$worker['mobile']?></a>
+                </li>
                     <li class="card-content-item">
-                        <a href="tel:<?=$worker['mobile']?>" class="blud-font">
-                        <span class="fa-stack ">
-                            <i class="fa fa-mobile fa-stack-1x"></i>
-                            <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-                   <?=$worker['mobile']?></a>
+                        <span class="card-content-item-tips m_tele"></span>
+                        <!--span class="card-content-item-tips am-icon-phone"></span-->
+                        <a href="tel:<?=$worker['work_tel']?>" class="blud-font"><?=$worker['work_tel']?></a>
                     </li>
-
-
                     <li class="card-content-item">
-                        <a href="tel:<?=$worker['work_tel']?>" class="blud-font">
-                        <span class="fa-stack ">
-                            <i class="fa fa-phone fa-stack-1x"></i>
-                            <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-                   <?=$worker['work_tel']?></a>
+                        <span class="card-content-item-tips m_email"></span>
+                        <a href="mailto:<?=$worker['email']?>" class="blud-font"><?=$worker['email']?></a>
                     </li>
-
-
-
                     <li class="card-content-item">
-                        <a href="mailto:<?=$worker['email']?>" class="blud-font">
-                        <span class="fa-stack ">
-                            <i class="fa fa-envelope fa-stack-1x"></i>
-                            <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-                   <?=$worker['email']?></a>
+                        <span class="card-content-item-tips m_weixin"></span>
+                        <!--span class="card-content-item-tips am-icon-weixin"></span-->
+                        <a class="blud-font"><?=$worker['wechat_account']?></a>
                     </li>
-
-
                     <li class="card-content-item">
-                        <a class="blud-font">
-                        <span class="fa-stack ">
-                            <i class="fa fa-weixin fa-stack-1x"></i>
-                            <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-                       <?=$worker['wechat_account']?></a>
+                        <span class="card-content-item-tips"><img style="width:30px" src="images/qqshuhuanew50.png"></span>
+                        
+                        <a class="blud-font"><?=$worker['qq']?></a>
                     </li>
-
-
                     <li class="card-content-item">
-                        <a  class="blud-font">
-                        <span class="fa-stack ">
-  <i class="fa fa-qq fa-stack-1x"></i>
-  <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-                       <?=$worker['qq']?></a>
 
-                    </li>
-
-
-                    <li class="card-content-item">
-                        <a href="http://api.map.baidu.com/marker?location=<?=$worker['latitude']?>,<?=$worker['longitude']?>&title=<?=$worker['company']?>&content=<?=$worker['company']?>&output=html">
-                        <span class=" fa-stack ">
-  <i class="fa fa-location-arrow fa-stack-1x"></i>
-  <i class="fa fa-circle-thin fa-stack-2x"></i>
-                        </span>
-
+                        <a href="http://api.map.baidu.com/marker?location=<?=$worker['location']?>&title=<?=$worker['company']?>&content=<?=$worker['company']?>&output=html">
+                        <span class="card-content-item-tips m_address"></span>
                        <?=$worker['address']?>
                         </a>
+
+
                     </li>
-
-
-
                 </ul>
             </div>
            <div class="f-cb card-btn">
@@ -262,3 +227,8 @@ if(!file_exists($worker['head_img'])){
 
 </html>
 <?php $this->endPage()?>
+
+
+
+
+

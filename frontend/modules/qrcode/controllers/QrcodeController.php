@@ -119,15 +119,32 @@ class QrcodeController extends \yii\web\Controller
         $listReply=ArrayHelper::map($reply, 'id', 'tag');
 
         if(Yii::$app->request->isPost){
+
             $idend=intval($_POST['QrcodeData']['idend']);
             $model->load(Yii::$app->request->post());
             $idstart=intval($model->id);
-            $exe=$Connection->createCommand()->update($table, [
+
+            $updateColumn=[
                 'prize'=>$model->prize,
                 'remark'=>$model->remark,
                 'replyid'=>$model->replyid,
                 'productid'=>$model->productid,
-            ], "id>=$idstart AND id<=$idend")->execute();
+            ];
+
+            if (!empty($model->dataColumns())){
+                $Mycolumn=$model->dataColumns();
+                $addColumn=array();
+                foreach($Mycolumn as $key => $value){
+                    $tempAddColumn=[$key=>$model->$key];
+                    $addColumn=array_merge($addColumn,$tempAddColumn);
+                }
+                $updateColumn=array_merge($updateColumn,$addColumn);
+            }
+
+
+            $exe=$Connection->createCommand()->update($table, $updateColumn, "id>=$idstart AND id<=$idend")->execute();
+
+
             if($exe){
             $successMsg='成功修改'.$exe.'条数据！';
             Yii::$app->getSession()->setFlash('success', $successMsg);
@@ -170,7 +187,7 @@ class QrcodeController extends \yii\web\Controller
         $model = new QrcodeData();
         if (!$listReply){
             Yii::$app->getSession()->setFlash('danger', '回复语未填写！');
-            return $this->redirect(['qrcodeReply/onereply']);
+            return $this->redirect(['qrcodereply/onereply']);
         }
         if (!$listData){
             Yii::$app->getSession()->setFlash('danger', '请先添加产品！');
@@ -208,6 +225,42 @@ class QrcodeController extends \yii\web\Controller
             $prize =  isset($model->prize) ? $model->prize : '';
             $remark =  isset($model->remark) ? $model->remark : '';
 
+
+            $insertColumn=[
+                'uid',
+                'code',
+                'productid',
+                'replyid',
+                'prize',
+                'create_time',
+                'query_time',
+                'clicks',
+                'status',
+                'url',
+                'remark'
+            ];
+
+            if (!empty($model->dataColumns())){
+                $Mycolumn=$model->dataColumns();
+
+                foreach($Mycolumn as $key => $value){
+                    $diyColumn[]=$key;
+                    $insertValue[]=isset($model->$key) ? $model->$key : '';
+                }
+
+                $insertColumn=array_merge($insertColumn,$diyColumn);
+
+        //        print_r($insertColumn);
+          //      print_r($insertValue);
+
+            }
+
+
+
+
+
+
+
             //'query_time', 'clicks', 'status', 'traceabilityid', 'url', 'remark'
 
       //      if ($model->validate()) {
@@ -240,23 +293,12 @@ class QrcodeController extends \yii\web\Controller
                         $remark
                     ];
 
-   //                 \QRcode::png($url,$dirPath.$_POST['sStr'].$code.'.png','M',6,1);
+                    $tableColumn[$i]=array_merge($tableColumn[$i],$insertValue);
+
                 }
 
 
-                $result=$Connection->createCommand()->batchInsert($table, [
-                    'uid',
-                    'code',
-                    'productid',
-                    'replyid',
-                    'prize',
-                    'create_time',
-                    'query_time',
-                    'clicks',
-                    'status',
-                    'url',
-                    'remark'
-                ], $tableColumn)->execute();
+            $result=$Connection->createCommand()->batchInsert($table, $insertColumn, $tableColumn)->execute();
 
 
                 if (!$result){
@@ -288,12 +330,12 @@ class QrcodeController extends \yii\web\Controller
          //   Yii::$app->session->setFlash('danger', '数据未设置');
          //
         }else{
-            $Msg='数据未设置';
+           $Msg='数据未设置';
         }
-        Yii::$app->session->setFlash('info', $Msg);
+      Yii::$app->session->setFlash('info', $Msg);
 
 
-   return $this->redirect(['qrcode/gencode']);
+ return $this->redirect(['qrcode/gencode']);
 
     }
 

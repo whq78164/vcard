@@ -5,7 +5,17 @@ use Yii;
 
 class DbController extends \yii\web\Controller
 {
-
+/*
+    protected function isInsert($table, $column){
+        $sql="Describe $table $column";
+        $con=Yii::$app->db->createCommand($sql)->queryOne();
+        if($con['Field']==$column){
+            return true;
+        }else{
+            return false;
+        }
+    }
+*/
     protected function columnExist($table, $column){
         $sql="Describe $table $column";
         $con=Yii::$app->db->createCommand($sql)->queryOne();
@@ -48,7 +58,7 @@ class DbController extends \yii\web\Controller
 
     protected function createTable($table, $columns, $options = null)
     {
-        echo "    > 创建 table $table ...";
+        echo "    > 创建 数据表 $table ...";
         $exist=$this->tableExist($table);
         if(!$exist){
             $time = microtime(true);
@@ -62,7 +72,7 @@ class DbController extends \yii\web\Controller
 
     protected function addColumn($table, $column, $type)
     {
-        echo "    > add column $column $type to table $table ...";
+        echo "    > 添加字段 $column $type to table $table ...";
 
         $columnExist=$this->columnExist($table, $column);
         if(!$columnExist){
@@ -104,7 +114,7 @@ class DbController extends \yii\web\Controller
 
     protected function update($table, $columns, $condition = '', $params = [])
     {
-        echo "    > 更新 $table ...";
+        echo "    > 更新数据 $table ...";
         $time = microtime(true);
         Yii::$app->db->createCommand()->update($table, $columns, $condition, $params)->execute();
         echo '成功 (耗时: ' . sprintf('%.3f', microtime(true) - $time) . "s)</br>";
@@ -130,10 +140,10 @@ class DbController extends \yii\web\Controller
 
     protected function dropTable($table)
     {
-        echo "    > drop table $table ...";
+        echo "    > 删除数据表 $table ...";
         $time = microtime(true);
         Yii::$app->db->createCommand()->dropTable($table)->execute();
-        echo ' 成功 (耗时: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+        echo ' 成功删除'.$table.' (耗时: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
     }
 
 

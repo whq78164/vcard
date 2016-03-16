@@ -64,7 +64,7 @@ class ProductController extends Controller
 
 			$model->save();
                     Yii::$app->getSession()->setFlash('success', '保存成功！');
-                    return $this->redirect(['view', 'id'=>$model->id]);
+                    return $this->redirect(['update', 'id'=>$model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "{{%company_department}}".
  *
  * @property integer $id
- * @property integer $company_id
  * @property string $department
  */
 class Department extends \yii\db\ActiveRecord

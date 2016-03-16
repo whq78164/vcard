@@ -21,8 +21,8 @@ class QrcodeLog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-       return 'tbhome_anti_log_'.Yii::$app->user->id;
-     //   return '{{%anti_log}}';
+   //    return 'tbhome_anti_log_'.Yii::$app->user->id;
+        return 'tbhome_qrcode_log_'.Yii::$app->user->id;
     }
 
     /**

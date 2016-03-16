@@ -122,8 +122,72 @@ $this->title='批量生成防伪码';
 
     <?//= $form->field($model, 'query_time') ?>
         <?//= $form->field($model, 'clicks') ?>
-        <?= $form->field($model, 'prize')->label('奖品')->hint('选填')->textarea()  ?>
-    <?= $form->field($model, 'remark')->label('备注')->hint('选填')->textarea() ?>
+
+
+
+
+    <div class="box box-info collapsed-box box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">数据字段</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-info"></i> 提示!</h4>
+                回复语模板中设置的变量字段，将被该选项替换
+            </div>
+
+            <?= $form->field($model, 'prize')->label('奖品')->hint('选填')->textarea()  ?>
+            <?= $form->field($model, 'remark')->label('备注')->hint('选填')->textarea() ?>
+
+
+
+
+            <?php
+
+            if (!empty($model->dataColumns())){
+                $Mycolumn=$model->dataColumns();
+
+                foreach($Mycolumn as $key => $value){
+
+                    echo $form->field($model, $key)->textarea();
+                }
+
+            }
+
+            ?>
+
+
+
+
+
+
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
         <div class="form-group">
             <?= Html::submitButton(Yii::t('tbhome', 'Submit'), ['class' => 'btn btn-primary']) ?>

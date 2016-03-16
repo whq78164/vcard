@@ -121,14 +121,9 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
 
-        <?= $content ?>
+        <?= $content ?><!--这里就是主要内容了。如：关于我们about.php, 首页index.php， 登录页login.php-->
 	</div>
 </div>
-
-
-
-
-
 
 <?//php Yii::powered()=Yii::t('tbhome', 'Vcards')?>
 <footer class="footer">

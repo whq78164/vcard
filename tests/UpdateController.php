@@ -6,52 +6,17 @@ use yii\db\Schema;
 
 class UpdateController extends DbController
 {
-    public $layout='user';
-
-    public function init(){
-        parent::init();
-        if(Yii::$app->user->identity->role!==100){
-            Yii::$app->session->setFlash('danger', '您不是管理员！');
-            $this->redirect(['/user/index']);
-        }
-    }
+ 
 
     public function actionIndex(){
         header('Content-Type:text/html;charset=UTF-8');
 
 
-        if(Yii::$app->request->isPost){
-            $table='sys';
-            $sql="SELECT * FROM {{%$table}} WHERE id=1";
-            $sys=Yii::$app->db->createCommand($sql)->queryOne();
-
-            if(!isset($sys['version'])){
-                //        $this->renameColumn('{{%usermodule}}', 'module_satus', 'module_status');
-                $this->addColumn('{{%sys}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.0');
-                $this->addColumn('{{%card_info}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%card_info}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-
-                $this->update('{{%sys}}', ['version'=>1.10], ['id'=>1]);
-                echo '恭喜！系统已更新成功！版本v1.10';
-            }elseif($sys['version']==1.10){
-                //$version=
-                echo '您的系统已升级成功！版本：1.10，请勿重复升级！';
-            }elseif($sys['version']<1.0){//手动清除版本信息，重新升级
 
                 $frontend=Yii::getAlias('@frontend');
                 require $frontend.'/update.php';
 
 
-            }else{
-
-
-
-                echo 'version字段已设置！';
-            }
-
-        }
 
      //   $this->update('{{%user}}', ['longitude'=>116.473259, 'latitude'=>39.86954], ['uid'=>1]);
 

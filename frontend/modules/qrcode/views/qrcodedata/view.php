@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 <?php
 $urlval=yii\helpers\Url::to([
-    '/anti/antipage',
+    '/qrcode/qrcode/qrcodepage',
     'code'=>$model->code,
     'replyid'=>$model->replyid,
   //  'productid'=>$model->productid

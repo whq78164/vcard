@@ -34,7 +34,7 @@ class ColumnController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Column::find(),
+            'query' => Column::find()->where(['uid'=>Yii::$app->user->id]),
         ]);
 
         return $this->render('index', [
