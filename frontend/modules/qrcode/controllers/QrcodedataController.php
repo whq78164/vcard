@@ -380,14 +380,14 @@ class QrcodedataController extends Controller
 
             $start = $_POST['start'];
             $end = $_POST['end'];
-            $data = QrcodeCodenew::find()->where('id>=' . $start . ' AND id<=' . $end);
+            $data = QrcodeData::find()->where('id>=' . $start . ' AND id<=' . $end);
             $num = $data->count();
             $data = $data->all();
 
             for ($i = 0; $i < $num; $i++) {
                 //   $url = $data[$i]->url;
                 $url=Url::to([
-                    '/Qrcode/Qrcodepage',
+                    '/qrcode/qrcode/qrcodepage',
                     'replyid'=>$data[$i]->replyid,
                  //   'productid'=>$data[$i]->productid,
                     'code'=>$data[$i]->code
@@ -458,15 +458,7 @@ class QrcodedataController extends Controller
         }
 
 
-
     }
-
-
-
-
-
-
-
 
 
 }

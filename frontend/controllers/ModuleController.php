@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\tbhome\DbTool;
+//require dirname(__DIR__) . '/tbhome/DbTool.php';
 
 /**
  * ModuleController implements the CRUD actions for Module model.
@@ -45,8 +47,19 @@ class ModuleController extends Controller
     {
 
         $modulesDir = Yii::getAlias('@frontend/modules');
-     //   $tbhomeDir=Yii::getAlias('@frontend/tbhome');
         $addmoduleFile=Yii::getAlias('@frontend/config/modules/addmodules.php');
+        $request=Yii::$app->request->post();
+        $online=Yii::$app->request->post('online');
+   /*     if($request){
+            print_r($request);
+            print_r($oline);
+        }else{
+            $model = new Module();
+            return $this->render('install', [
+                'model' => $model,
+            ]);
+        }
+*/
         /*         switch($step){
                    case 1 :
                        $render='step1';
@@ -69,84 +82,92 @@ class ModuleController extends Controller
                    $render='install';
                }
        */
-        $model = new Module();
 
-            if ($model->load(Yii::$app->request->post())) {
-                $modulesDir=$modulesDir . '/' . $model->modulename;
+                $model = new Module();
 
-                if (is_dir($modulesDir)) {
-                    $sqlFile=$modulesDir.'/'.$model->modulename.'.sql';
-                    if(is_file($sqlFile)){
-            /*            $dsn=Yii::$app->db->dsn;
-                        $username=Yii::$app->db->username;
-                        $password=Yii::$app->db->password;
-                        $piecesDSN = explode(';', $dsn);//把字符串打散成数组，分割号：
-                        $host=explode('=', $piecesDSN[0]);
-                        $host=$host[1];
-                        $dbname=explode('=', $piecesDSN[1]);
-                        $dbname=$dbname[1];
-               */
-                        if(is_file($modulesDir.'/install.lock')){
-                            Yii::$app->getSession()->setFlash('danger','请删除模块目录install.lock文件后重新安装！');
-                            return $this->refresh();
+                    if ($request) {
 
-                        }
+                        $model->load($request);
+                        $modulesDir=$modulesDir . '/' . $model->modulename;
 
 
-                        if($model->save()){
-                            $addmodule=$this->addmodules();
-                            $input=['{{module}}','{{class}}'];
-                            $output=[$model->modulename,$_POST['class']];
-                            $addmodule=str_replace($input,$output,$addmodule);
-                            file_put_contents($addmoduleFile,$addmodule,FILE_APPEND|LOCK_EX);
+                        if (is_dir($modulesDir)) {
+                            $sqlFile=$modulesDir.'/'.$model->modulename.'.sql';
+                            if(is_file($sqlFile)){
+                    /*            $dsn=Yii::$app->db->dsn;
+                                $username=Yii::$app->db->username;
+                                $password=Yii::$app->db->password;
+                                $piecesDSN = explode(';', $dsn);//把字符串打散成数组，分割号：
+                                $host=explode('=', $piecesDSN[0]);
+                                $host=$host[1];
+                                $dbname=explode('=', $piecesDSN[1]);
+                                $dbname=$dbname[1];
+                       */
+                                if(is_file($modulesDir.'/install.lock')){
+                                    Yii::$app->getSession()->setFlash('danger','请删除模块目录install.lock文件后重新安装！');
+                                    return $this->refresh();
 
-                            $sql=file_get_contents($sqlFile);
-                            $sqlArr= $this->outputSql($sql);
-                            foreach($sqlArr as $eachSql){
-                                Yii::$app->db->createCommand($eachSql)->execute();
+                                }
+
+                                $sql=file_get_contents($sqlFile);
+                              //  $sqlArr= $this->outputSql($sql);
+                                $sqlArr= DbTool::outputSql($sql);
+                                foreach($sqlArr as $eachSql){
+                                    Yii::$app->db->createCommand($eachSql)->execute();
+                                }
+
+
+                                if($model->save()){
+                                    $addmodule=$this->addmodulesConf();
+                                    $input=['{{module}}','{{class}}'];
+                                    $output=[$model->modulename,$_POST['class']];
+                                    $addmodule=str_replace($input,$output,$addmodule);
+                                    file_put_contents($addmoduleFile,$addmodule,FILE_APPEND|LOCK_EX);
+
+                                    $date=date('Y-m-d_H:i:s');
+                                    $string='安装时间：'.$date.'
+                                    ';
+                                    $lockFile = fopen($modulesDir.'/install.lock', "a") or die("无法创建安装锁文件install.lock");
+
+                                    fwrite($lockFile, $string);
+                                    fclose($lockFile);
+
+                                    Yii::$app->getSession()->setFlash('success','模块安装成功！');
+                                    return $this->redirect(['/module']);
+                                }else{
+                                    Yii::$app->getSession()->setFlash('danger','模块标识可能重名，模块安装失败！');
+                                    return $this->refresh();
+                                }
+
+
+
+                            }else{
+                                $error='模块目录未发现安装文件：'.$sqlFile;
+                                Yii::$app->getSession()->setFlash('danger', $error);
+                                return $this->refresh();
                             }
 
-                            $date=date('Y-m-d_H:i:s');
-                            $string='安装时间：'.$date.'
-                            ';
-                            $lockFile = fopen($modulesDir.'/install.lock', "a") or die("无法创建安装锁文件install.lock");
-
-                            fwrite($lockFile, $string);
-                            fclose($lockFile);
-
-                            Yii::$app->getSession()->setFlash('success','模块安装成功！');
-                            return $this->redirect(['/module']);
-                        }else{
-                            Yii::$app->getSession()->setFlash('danger','模块标识可能重名，模块安装失败！');
+                        }elseif($online==2){
+                            echo $online.'在线安装';
+                            print_r($request);
+                        } else {
+                            $error = '模块目录不存在！：'.$modulesDir;
+                            Yii::$app->getSession()->setFlash('danger',$error);
                             return $this->refresh();
                         }
 
-
-
-                    }else{
-                        $error='模块目录未发现安装文件：'.$sqlFile;
-                        Yii::$app->getSession()->setFlash('danger', $error);
-                        return $this->refresh();
+                    }else {
+                        return $this->render('install', [
+                            'model' => $model,
+                        ]);
                     }
-
-                } else {
-                    $error = '模块目录不存在！：'.$modulesDir;
-                    Yii::$app->getSession()->setFlash('danger',$error);
-                    return $this->refresh();
-                }
-
-            }else {
-                return $this->render('install', [
-                    'model' => $model,
-                ]);
-            }
 
 
 
     }
 
 
-    protected function addmodules() {
+    protected function addmodulesConf() {
         $addmodule = <<<EOF
 
 \$Moduleconfig['{{module}}']=['class' => '{{class}}'];
@@ -253,9 +274,7 @@ EOF;
 
 
 
-
-
-
+/*
     protected function outputSql($sqlStr,$delimiter = '(;\n)|((;\r\n))|(;\r)',$prefix = '',$commenter = array('#','--'))
     {
         //通过sql语法的语句分割符进行分割
@@ -317,10 +336,6 @@ EOF;
 
     }
 
-
-
-
-
     private function findTableName($sqlFlagTree,$tokens,$tokensKey=0,$tableName = array())
     {
         $regxLeftWall = "^[\`\'\"]{1}";
@@ -355,7 +370,7 @@ EOF;
 
 
 
-
+*/
 
 
 

@@ -13,20 +13,33 @@ $fa=Html::a('图标样式参考','http://fontawesome.dashgame.com/', ['target'=>
 <div class="module-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?=$action=='install'?Html::label('模块命名空间，例：<code>frontend\modules\qrcode\Module</code>', 'class'):''?>
-<?=$action=='install' ? Html::input('text', 'class','',[
-    'class'=>'form-control',
-    'id'=>'class',
-]) : ''?>
+
+
+    <?php
+    if($action=='install'){
+        echo Html::radioList('online', [1], [1=>'本地安装', 2=>'在线安装'],['class'=>'form-group']);
+   //     echo Html::checkbox('sql', true, ['label' => '执行数据库文件']).'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+     //   echo Html::checkbox('online', false, ['label' => '在线安装']).' <br/>';
+        echo Html::label('模块命名空间，例：<code>frontend\modules\qrcode\Module</code>', 'class');
+        echo Html::input('text', 'class','',[
+            'class'=>'form-control',
+            'id'=>'class',
+        ]);
+
+
+
+
+
+
+    }
+?>
+
+
     <br/>
-    <?= $form->field($model, 'modulename')->textInput(['placeholder'=>'column'])->label('模块目录（模块标识），例：<code>qrcode</code>') ?>
+    <?= $form->field($model, 'modulename')->textInput(['placeholder'=>'qrcode'])->label('模块目录（模块标识），例：<code>qrcode</code>') ?>
 
     <?= $form->field($model, 'module_label')->textInput()->label('模块名，例：<code>二维码管理系统</code>') ?>
     <?= $form->field($model, 'module_des')->textarea(['rows' => 5]) ?>
-
-
-
-
 
 
 

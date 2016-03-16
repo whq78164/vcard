@@ -60,7 +60,7 @@ use yii\widgets\ActiveForm;
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('tbhome', 'Create') : Yii::t('tbhome', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 
-            <?= Html::a(Yii::t('tbhome', '查看防伪页'), ['anti/index', 'replyid'=>$model->id], ['class' => 'btn btn-success pull-right', 'target'=>'_blank']) ?>
+            <?= Html::a(Yii::t('tbhome', '查看防伪页'), ['qrcode/index', 'replyid'=>$model->id], ['class' => 'btn btn-success pull-right', 'target'=>'_blank']) ?>
 
         </div>
         <?php ActiveForm::end(); ?>

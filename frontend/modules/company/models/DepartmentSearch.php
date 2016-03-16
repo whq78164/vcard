@@ -1,16 +1,15 @@
 <?php
 
-namespace frontend\modules\qrcode\models;
+namespace frontend\modules\company\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-//use frontend\modules\qrcode\models\QrcodeLog;
 
 /**
- * AntiLogSearch represents the model behind the search form about `frontend\models\AntiLog`.
+ * WorkerSearch represents the model behind the search form about `frontend\company\models\Worker`.
  */
-class QrcodeLogSearch extends QrcodeLog
+class DepartmentSearch extends Department
 {
     /**
      * @inheritdoc
@@ -18,8 +17,8 @@ class QrcodeLogSearch extends QrcodeLog
     public function rules()
     {
         return [
-            [['id', 'startid', 'endid', 'time'], 'integer'],
-            [['url', 'remark'], 'safe'],
+            [['id', 'uid'], 'integer'],
+            [['department'], 'safe'],
         ];
     }
 
@@ -41,7 +40,8 @@ class QrcodeLogSearch extends QrcodeLog
      */
     public function search($params)
     {
-        $query = QrcodeLog::find();
+        $uid=Yii::$app->user->id;
+        $query = Department::find()->where(['uid'=>$uid]);//->all();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -55,15 +55,15 @@ class QrcodeLogSearch extends QrcodeLog
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
+   /*     $query->andFilterWhere([
             'id' => $this->id,
-            'startid' => $this->startid,
-            'endid' => $this->endid,
-            'time' => $this->time,
+            'company_id' => $this->company_id,
+            'department_id' => $this->department_id,
+            'qq' => $this->qq,
+            'is_work' => $this->is_work,
         ]);
-
-        $query->andFilterWhere(['like', 'url', $this->url])
-            ->andFilterWhere(['like', 'remark', $this->remark]);
+*/
+        $query->andFilterWhere(['like', 'department', $this->department]);
 
         return $dataProvider;
     }

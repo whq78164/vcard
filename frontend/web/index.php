@@ -1,6 +1,6 @@
 <?php
-//defined('YII_ENV') or define('YII_ENV', 'dev');
-//pro模式：高效安全模式(正常使用开启); dev模式：开发模式(出错或调试时开启);
+//defined('YII_ENV') or define('YII_ENV', 'prod');
+//prod模式：高效安全模式(正常使用开启); dev模式：开发模式(出错或调试时开启);
 
 defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_ENV_DEV') or define('YII_ENV_DEV',true);
@@ -23,5 +23,4 @@ require(__DIR__ . '/../tbhome/func.lib.php');
 //echo \Yii::$app->request->hostInfo.'</br>';
 //echo Yii::$app->request->baseUrl;
 $application->language= isset(\Yii::$app->session['language'])?\Yii::$app->session['language']:'zh-CN';
-
 $application->run();
