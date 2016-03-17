@@ -360,5 +360,16 @@ class SiteController extends Controller
 
     }
 
+    public function actionTest(){
+        $rootDir=dirname(dirname(__DIR__));
+        $zipDir=$rootDir.'/frontend/modules/company';
+        //Yii::getAlias('@$frontend');dirname(__DIR__); 为本地绝对目录。
+
+        $file=$rootDir.'/frontend/modules.zip';
+      \frontend\tbhome\FileTools::readDir($zipDir);
+
+
+    }
+
 
 }
