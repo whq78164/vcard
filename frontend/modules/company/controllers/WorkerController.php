@@ -183,20 +183,17 @@ class WorkerController extends Controller
     {
 
         $uid=Yii::$app->user->id;
-        $departments=Department::find()->where(['uid'=>$uid]);
-        $num=$departments->count();
-        $departments=$departments->all();
+        $workers=Worker::find()->where(['uid'=>$uid]);
+        $num=$workers->count();
+        $workers=$workers->all();//$workers数组，键为数据表字段
         //    print_r($departments);
-
-
-
 
         $objPHPExcel=new \PHPExcel();
         $objPHPExcel->getProperties()  //获得文件属性对象，给下文提供设置资源
         ->setCreator( "tbhome")                 //设置文件的创建者
         ->setLastModifiedBy( "wuhanqing")          //设置最后修改者
-        ->setTitle( "Department infomation" )    //设置标题
-        ->setSubject( "Departments" )  //设置主题
+        ->setTitle( "Workers infomation" )    //设置标题
+        ->setSubject( "Workers" )  //设置主题
         ->setDescription( "Think you to usage！") //设置备注
         ->setKeywords( "office 2007 openxml php")        //设置标记
         ->setCategory( "Test result file");
@@ -204,29 +201,53 @@ class WorkerController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         $objActivSheet=$objPHPExcel->getActiveSheet();
 
-        $objActivSheet->setCellValue('A1', 'id')
-            ->setCellValue('B1', 'uid')
-            ->setCellValue('C1', 'department')
-            ->setCellValue('D1', 'status');
+        $objActivSheet->setCellValue('A1', 'job_id')
+            ->setCellValue('B1', 'department_id')
+            ->setCellValue('C1', 'name')
+            ->setCellValue('D1', 'mobile')
+            ->setCellValue('E1', 'qq')
+            ->setCellValue('F1', 'email')
+            ->setCellValue('G1', 'position')
+            ->setCellValue('H1', 'work_tel')
+            ->setCellValue('I1', 'wechat_account')
+            ->setCellValue('J1', 'fax')
+            ->setCellValue('K1', 'company_id');
 
         for($i=2; $i<($num+2); $i++){
             $arrid=$i-2;
 
-            $objActivSheet->setCellValue('A'.$i, $departments[$arrid]->id)
-                ->setCellValue('B'.$i, $departments[$arrid]->uid)
-                ->setCellValue('C'.$i, $departments[$arrid]->department)
-                ->setCellValue('D'.$i, $departments[$arrid]->status);
+            $departmentid=$workers[$arrid]->department_id;
+            $departmentTemp=Department::findOne(['id'=>$departmentid]);
+            $departmentid=$departmentTemp->department;
 
+            $companyid=$workers[$arrid]->company_id;
+            $companyTemp=Company::findOne(['id'=>$companyid]);
+            $companyid=$companyTemp->company;
+
+            $objActivSheet->setCellValue('A'.$i, $workers[$arrid]->job_id)
+                ->setCellValue('B'.$i, $departmentid)
+                ->setCellValue('C'.$i, $workers[$arrid]->name)
+                ->setCellValue('D'.$i, $workers[$arrid]->mobile)
+                ->setCellValue('E'.$i, $workers[$arrid]->qq)
+                ->setCellValue('F'.$i, $workers[$arrid]->email)
+                ->setCellValue('G'.$i, $workers[$arrid]->position)
+                ->setCellValue('H'.$i, $workers[$arrid]->work_tel)
+                ->setCellValue('I'.$i, $workers[$arrid]->wechat_account)
+                ->setCellValue('J'.$i, $workers[$arrid]->fax)
+                ->setCellValue('K'.$i, $companyid);
         }
 
-        $objActivSheet->setTitle('Departments');
-        $name='Departments';
+        $objActivSheet->setTitle('Workers');
+        $name='Workers';
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$name.'.xls"');
         header('Cache-Control: max-age=0');
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+
+
+
 
     }
 
@@ -398,26 +419,21 @@ class WorkerController extends Controller
 
     public function actionMp($id=1)
     {
-
-
-        $wechatgh=Wechatgh::findOne(['uid'=>Yii::$app->user->id]);
-        if ($wechatgh==null){
-            Yii::$app->getSession()->setFlash('danger','请设置公众号信息！');
-            return $this->redirect(['/wechatgh/create']);
-        }
-
-
-
         $workerObjet=$this->findModel($id);//Worker::findOne($id);
         $worerArr=$workerObjet->attributes;
+        $uid=$worerArr['uid'];
+
         $company=Company::findOne($workerObjet->company_id)->attributes;
         $department=Department::findOne($workerObjet->department_id)->attributes;
         $worerInfo=ArrayHelper::merge($company,$department,$worerArr);
         //$user = array_merge($user1, $user2);
 
         ////////////////////////////微信公众号分享接口start
-        $uid=$worerInfo['uid'];
         $wechatgh=Wechatgh::findOne(['uid'=>$uid]);
+        if ($wechatgh==null){
+            Yii::$app->getSession()->setFlash('danger','请设置公众号信息！');
+            return $this->redirect(['/wechatgh/create']);
+        }
 
         $jssdk=new Wechat();
         $jssdk->appId=$wechatgh->appid;

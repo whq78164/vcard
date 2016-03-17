@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?=Html::a('下载样板', 'Uploads/DownLoads.zip', ['class'=>'btn btn-success'])?>
+<?=Html::a('导出全部数据', ['download'], ['class'=>'btn btn-success'])?>
 
 <script Charset="UTF-8" type="text/javascript">
 /*
