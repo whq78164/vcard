@@ -27,14 +27,11 @@ class UpdateController extends DbController
 
             if(!isset($sys['version'])){
                 //        $this->renameColumn('{{%usermodule}}', 'module_satus', 'module_status');
-                $this->addColumn('{{%sys}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.0');
-                $this->addColumn('{{%card_info}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%card_info}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
-                $this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
 
-                $this->update('{{%sys}}', ['version'=>1.10], ['id'=>1]);
-                echo '恭喜！系统已更新成功！版本v1.10';
+                $frontend=Yii::getAlias('@frontend');
+                require $frontend.'/update.php';
+
+
             }elseif($sys['version']==1.10){
                 //$version=
                 echo '您的系统已升级成功！版本：1.10，请勿重复升级！';
@@ -42,7 +39,6 @@ class UpdateController extends DbController
 
                 $frontend=Yii::getAlias('@frontend');
                 require $frontend.'/update.php';
-
 
             }else{
 

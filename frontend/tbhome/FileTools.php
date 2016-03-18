@@ -40,6 +40,67 @@ class FileTools
 
         return $fileArr;
     }
+
+    static function searchDirs($file){
+        $fileArr=[];
+
+        if(is_dir($file)){
+         //   $fileArr[]=$file;
+            $dirHandle = opendir($file);
+            while (($files = readdir($dirHandle)) !== false) {
+
+                if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                    //  echo "filename: $file : filetype: " . filetype($dir . $file) . "n"."<br />";
+                    $eachFile=$file.'/'. $files;
+                    if(filetype($eachFile)=='dir'){
+                        $fileArr[]=$eachFile;
+                        $fileArr=array_merge($fileArr, self::searchDirs($eachFile));
+                    }
+
+                }
+
+            }
+            closedir($dirHandle);
+
+        }
+
+
+        return $fileArr;
+    }
+
+    static function checkWritable($file){
+        $fileArr=[];
+
+        if(is_dir($file)){
+            if(!is_writable($file)){
+                $fileArr[]=$file;
+                //$fileArr=array_merge($fileArr, self::checkWritable($file));
+            }else{
+                $dirHandle = opendir($file);
+                while (($files = readdir($dirHandle)) !== false) {
+
+                    if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                        $eachFile=$file.'/'. $files;
+                        if(filetype($eachFile)=='dir'){
+                            if(!is_writable($eachFile)){
+                                $fileArr[]=$eachFile;
+                            }else{
+                                $fileArr=array_merge($fileArr, self::checkWritable($eachFile));
+                            }
+                        }
+                    }
+                }
+                closedir($dirHandle);
+            }
+
+
+
+        }
+
+
+        return $fileArr;
+    }
+
     static function extractZip($file, $path){
     if (!is_dir($path)) {mkdir($path, 0777, true);}//is_dir, file_exists()
         $zip=new \ZipArchive();
@@ -63,6 +124,11 @@ class FileTools
         }
 
     }
+
+
+
+
+
     static function readDir($path){
         $files=self::searchFiles($path);
         foreach($files as $file) {

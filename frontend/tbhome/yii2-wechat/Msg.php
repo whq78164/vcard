@@ -6,7 +6,7 @@
  * Time: 0:36
  */
 
-namespace tbhome\wechat;
+namespace frontend\tbhome\wechat;
 
 
 class Msg

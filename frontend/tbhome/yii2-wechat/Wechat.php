@@ -5,7 +5,7 @@
  * Date: 2016-02-21
  * Time: 0:40
  */
-namespace tbhome\wechat;
+namespace frontend\tbhome\wechat;
 
 
 class Wechat extends Wechatbase

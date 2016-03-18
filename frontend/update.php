@@ -166,6 +166,9 @@ $this->addColumn('{{%card_info}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT 
 //$this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
 //$this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
 
+
+
+
 $this->insert('{{%module}}',[
     'id'=>1, //id字段如不设置，则默认自增
     'modulename'=>'company',

@@ -357,16 +357,23 @@ class SiteController extends Controller
         $qrurl= genqrcode($value);
            echo '<img src="'.$qrurl.'">';
 
-
     }
 
     public function actionTest(){
-        $rootDir=dirname(dirname(__DIR__));
-        $zipDir=$rootDir.'/frontend/modules/company';
-        //Yii::getAlias('@$frontend');dirname(__DIR__); 为本地绝对目录。
+      //  $rootDir=dirname(dirname(__DIR__));
+        $rootDir=dirname(Yii::getAlias('@frontend'));
+        $zipDir=$rootDir.'/frontend/modules';
+        //Yii::getAlias('@frontend');dirname(__DIR__); 为本地绝对目录。
+$dirs=\frontend\tbhome\FileTools::checkWritable($zipDir);
 
-        $file=$rootDir.'/frontend/modules.zip';
-      \frontend\tbhome\FileTools::readDir($zipDir);
+       if(empty($dirs)){
+           echo '全目录可写！';
+       }else{
+           foreach($dirs as $dir){echo $dir.'<br>';}
+       }
+
+     //   $file=$rootDir.'/frontend/modules.zip';
+   //   \frontend\tbhome\FileTools::readDir($zipDir);
 
 
     }

@@ -1,0 +1,26 @@
+{
+    "name": "tbhome/yii2-wechat",
+    "type": "yii2-extension",
+    "description": "The wechat api for the Yii framework",
+    "keywords": ["yii2", "wechat", "weixin", "sdk"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/callmez/yii2-wechat-sdk/issues",
+        "wiki": "https://github.com/callmez/yii2-wechat-sdk/wiki",
+        "source": "https://github.com/callmez/yii2-wechat-sdk"
+    },
+    "authors": [
+        {
+            "name": "吴汉青",
+            "email": "798904845@qq.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "tbhome\\wechat\\": ""
+        }
+    }
+}
