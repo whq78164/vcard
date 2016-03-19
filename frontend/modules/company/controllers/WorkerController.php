@@ -86,15 +86,20 @@ class WorkerController extends Controller
 
             $filename='workersData'.time();
             $dir="Uploads/".$uid.'/company/workers/';
+
+
+
+
             $file->file = UploadedFile::getInstance($file, 'file');//上传!
             if($file->upload($dir, $filename)){
+
                 $filePath = $dir. $filename . '.' . $file->file->extension;
                 //  $excel=file_get_contents($url);
                 //header('Content-Type:text/html;charset=UTF-8');
 
                 //       $PHPExcel = new \PHPExcel();
 
-                /**默认用excel2007读取excel，若格式不对，则用之前的版本进行读取*/
+                ///默认用excel2007读取excel，若格式不对，则用之前的版本进行读取
                 $PHPReader = new \PHPExcel_Reader_Excel2007();
                 if (!$PHPReader->canRead($filePath)) {
                     $PHPReader = new \PHPExcel_Reader_Excel5();
@@ -104,9 +109,9 @@ class WorkerController extends Controller
                     }
                 }
                 $PHPExcel = $PHPReader->load($filePath);
-                $currentSheet = $PHPExcel->getSheet(0); /* * 读取excel文件中的第一个工作表 */
-                $allColumn = $currentSheet->getHighestColumn();/**取得最大的列号*/
-                $allRow = $currentSheet->getHighestRow(); /* * 取得一共有多少行 */
+                $currentSheet = $PHPExcel->getSheet(0); // 读取excel文件中的第一个工作表 /
+                $allColumn = $currentSheet->getHighestColumn();//取得最大的列号/
+                $allRow = $currentSheet->getHighestRow(); // 取得一共有多少行 /
                 $allColumn = \PHPExcel_Cell::columnIndexFromString($allColumn); //字母列转换为数字列 如:AA变为27
 
                 $columnValue=[];////第N栏M列数据值
@@ -118,19 +123,27 @@ class WorkerController extends Controller
                 }
 
 
+                $overwrite=$_POST['overwrite'];
+                if($overwrite==1){
+                   Worker::deleteAll(['uid'=>$uid]);
+                }//elseif($overwrite==2){echo '追加！！！';}
+
 
                 for ($currentRow = 2; $currentRow <= $allRow; $currentRow = $currentRow + 1) {
-                    //   $workerModel=Worker::findOne(['job_id'=>$columnArr['job_id']]);
                     //    if ($workerModel==null){
                    $workerModel=new Worker();
                     //   }
 
-
-
-
                     for ($i=0; $i<$allColumn; $i++){
                         $columnValue[$i]=trim($currentSheet->getCellByColumnAndRow($i, $currentRow)->getValue());
                         /////$columnValue[$i]： 第$currentRow栏，第$i列的数据值。
+
+                       if($modelColumn[$i]=='job_id'){
+                            if(Worker::findOne(['job_id'=>$columnValue[$i]])){
+                                $workerModel=Worker::findOne(['job_id'=>$columnValue[$i]]);
+                            }
+                        }
+
                        if($modelColumn[$i]=='department_id'){
                            $modelDepartment=Department::findOne(['department'=>$columnValue[$i]]);
                             $columnValue[$i]=$modelDepartment->id;
@@ -170,8 +183,10 @@ class WorkerController extends Controller
                 //     echo \PHPExcel_Cell::columnIndexFromString($allColumn);
 
 
-                Yii::$app->getSession()->setFlash('success', $allRow.'条数据导入成功！'.$filePath);
+                Yii::$app->getSession()->setFlash('success', ($allRow-1).'条数据导入成功！'.$filePath);
                 return $this->redirect(['index']);
+
+
             }
 
         }

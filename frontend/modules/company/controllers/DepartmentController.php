@@ -86,7 +86,7 @@ class DepartmentController extends Controller
                 $allColumn = \PHPExcel_Cell::columnIndexFromString($allColumn); //字母列转换为数字列 如:AA变为27
 
                 $columnValue=[];////第N栏M列数据值
-                $columnArr=[];////第N栏的数据
+   //             $columnArr=[];////第N栏的数据
                 $modelColumn=[];/////第一栏，数据表字段名
 
 
@@ -98,6 +98,11 @@ class DepartmentController extends Controller
                 }
 
 
+                $overwrite=$_POST['overwrite'];
+                if($overwrite==1){
+                    Department::deleteAll(['uid'=>$uid]);
+                }//elseif($overwrite==2){echo '追加！！！';}
+
 
 
                 for ($currentRow = 2; $currentRow <= $allRow; $currentRow = $currentRow + 1) {
@@ -106,7 +111,13 @@ class DepartmentController extends Controller
                     for ($i=0; $i<$allColumn; $i++){
                         $columnValue[$i]=trim($currentSheet->getCellByColumnAndRow($i, $currentRow)->getValue());/////$columnValue[$i]： 第$currentRow栏，第$i列的数据值。
 
-                        $columnArr[$modelColumn[$i]]=$columnValue[$i];//数组键值对，
+                        if($modelColumn[$i]=='department'){
+                            if(Department::findOne(['department'=>$columnValue[$i]])){
+                                $departmentModel=Department::findOne(['department'=>$columnValue[$i]]);
+                            }
+                        }
+
+          //              $columnArr[$modelColumn[$i]]=$columnValue[$i];//数组键值对，
                         //     print_r($columnArr[$modelColumn[$i]]);
                         //     echo '<br/>';
 
@@ -122,7 +133,7 @@ class DepartmentController extends Controller
                     //    echo $currentSheet->getCellByColumnAndRow(1, $currentRow)->getValue();
 
                 }
-                Yii::$app->getSession()->setFlash('success', ($currentRow-1).'条数据导入成功！'.$filePath);
+                Yii::$app->getSession()->setFlash('success', ($allRow-1).'条数据导入成功！'.$filePath);
                 return $this->redirect(['index']);
             }
 
@@ -140,8 +151,6 @@ class DepartmentController extends Controller
         $num=$departments->count();
         $departments=$departments->all();
     //    print_r($departments);
-
-
 
 
         $objPHPExcel=new \PHPExcel();

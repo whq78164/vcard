@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //$frontend=Yii::getAlias('@frontend');
 //$head=$frontend.'/Uploads/'.Yii::$app->user->
 
-
+$webPath=Yii::getAlias('@web');
 ?>
 <div class="row">
 
@@ -72,7 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     $department_id=$model->department_id;
                     $department=Department::findOne($department_id);
-                    return Html::encode($department->department);
+                    if($department==null){
+                        $department='关联失败！请选择所在部门！或重新导入员工信息';
+                    }else{
+                        $department=$department->department;
+                    }
+                    return Html::encode($department);
                 },
             ],
 
@@ -80,10 +85,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             'name',
-            // 'mobile',
-            // 'qq',
-            // 'email:email',
-            // 'head_img',
+             'mobile',
+             'qq',
+             'email:email',
             // 'position',
             // 'task',
             // 'work_tel',
@@ -108,15 +112,30 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
         <!--input type="file" id="user-pic"-->
         <?= $form->field($file, 'file')->fileInput(['id'=>'excelFile'])->label('Excel表格')?>
+        <?=Html::radioList('overwrite', [1], [1=>'清空重写', 2=>'追加&修改'],['class'=>'form-group']);?>
         <div class="form-group">
-            <?=Html::submitButton('导入Excel', ['id'=>'uploadExcel','class' => 'btn btn-primary'])?>
+            <?=Html::submitButton('导入Excel', [
+                'id'=>'uploadExcel',
+                'class' => 'btn btn-primary',
+                'data' => ['confirm' => Yii::t('tbhome', '
+                清空重写：会清除之前的数据，请先导出备份！
+                追加&修改：工号不存在的记录：追加；已存在的记录：修改'),],
+            ])?>
         </div>
 
         <?php ActiveForm::end() ?>
     </div>
+
+    <div class="col-md-6">
+        <?=Html::a('下载数据导入模板', $webPath.'/Uploads/'.Yii::$app->user->id.'/company/company.zip', ['class'=>'btn btn-info'])?>
+        <br/><br/>
+        <?=Html::a('导出全部数据', ['download'], ['class'=>'btn btn-success'])?>
+    </div>
+
+
 </div>
 
-<?=Html::a('导出全部数据', ['download'], ['class'=>'btn btn-success'])?>
+
 
 <script Charset="UTF-8" type="text/javascript">
 /*

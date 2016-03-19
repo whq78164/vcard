@@ -166,7 +166,7 @@ $this->addColumn('{{%card_info}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT 
 //$this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
 //$this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
 
-
+$this->alterColumn('{{%company_worker}}', 'qq', Schema::TYPE_STRING." NOT NULL DEFAULT '"."798904845'");
 
 
 $this->insert('{{%module}}',[

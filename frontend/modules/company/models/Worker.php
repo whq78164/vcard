@@ -42,9 +42,10 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'uid', 'company_id', 'department_id', 'qq', 'is_work'], 'integer'],
+            [['company_id', 'uid', 'company_id', 'department_id',  'is_work'], 'integer'],
             [['job_id', 'work_tel'], 'string', 'max' => 30],
-            [['name', 'mobile', 'email', 'head_img', 'task', 'wechat_qrcode', 'fax', 'remark'], 'string', 'max' => 255],
+            [['name', 'mobile', 'qq','email', 'head_img', 'task', 'wechat_qrcode', 'fax', 'remark'], 'string', 'max' => 255],
+            [['job_id'], 'unique'],
             [['position', 'wechat_account'], 'string', 'max' => 50]
         ];
     }

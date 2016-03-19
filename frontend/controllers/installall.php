@@ -335,7 +335,7 @@ $this->createTable('{{%company_worker}}', [
     'department_id' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
     'name' => Schema::TYPE_STRING . ' NOT NULL',
     'mobile' => Schema::TYPE_STRING . ' NOT NULL',
-    'qq' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+    'qq' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."798904845'",
     'email' => Schema::TYPE_STRING . ' NOT NULL',
     'head_img' => Schema::TYPE_STRING . ' NOT NULL',
     'position' => Schema::TYPE_STRING . '(50) NOT NULL',
