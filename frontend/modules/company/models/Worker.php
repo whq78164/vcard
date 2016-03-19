@@ -43,10 +43,11 @@ class Worker extends \yii\db\ActiveRecord
     {
         return [
             [['company_id', 'uid', 'company_id', 'department_id',  'is_work'], 'integer'],
-            [['job_id', 'work_tel'], 'string', 'max' => 30],
-            [['name', 'mobile', 'qq','email', 'head_img', 'task', 'wechat_qrcode', 'fax', 'remark'], 'string', 'max' => 255],
+            [['fax', 'name', 'mobile', 'qq','job_id', 'work_tel'], 'string', 'max' => 30],
+            [['email', 'head_img', 'task', 'wechat_qrcode','remark'], 'string', 'max' => 255],
+            [['email'], 'email'],
             [['job_id'], 'unique'],
-            [['position', 'wechat_account'], 'string', 'max' => 50]
+            [[ 'position', 'wechat_account'], 'string', 'max' => 50]
         ];
     }
 

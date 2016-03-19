@@ -32,13 +32,16 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'task')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'work_tel')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'work_tel')->textInput(
+   //     ['maxlength' => true]
+    ) ?>
+    <?= $form->field($model, 'fax')->textInput(
+   //     ['maxlength' => true]
+    ) ?>
 
     <?= $form->field($model, 'wechat_account')->textInput(['maxlength' => true]) ?>
 
     <?//= $form->field($model, 'wechat_qrcode')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'fax')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'is_work')->dropDownList([10=>'在职',0=>'离职'])?>
 

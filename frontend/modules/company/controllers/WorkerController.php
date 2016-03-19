@@ -22,6 +22,28 @@ use frontend\models\Uploadfile;
  */
 class WorkerController extends Controller
 {
+
+    public function arrtostr($array){
+        $msg='';
+        if(is_array($array)){
+            foreach($array as $key=>$value){
+                $msg.='{'.$key.'}'.'=>{';
+                if(is_array($value)){
+                   $msg.=$this->arrtostr($value);
+                }
+                if(is_string($value)){
+                    $msg.=$value.'}';
+                }
+            }
+        }
+        if(is_string($array)){
+            $msg.=$array;
+        }
+        return $msg;
+    }
+
+
+
     public $layout='@frontend/views/layouts/user';
     public function behaviors()
     {
@@ -302,11 +324,14 @@ class WorkerController extends Controller
             $model->uid=$uid;
 
 
-            if($model->save()){
+            if($model->validate()){
+                $model->save();
                 Yii::$app->getSession()->setFlash('success', '职员信息创建成功，请上传图片！');
                 return $this->redirect(['update', 'id' => $model->id]);
             }else{
-                Yii::$app->getSession()->setFlash('success', '创建失败，请稍后重试！');
+                $errors = $model->errors;
+                $msg='验证失败：'.$this->arrtostr($errors);
+                Yii::$app->getSession()->setFlash('warning', $msg);
                 return $this->refresh();
             }
 
@@ -342,14 +367,28 @@ class WorkerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->uid=$uid;
-
-            if($model->save()){
+            if($model->validate()){
+                $model->save();
                 Yii::$app->getSession()->setFlash('success', '职员信息修改成功！');
                 return $this->refresh();
             //    return $this->redirect(['update', 'id' => $model->id]);
             }else{
-                Yii::$app->getSession()->setFlash('danger', '保存失败，请稍后重试！');
-                return $this->refresh();
+                $errors = $model->errors;
+                $msg='验证失败：'.$this->arrtostr($errors);
+
+              /*
+              foreach($errors as $key=>$value){
+                    $msg.=$key;
+                    if(is_array($value)){
+                        foreach($value as $error){
+                            $msg.=$error;
+                        }
+                    }
+                }
+              */
+
+             Yii::$app->getSession()->setFlash('danger', $msg);
+               return $this->refresh();
             }
 
 

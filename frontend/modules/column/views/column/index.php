@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'label',
              'remark',
 
-            ['class' => 'yii\grid\ActionColumn', 'template'=>'{update}'],
+            ['class' => 'yii\grid\ActionColumn', 'template'=>'{update}{view}'],
         ],
     ]); ?>
 
