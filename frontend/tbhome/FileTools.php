@@ -7,7 +7,7 @@
  */
 
 namespace frontend\tbhome;
-
+//use Yii;
 
 class FileTools
 {
@@ -25,19 +25,14 @@ class FileTools
                     }elseif(filetype($eachFile)=='file'){
                         $fileArr[]=$file.'/'.$files;
                     }
-
                 }
-
             }
             closedir($dirHandle);
-
         }
-
 
         if(is_file($file)){
             $fileArr[]=$file;
         }
-
         return $fileArr;
     }
 
@@ -68,7 +63,7 @@ class FileTools
         return $fileArr;
     }
 
-    static function checkWritable($file){
+    static function checkWritableDir($file){
         $fileArr=[];
 
         if(is_dir($file)){
@@ -85,7 +80,7 @@ class FileTools
                             if(!is_writable($eachFile)){
                                 $fileArr[]=$eachFile;
                             }else{
-                                $fileArr=array_merge($fileArr, self::checkWritable($eachFile));
+                                $fileArr=array_merge($fileArr, self::checkWritableDir($eachFile));
                             }
                         }
                     }
@@ -98,6 +93,36 @@ class FileTools
         }
 
 
+        return $fileArr;
+    }
+
+    static function checkWritableFiles($file){
+        $fileArr=[];
+
+            if(!is_writable($file)){
+                $fileArr[]=$file;
+                //$fileArr=array_merge($fileArr, self::checkWritable($file));
+            }else{
+                if(is_dir($file)){
+                    $dirHandle = opendir($file);
+                    while (($files = readdir($dirHandle)) !== false) {
+
+                        if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                            $eachFile=$file.'/'. $files;
+
+                            if(!is_writable($eachFile)){
+                                $fileArr[]=$eachFile;
+                            }else{
+                                if(is_dir($file)){
+                                    $fileArr=array_merge($fileArr, self::checkWritableFiles($eachFile));
+                                }
+                            }
+                        }
+                    }
+                    closedir($dirHandle);
+                }
+
+            }
         return $fileArr;
     }
 
@@ -126,10 +151,51 @@ class FileTools
     }
 
 
+    /**
+     * compute each md5 for each Dirs or file
+     * @param string $file the DIR or File what want to compute md5
+     * @param string $basePath
+     * @param string $replace after be replace for basePath
+     * @param array $exclude exclude path
+     * @return array
+     */
+    static function md5Files($file, $basePath, $replace, $exclude){
+        $Md5Arr=[];
+        foreach($exclude as $eachExclude){
+            if($file!==$eachExclude){
+                if(is_dir($file)){
+                    $dirHandle = opendir($file);
+                    while (($files = readdir($dirHandle)) !== false) {
+                        if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                            //  echo "filename: $file : filetype: " . filetype($dir . $file) . "n"."<br />";
+                            $eachFile=$file.'/'. $files;
+                            if(filetype($eachFile)=='dir'){
+                                $Md5Arr=array_merge($Md5Arr, self::md5Files($eachFile,$basePath, $replace,$exclude));
+                            }elseif(filetype($eachFile)=='file'){
+                                $eachFilePath=str_replace($basePath,$replace,$eachFile);
+                                $eachFileMd5=md5_file($eachFile);
+                                $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
+                                $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
+                            }
+                        }
+                    }
+                    closedir($dirHandle);
+                }
+                if(is_file($file)){
+                    $eachFilePath=str_replace($basePath,$replace,$file);
+                    $eachFileMd5=md5_file($file);
+                    $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
+                    $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
+                }
+            }
+        }
+
+        return $Md5Arr;
+    }
 
 
 
-    static function readDir($path){
+    static function echoDir($path){
         $files=self::searchFiles($path);
         foreach($files as $file) {
             if (filetype($file)=='file'){

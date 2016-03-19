@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\User;
+use Faker\Provider\File;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -360,18 +361,24 @@ class SiteController extends Controller
     }
 
     public function actionTest(){
-      //  $rootDir=dirname(dirname(__DIR__));
+        ini_set("max_execution_time", "1800");
+        //  $rootDir=dirname(dirname(__DIR__));
         $rootDir=dirname(Yii::getAlias('@frontend'));
         $zipDir=$rootDir.'/frontend/modules';
+        $webDir=Yii::getAlias('@web');
         //Yii::getAlias('@frontend');dirname(__DIR__); 为本地绝对目录。
-$dirs=\frontend\tbhome\FileTools::checkWritable($zipDir);
+$dirs=\frontend\tbhome\FileTools::md5Files(Yii::getAlias('@frontend'),Yii::getAlias('@frontend'),'frontend',[$webDir]);
+     //   echo md5_file(__FILE__);
+//echo Yii::getAlias('@frontend');
+    //   print_r($dirs);
+       foreach($dirs as $key=>$value){echo $key.' => '.$value.'<br/>';}
 
-       if(empty($dirs)){
+  /*     if(empty($dirs)){
            echo '全目录可写！';
        }else{
            foreach($dirs as $dir){echo $dir.'<br>';}
        }
-
+*/
      //   $file=$rootDir.'/frontend/modules.zip';
    //   \frontend\tbhome\FileTools::readDir($zipDir);
 
