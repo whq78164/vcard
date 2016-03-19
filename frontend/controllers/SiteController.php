@@ -365,13 +365,23 @@ class SiteController extends Controller
         //  $rootDir=dirname(dirname(__DIR__));
         $rootDir=dirname(Yii::getAlias('@frontend'));
         $zipDir=$rootDir.'/frontend/modules';
-        $webDir=Yii::getAlias('@web');
+        $webDir=Yii::getAlias('@frontend/web');
+        $frontend=Yii::getAlias('@frontend');
+        $exclude=array($webDir, $frontend.'/.idea');
         //Yii::getAlias('@frontend');dirname(__DIR__); 为本地绝对目录。
-$dirs=\frontend\tbhome\FileTools::md5Files(Yii::getAlias('@frontend'),Yii::getAlias('@frontend'),'frontend',[$webDir]);
-     //   echo md5_file(__FILE__);
-//echo Yii::getAlias('@frontend');
-    //   print_r($dirs);
-       foreach($dirs as $key=>$value){echo $key.' => '.$value.'<br/>';}
+$dirs=\frontend\tbhome\FileTools::md5Files($frontend,$frontend.'/','',$exclude);
+
+     foreach($dirs as $key=>$value){echo $key.' => '.$value.'<br/>';}
+
+   //     print_r($_SERVER['SERVER_ADDR']);
+     //   print_r($_SERVER["HTTP_HOST"]);
+       // print_r($_SERVER["SERVER_NAME"]);//域名为vcards.top 时输出www.vcards.top
+
+  //$res=httpGet('http://www.vcards.top/index.php?r=cloud/index');
+    //    $res=json_decode($res);
+      //  print_r($res);
+
+
 
   /*     if(empty($dirs)){
            echo '全目录可写！';

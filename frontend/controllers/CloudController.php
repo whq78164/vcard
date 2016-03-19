@@ -35,8 +35,8 @@ class CloudController extends \yii\web\Controller
                 $Site['page1']='您的站点是主控站';
                 $Site['msg']='请先登录系统管理员后台，设置站点信息！';
 
-
-                return json_encode($Site);
+//return $Site;
+               return json_encode($Site);
             }else{
                 //               $model= new Cloud();
                 //             $model=$model->findOne(['ip'=>$_SERVER['REMOTE_ADDR']]);//->attributes;

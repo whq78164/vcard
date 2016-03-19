@@ -160,15 +160,19 @@ class FileTools
      * @return array
      */
     static function md5Files($file, $basePath, $replace, $exclude){
-        $Md5Arr=[];
-        foreach($exclude as $eachExclude){
-            if($file!==$eachExclude){
-                if(is_dir($file)){
-                    $dirHandle = opendir($file);
-                    while (($files = readdir($dirHandle)) !== false) {
-                        if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
-                            //  echo "filename: $file : filetype: " . filetype($dir . $file) . "n"."<br />";
-                            $eachFile=$file.'/'. $files;
+
+            $Md5Arr=[];
+
+            if(is_dir($file)){
+
+                $dirHandle = opendir($file);
+                while (($files = readdir($dirHandle)) !== false) {
+                    if ($files !== "." && $files !== "..") {//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                        //  echo "filename: $file : filetype: " . filetype($dir . $file) . "n"."<br />";
+
+                        $eachFile=$file.'/'. $files;
+
+                        if(!in_array($file, $exclude)){
                             if(filetype($eachFile)=='dir'){
                                 $Md5Arr=array_merge($Md5Arr, self::md5Files($eachFile,$basePath, $replace,$exclude));
                             }elseif(filetype($eachFile)=='file'){
@@ -178,20 +182,27 @@ class FileTools
                                 $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
                             }
                         }
-                    }
-                    closedir($dirHandle);
-                }
-                if(is_file($file)){
-                    $eachFilePath=str_replace($basePath,$replace,$file);
-                    $eachFileMd5=md5_file($file);
-                    $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
-                    $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
-                }
-            }
-        }
 
-        return $Md5Arr;
+
+                    }
+                }
+                closedir($dirHandle);
+            }
+
+
+            if(is_file($file)){
+                $eachFilePath=str_replace($basePath,$replace,$file);
+                $eachFileMd5=md5_file($file);
+                $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
+                $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
+            }
+
+
+            return $Md5Arr;
+
+
     }
+
 
 
 

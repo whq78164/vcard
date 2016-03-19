@@ -30,7 +30,9 @@ use yii\helpers\Url;
        }
         ?>
         <div class="alert " id="ReturnResult">
-
+            <?php
+            print_r($diffFiles);
+            ?>
         </div>
 
         <!--input name="_csrf" type="hidden" id="_csrf" value="<?//= Yii::$app->request->csrfToken ?>"-->

@@ -6,7 +6,9 @@ use frontend\models\UserSearch;
 use Yii;
 use common\models\User;
 use yii\web\NotFoundHttpException;
-use linslin\yii2\curl;
+//use linslin\yii2\curl;
+//use frontend\tbhome\ArrayTools;
+use frontend\tbhome\Curl;
 
 class AdminController extends \yii\web\Controller
 {
@@ -64,7 +66,7 @@ if($model==null){
           //  $model = new Site();
             $model->load(Yii::$app->request->post());
             if ($model->validate()) {
-              $curl = new curl\Curl();
+              $curl = new Curl();
                 $response=$curl->setOption(
                     CURLOPT_POSTFIELDS,
                     http_build_query([
@@ -101,19 +103,45 @@ if($model==null){
 
     public function actionIndex()
     {
-     //   if ($this->remoteMsg->status == 9)return  $this->redirect(['site']);
+        ini_set("max_execution_time", "1800");
+
+        $frontend=Yii::getAlias('@frontend');
+        $webDir=Yii::getAlias('@frontend/web');
+
+        $exclude=[
+            $webDir,
+            $frontend.'/.idea',
+            $frontend.'/config',
+            $frontend.'/assets/phpqrcode',
+            $frontend.'/runtime',
+        ];
+
+        $filesMd5=\frontend\tbhome\FileTools::md5Files($frontend,$frontend.'/','',$exclude);
 
 
-            //
-            //    $response=json_decode($response);
-            //  $this->actionGetremote();
+        $checkDiffApi='http://demo.vcards.top/vcardsdemo/frontend/web/index.php?r=api/update/checkdiff';
+
+        //Init curl
+        $curl = new Curl();
+
+        $diffFiles = $curl->setOption(
+            CURLOPT_POSTFIELDS,
+            http_build_query($filesMd5)
+        )->post($checkDiffApi);
+    //    $diffFiles=json_decode($diffFiles,true) ? json_decode($diffFiles,true) : array('status'=>'无响应');
+
+
+       // foreach($dirs as $key=>$value){echo $key.' => '.$value.'<br/>';}
+
+
+
             $response = $this->remoteMsg;
-//var_dump($response);
         $site=Site::findOne(['id'=>1]);
 
             return $this->render('index', [
                 'model'=>$response,
                 'site'=>$site,
+                'diffFiles'=>$diffFiles,
             ]);
 
     }

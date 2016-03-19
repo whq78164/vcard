@@ -17,13 +17,6 @@ $Moduleconfig['authmenu']=[
     ]
 ];
 $Moduleconfig['company']=['class' => 'frontend\modules\company\companyModule',];
-$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\Module'];
+$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\qrcodeModule'];
+$Moduleconfig['api']=['class' => 'frontend\modules\api\apiModule'];
 //////类名和php文件名必须一致!
-
-$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\Module'];
-
-$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\Module'];
-
-$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\Module'];
-
-$Moduleconfig['qrcode']=['class' => 'frontend\modules\qrcode\Module'];

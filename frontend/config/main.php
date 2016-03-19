@@ -39,6 +39,14 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // 使用数据库管理配置文件
        ],
+       'urlManager' => [
+       //    'enablePrettyUrl' => true,
+      //     'enableStrictParsing' => true,
+     //      'showScriptName' => false,
+           'rules' => [
+               ['class' => 'yii\rest\UrlRule', 'controller' => 'test'],
+           ],
+       ],
 /*
        'as access' => [
            'class' => 'mdm\admin\components\AccessControl',
