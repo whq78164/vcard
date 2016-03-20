@@ -14,26 +14,47 @@ use yii\helpers\Url;
     <div class="col-sm-12 col-md-8 ">
 
 
-<?=$model->welcome?>
+        <?=$model->welcome?>
         <br/>
         <?//=$model->page1?>
-
 
         <?php
         if($model->status>9) {
             ?>
-
-            <?= Html::button('一键更新', ['id' => 'update', 'class' => 'pull-left btn btn-success']) ?>
-            <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'pull-right btn btn-danger']) ?>
-            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <?= Html::button('一键更新', ['id' => 'update', 'class' => ' btn btn-success']) ?>
+                </div>
+                <div class="col-md-4">
+                    <?= Html::button('备份数据库', ['id' => 'backup', 'class' => 'btn btn-primary']) ?>
+                </div>
+                <div class="col-md-4">
+                    <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'btn btn-danger']) ?>
+                </div>
+            </div>
             <?php
-       }
+        }
         ?>
-        <div class="alert " id="ReturnResult">
-            <?php
-            print_r($diffFiles);
-            ?>
+        <br/>
+        <?php
+        if($diffFiles){
+            echo '<div class="alert alert-danger">';
+            echo '您的系统文件有更新，请升级！';
+            foreach($diffFiles as $value){echo ' <br/>'.$value;}
+        }else{
+            echo '<div class="alert alert-info">';
+            echo '恭喜！您的系统为最新版，无需升级';
+        }
+
+
+        ?>
+    </div>
+        <div class="alert alert-success" id="ReturnResult">
+
         </div>
+
+
+
 
         <!--input name="_csrf" type="hidden" id="_csrf" value="<?//= Yii::$app->request->csrfToken ?>"-->
 
@@ -43,11 +64,11 @@ use yii\helpers\Url;
     <div class="col-sm-12 col-md-4">
         当前版本：
         <strong>v<?php
-        if (isset($site->version)){
-            echo sprintf('%.2f', $site->version);
-        }
-        ?>
-            </strong>
+            if (isset($site->version)){
+                echo sprintf('%.2f', $site->version);
+            }
+            ?>
+        </strong>
         <br/><br/>
 
         <strong>更新记录：</strong>
@@ -70,30 +91,32 @@ use yii\helpers\Url;
     $(document).ready(function(){
 
         $("#update").click(function(){
+            if(confirm("升级前，请做好数据备份！")) {
 
-  //        var FWcode = document.getElementById('FWcode').value;
+                //        var FWcode = document.getElementById('FWcode').value;
 
-     //       var FWcode = $("#FWcode").val();
-   //         var FWuid = $("#FWuid").val();
-    //        var replyid = $("#replyid").val();
-            var url="<?=Url::to(['update/index'],true)?>";
-            var csrfToken = $('meta[name="csrf-token"]').attr("content");
-           var data={
-               _csrf: csrfToken
- //               FWcode: FWcode,
-   //             replyid: replyid,
-  //              FWuid: FWuid
-            };
+                //       var FWcode = $("#FWcode").val();
+                //         var FWuid = $("#FWuid").val();
+                //        var replyid = $("#replyid").val();
+                var url = "<?=Url::to(['update/index'],true)?>";
+                var csrfToken = $('meta[name="csrf-token"]').attr("content");
+                var data = {
+                    _csrf: csrfToken
+                    //             replyid: replyid,
+                    //              FWuid: FWuid
+                };
 
-            $.ajax({
-                type: 'POST',
-                url: url ,
-                data: data ,
-                success: function(data,status){
-                    document.getElementById('ReturnResult').innerHTML = data;//+status;
-                }
-                //   dataType: html
-            });
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: data,
+                    success: function (data, status) {
+                        document.getElementById('ReturnResult').innerHTML = data;//+status;
+                    }
+                    //   dataType: html
+                });
+
+            }
 
         });
 
@@ -105,18 +128,37 @@ use yii\helpers\Url;
                 var data={
                     _csrf: csrfToken
                 };
-                    $.ajax({
-                        type: 'POST',
-                        url: url ,
-                        data: data ,
-                        success: function(data,status){
-                            document.getElementById('ReturnResult').innerHTML = data;//+status;
-                        }
-                    });
+                $.ajax({
+                    type: 'POST',
+                    url: url ,
+                    data: data ,
+                    success: function(data,status){
+                        document.getElementById('ReturnResult').innerHTML = data;//+status;
+                    }
+                });
 
+            }
+
+        });
+
+        $("#backup").click(function(){
+            //    if(confirm("确认清除？提示：请在技术人员指导下操作！")){
+
+            var url="<?=Url::to(['update/backupdb'],true)?>";
+            var csrfToken = $('meta[name="csrf-token"]').attr("content");
+            var data={
+                _csrf: csrfToken
+            };
+            $.ajax({
+                type: 'POST',
+                url: url ,
+                data: data ,
+                success: function(data,status){
+                    document.getElementById('ReturnResult').innerHTML = data;//+status;
                 }
+            });
 
-
+            //        }
 
         });
 

@@ -135,14 +135,15 @@ class FileTools
             $zip->close();
         }
     }
-    static function createZip($filename, $path){
+    static function createZip($filename, $path, $delpath=''){
         $zip = new \ZipArchive();
         if ($zip->open($filename, \ZipArchive::CREATE) === TRUE) {
             //必须为CREATE, OVERWRITE为覆盖，不可用。
             $files=self::searchFiles($path);
             //  $zip->addFile('autoload.php');
             foreach($files as $value){
-                $zip->addFile($value);
+                $file=str_replace($delpath, '', $value);
+                $zip->addFile($value, $file);
             }
             //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
             $zip->close(); //关闭处理的zip文件
@@ -202,6 +203,86 @@ class FileTools
 
 
     }
+
+
+
+    static function filesMd5Arr(){
+        ini_set("max_execution_time", "1800");
+        $frontend=dirname(__DIR__);
+        $excludeFrontend=[
+            $frontend.'/web',
+            $frontend.'/.idea',
+            $frontend.'/config',
+            $frontend.'/assets/phpqrcode',
+            $frontend.'/runtime',
+            $frontend.'/modules',
+            $frontend.'/controllers/CloudController.php',
+            $frontend.'/controllers/CloudtableController.php',
+            $frontend.'/views/cloud',
+            $frontend.'/views/cloudtable',
+        ];
+        $frontendDirs=self::md5Files($frontend, $frontend.'/', '', $excludeFrontend);
+
+        $excludeWeb=[
+            $frontend.'/web/tbhome/AdminLTE',
+            $frontend.'/web/tbhome/font-awesome',
+            $frontend.'/web/tbhome/Ionicons',
+            $frontend.'/web/tbhome/pace',
+            $frontend.'/web/tbhome/ueditor',
+            $frontend.'/web/tbhome/weui',
+        ];
+        $webDirs=self::md5Files($frontend.'/web/tbhome', $frontend.'/', '', $excludeWeb);
+
+        $dirs=array_merge($frontendDirs,$webDirs);
+
+        return $dirs;
+
+    }
+
+
+
+    //循环删除目录和文件函数
+    static function delDirAndFile( $dirName )
+    {
+        if (is_file($dirName)) {
+            if (unlink($dirName)) echo "成功删除文件： $dirName<br />\n";
+        }
+
+
+        if(is_dir($dirName)){
+        if ($handle = opendir($dirName)) {
+            //    while ( false !== ( $item = readdir( $handle ) ) ) {
+            while (($files = readdir($handle)) !== false) {
+                if ($files != "." && $files != "..") {
+                    if (is_dir("$dirName/$files")) {
+                        self::delDirAndFile("$dirName/$files");
+                    } else {
+                        if (unlink("$dirName/$files")) echo "成功删除文件： $dirName/$files<br />\n";
+                    }
+                }
+            }
+            closedir($handle);
+            if (rmdir($dirName)) echo "成功删除目录： $dirName<br />\n";
+        }
+        }
+
+
+    }
+
+    static function createZipFromArr($zipfile, $array, $delpath=''){
+        $zip = new \ZipArchive();
+        if ($zip->open($zipfile, \ZipArchive::CREATE) === TRUE) {
+
+            foreach($array as $value){
+                $file=str_replace($delpath, '', $value);
+                $zip->addFile($value, $file);
+            }
+            //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
+            $zip->close(); //关闭处理的zip文件
+        }
+    }
+
+
 
 
 

@@ -17,8 +17,11 @@ class Upload extends Model
     {
 
         return [
+        /*
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg, bmp'],
+        */
         ];
+
     }
 
     public function upload($filename, $dir="Uploads/")

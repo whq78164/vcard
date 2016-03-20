@@ -361,18 +361,35 @@ class SiteController extends Controller
     }
 
     public function actionTest(){
-        ini_set("max_execution_time", "1800");
-        //  $rootDir=dirname(dirname(__DIR__));
-        $rootDir=dirname(Yii::getAlias('@frontend'));
-        $zipDir=$rootDir.'/frontend/modules';
-        $webDir=Yii::getAlias('@frontend/web');
-        $frontend=Yii::getAlias('@frontend');
-        $exclude=array($webDir, $frontend.'/.idea');
-        //Yii::getAlias('@frontend');dirname(__DIR__); 为本地绝对目录。
-$dirs=\frontend\tbhome\FileTools::md5Files($frontend,$frontend.'/','',$exclude);
+        $frontend=\Yii::getAlias('@frontend');
+        $excludeFrontend=[
+            $frontend.'/web',
+            $frontend.'/.idea',
+            $frontend.'/config',
+            $frontend.'/assets/phpqrcode',
+            $frontend.'/runtime',
+            $frontend.'/modules',
+            $frontend.'/controllers/CloudController.php',
+            $frontend.'/controllers/CloudtableController.php',
+            $frontend.'/views/cloud',
+            $frontend.'/views/cloudtable',
+        ];
+$dirs=\frontend\tbhome\FileTools::md5Files($frontend, $frontend, $frontend, $excludeFrontend);
+$ziplist=array_flip($dirs);
+        //print_r($ziplist);
+        echo $frontend;
+        \frontend\tbhome\FileTools::createZipFromArr($frontend.'/runtime/mmmhhhmm.zip', $ziplist,$frontend.'/');
 
-     foreach($dirs as $key=>$value){echo $key.' => '.$value.'<br/>';}
 
+
+
+
+
+
+
+
+
+        //basename()
    //     print_r($_SERVER['SERVER_ADDR']);
      //   print_r($_SERVER["HTTP_HOST"]);
        // print_r($_SERVER["SERVER_NAME"]);//域名为vcards.top 时输出www.vcards.top
@@ -394,6 +411,14 @@ $dirs=\frontend\tbhome\FileTools::md5Files($frontend,$frontend.'/','',$exclude);
 
 
     }
+
+
+
+
+
+
+
+
 
 
 }

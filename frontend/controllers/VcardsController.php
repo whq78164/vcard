@@ -30,7 +30,7 @@ http://localhost/index.php?r=site/page&view=about
 
 */
 
-    public $layout = '886';
+ //   public $layout = '886';
 
 
     public function actionIndex($uid=1)
