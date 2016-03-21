@@ -40,7 +40,7 @@ $webPath=Yii::getAlias('@web');
             [
                 'header'=>'个人头像', 'format' => 'html', 'value'=>function($data){
                 if(!file_exists($data->head_img)){
-                    $data->head_img='Uploads/shuhualogo.jpg';
+                    $data->head_img='Uploads/default_face.jpg';
                 }
                 return Html::img($data->head_img, ['width'=>'70px']);
             },
@@ -127,7 +127,7 @@ $webPath=Yii::getAlias('@web');
     </div>
 
     <div class="col-md-6">
-        <?=Html::a('下载数据导入模板', $webPath.'/Uploads/'.Yii::$app->user->id.'/company/company.zip', ['class'=>'btn btn-info'])?>
+        <?=Html::a('下载数据导入模板', $webPath.'/Uploads/CompanyImport.zip', ['class'=>'btn btn-info'])?>
         <br/><br/>
         <?=Html::a('导出全部数据', ['download'], ['class'=>'btn btn-success'])?>
     </div>

@@ -13,22 +13,8 @@ use frontend\models\Site;
 //use mdm\admin\components\MenuHelper;
 
 $response=Site::findOne(['id'=>1]);
-//$url=Yii::$app->params['updateApi'];
-//$response=httpGet($url);
-//$response=json_decode($response);
-/*
-switch ($response->status){
-    case 9 :// header('location: '.Yii::$app->homeUrl);
-      //  Yii::$app->getSession()->setFlash('danger', $response->msg);
-        break;
-    case 0 :  //Yii::$app->getSession()->setFlash('danger', $response->msg);
-
-        break;
-}
-*/
-
 AppAsset::register($this);
-
+$sitetitle=$response->sitetitle;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -38,7 +24,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
 
-    <title><?= Html::encode($response->sitetitle) ?></title>
+    <title><?= Html::encode($this->title) ?></title>
 
     <?php $this->head() ?>
 </head>
@@ -60,7 +46,7 @@ AppAsset::register($this);
  //   $items = MenuHelper::getAssignedMenu(Yii::$app->user->id);//, null, $callback);
 ///
     NavBar::begin([
-        'brandLabel' => $response->sitetitle,//Yii::t('tbhome', 'Vcards').'微名片',
+        'brandLabel' => $sitetitle,//Yii::t('tbhome', 'Vcards').'微名片',
 //        'brandLabel' => ['label' => Yii::t('tbhome', 'Vcards'), 'class' => 'h1'],
 
         'brandUrl' => Yii::$app->homeUrl,

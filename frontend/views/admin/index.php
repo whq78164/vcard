@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+//use yii\bootstrap\BootstrapAsset;////
+//BootstrapAsset::register($this);
 ?>
 
 
@@ -9,63 +11,69 @@ use yii\helpers\Url;
 
 <div class="row">
 
-
-
     <div class="col-sm-12 col-md-8 ">
-
-
         <?=$model->welcome?>
         <br/>
         <?//=$model->page1?>
 
-        <?php
-        if($model->status>9) {
-            ?>
-            <div class="row">
-                <div class="col-md-4">
-                    <?= Html::button('一键更新', ['id' => 'update', 'class' => ' btn btn-success']) ?>
-                </div>
-                <div class="col-md-4">
-                    <?= Html::button('备份数据库', ['id' => 'backup', 'class' => 'btn btn-primary']) ?>
-                </div>
-                <div class="col-md-4">
-                    <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'btn btn-danger']) ?>
-                </div>
-            </div>
+
+
+        <!--div class="col-sm-12 col-md-8 "-->
+
             <?php
-        }
-        ?>
-        <br/>
-        <?php
-        if($diffFiles){
-            echo '<div class="alert alert-danger">';
-            echo '您的系统文件有更新，请升级！';
-            foreach($diffFiles as $value){echo ' <br/>'.$value;}
-        }else{
-            echo '<div class="alert alert-info">';
-            echo '恭喜！您的系统为最新版，无需升级';
-        }
+            if($model->status>9) {
+                ?>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= Html::button('一键更新', ['id' => 'update', 'class' => ' btn btn-success']) ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= Html::button('备份数据库', ['id' => 'backup', 'class' => 'btn btn-primary']) ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'btn btn-danger']) ?>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+            <br/>
+
+            <div id="ReturnResult">
+            </div>
+        <!--/div-->
 
 
-        ?>
+
+        <!--div class="col-sm-12 col-md-8"-->
+            <?php
+            if($diffFiles){
+                echo '<div class="alert alert-danger">';
+                echo '您的系统文件有更新，请升级！';
+                foreach($diffFiles as $value){echo ' <br/>'.$value;}
+                echo '</div>';
+            }else{
+                echo '<div class="alert alert-success">';
+                echo '恭喜！您的系统为最新版，无需升级';
+                echo '</div>';
+            }
+            ?>
+        <!--/div-->
+
+
+
+
+
+
+
+
     </div>
-        <div class="alert alert-success" id="ReturnResult">
-
-        </div>
-
-
-
-
-        <!--input name="_csrf" type="hidden" id="_csrf" value="<?//= Yii::$app->request->csrfToken ?>"-->
-
-    </div>
-
 
     <div class="col-sm-12 col-md-4">
         当前版本：
         <strong>v<?php
             if (isset($site->version)){
-                echo sprintf('%.2f', $site->version);
+                echo $site->version;//sprintf('%.2f', $site->version);
             }
             ?>
         </strong>
@@ -79,9 +87,21 @@ use yii\helpers\Url;
     </div>
 
 
-
-
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -94,16 +114,12 @@ use yii\helpers\Url;
             if(confirm("升级前，请做好数据备份！")) {
 
                 //        var FWcode = document.getElementById('FWcode').value;
-
                 //       var FWcode = $("#FWcode").val();
-                //         var FWuid = $("#FWuid").val();
-                //        var replyid = $("#replyid").val();
+
                 var url = "<?=Url::to(['update/index'],true)?>";
                 var csrfToken = $('meta[name="csrf-token"]').attr("content");
                 var data = {
                     _csrf: csrfToken
-                    //             replyid: replyid,
-                    //              FWuid: FWuid
                 };
 
                 $.ajax({
@@ -119,6 +135,7 @@ use yii\helpers\Url;
             }
 
         });
+
 
         $("#clearv").click(function(){
             if(confirm("确认清除？提示：请在技术人员指导下操作！")){

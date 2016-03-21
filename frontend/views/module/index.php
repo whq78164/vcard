@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'modulename',
+            'version',
             'module_label',
 
             [

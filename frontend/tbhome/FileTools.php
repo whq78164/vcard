@@ -269,12 +269,12 @@ class FileTools
 
     }
 
-    static function createZipFromArr($zipfile, $array, $delpath=''){
+    static function createZipFromArr($zipfile, $fullpatharray, $basepath=''){
         $zip = new \ZipArchive();
         if ($zip->open($zipfile, \ZipArchive::CREATE) === TRUE) {
 
-            foreach($array as $value){
-                $file=str_replace($delpath, '', $value);
+            foreach($fullpatharray as $value){
+                $file=str_replace($basepath, '', $value);
                 $zip->addFile($value, $file);
             }
             //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法

@@ -2,7 +2,9 @@
 
 /* @ar $this yii\web\View */
 use yii\helpers\Html;
-$this->title = '唯卡微名片营销平台';
+use frontend\models\Site;
+$response=Site::findOne(['id'=>1]);
+$this->title = $response->sitetitle;
 ?>
 <style type="text/css" xmlns="http://www.w3.org/1999/html">
     p img{max-width:100%;}

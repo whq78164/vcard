@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\controllers;
+use frontend\tbhome\FileTools;
 use Yii;
 use yii\db\Schema;
 use frontend\tbhome\DatabaseTool;
@@ -37,16 +38,12 @@ class UpdateController extends DbController
 
         if(Yii::$app->request->isPost){
 
-
             if(!isset($sys['version'])){
                 //        $this->renameColumn('{{%usermodule}}', 'module_satus', 'module_status');
 
-
                 require $frontend.'/update.php';
 
-
             }elseif($sys['version']<1.0){//手动清除版本信息，重新升级
-
 
                 require $frontend.'/update.php';
 
@@ -55,31 +52,28 @@ class UpdateController extends DbController
 
 
 
-                //$version=
-                //   echo '您的系统已升级成功！版本：1.10，请勿重复升级！';
-
                 $backFilename=$frontend.'/backup/'.date('Ymd_His',time());
                 $updateZip=$frontend.'/runtime/'.date('Ymd_His',time());
                 $updateFilesArr=Update::filesList();
-                $update=$frontend.'/update/update_v'.strval($version).'.php';
-             //   echo $update;
+                $updateSql=$frontend.'/update/update_v'.strval($version).'.php';
 
 
                 if(!$updateFilesArr){
                     echo '恭喜！您的系统已是最新版本，无需升级！';
                 }else{
-                    Update::backupFiles($backFilename);
+                    Update::backupFiles($backFilename);//备份本地增量文件zip
+                 //   FileTools::createZipFromArr($backFilename.'.zip', $updateFilesArr, $frontend.'/');
                     //     if($this->actionBackupdb()){  }
-                    Update::downZip($updateZip.'.zip', $this->getVersion());
+                    Update::downZip($updateZip.'.zip', $this->getVersion(), 'frontend');
 
-                    \frontend\tbhome\FileTools::extractZip($updateZip.'.zip', $frontend);
-                    echo '<br/>升级文件成功！<br>';
+                  \frontend\tbhome\FileTools::extractZip($updateZip.'.zip', $frontend);
+                    echo '<br/>文件更新成功！<br>';
                     foreach($updateFilesArr as $dir){echo '<br>'.$dir;}
-                    unlink($updateZip.'.zip');
+                   unlink($updateZip.'.zip');
 
-                    if(file_exists($update)){
+                   if(file_exists($updateSql)){
                         echo '<br/>升级数据库<br/>';
-                        require $update;
+                        require $updateSql;
                     }
 
 

@@ -35,6 +35,43 @@ class Update
     }
 
 
+    static public function moduleFilesList($moduleDir){
+        $filesMd5=self::ModuleFilesMd5($moduleDir);
+        $checkDiffApi='http://demo.vcards.top/vcardsdemo/frontend/web/index.php?r=api/update/checkmodule';
+        $curl = new Curl();
+        $moduleFiles=['moduleFiles'=>$filesMd5];
+        $module=['moduleDir'=>$moduleDir];
+        $postData=array_merge($moduleFiles,$module);
+        $diffFiles = $curl->setOption(
+            CURLOPT_POSTFIELDS,
+            http_build_query($postData)
+        )->post($checkDiffApi);
+        $diffFiles=json_decode($diffFiles,true) ? json_decode($diffFiles,true) : false;
+        if($diffFiles){
+            $updateFiles=array();
+            foreach($diffFiles as $key=>$value){
+                //   $updateFiles=array_merge($updateFiles,$key);
+                $updateFiles[]=$key;
+            }
+            return $updateFiles;
+        }else{
+            return false;
+        }
+
+    }
+
+
+    static function ModuleFilesMd5($moduleDir){
+        ini_set("max_execution_time", "1800");
+        $frontendModuleDir=dirname(__DIR__).'/modules/'.$moduleDir;
+
+        $frontendDirs=FileTools::md5Files($frontendModuleDir, $frontendModuleDir.'/', '', []);
+
+        return $frontendDirs;
+
+    }
+
+
 
 
 
@@ -74,9 +111,14 @@ class Update
 
 
 
-    static function downZip($dir,$version){
+    static function downZip($save,$version, $type){////不可以设置默认值type='frontend'
+        if($type=='frontend'){
+            $updateFilesArr=self::filesList();
+        }else{
+            $updateFilesArr=self::moduleFilesList($type);
+        }
 
-        $updateFilesArr=Update::filesList();
+
 
         $updateFilesApi='http://demo.vcards.top/vcardsdemo/frontend/web/index.php?r=api/update/updatefiles';
 
@@ -84,19 +126,20 @@ class Update
         $postData=[
             'version'=>$version,
             'files'=>$updateFilesArr,
+            'type'=>$type,
         ];
 
         $ch = curl_init($updateFilesApi);
-        //curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+ //       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
-        $fp = fopen($dir, "wb");
+    $fp = fopen($save, "wb");
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        $res=curl_exec($ch);
+      curl_exec($ch);//$res=
         curl_close($ch);
         fclose($fp);
-        return $res;
+      //  return $res;
 
         /*
         foreach($updateFilesArr as $updateFile){
@@ -115,15 +158,23 @@ class Update
 
     }
 
-    static function backupFiles($backFilename){
+    static function backupFiles($backFilename, $module='frontend'){
         $frontend=\Yii::getAlias('@frontend');
-        $updateFilesArr=self::filesList();
+
+        if($module=='frontend'){
+            $updateFilesArr=self::filesList();
+            $prefix=$frontend.'/';
+        }else{
+            $prefix=$frontend.'/modules/'.$module.'/';
+            $updateFilesArr=self::moduleFilesList($module);
+        }
+
         $zip = new \ZipArchive();
         if ($zip->open($backFilename.'.zip', \ZipArchive::CREATE) === TRUE) {
             //新建时必须为CREATE, OVERWRITE为覆盖，不可用。
             foreach($updateFilesArr as $value){
-                $eachFile=$frontend.'/'.$value;
-                $zip->addFile($eachFile);
+                $eachFile=$prefix.$value;
+                $zip->addFile($eachFile, $value);
             }
             $zip->close(); //关闭处理的zip文件
         }
