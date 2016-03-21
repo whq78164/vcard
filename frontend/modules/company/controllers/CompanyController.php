@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Upload;
 use yii\web\UploadedFile;
+use frontend\tbhome\ArrayTools;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -126,8 +127,17 @@ class CompanyController extends Controller
                 $model=$this->findModel($id);
                 $model->uid = $uid;
                 $model->image = $url;
-                $model->save();
-                Yii::$app->getSession()->setFlash('success', '上传成功！');
+
+                if($model->validate()){
+                    $model->save();
+                    $msg='上传成功！';
+                }else{
+                    $errors = $model->errors;
+                    $msg='验证失败：'.ArrayTools::arrayToString($errors);
+                  //  $msg='验证失败：'.json_encode($errors);
+                }
+
+                Yii::$app->getSession()->setFlash('success', $msg);
                 return $this->redirect(['update', 'id'=>$model->id]);
             } else {
                 Yii::$app->getSession()->setFlash('danger', '上传失败！');

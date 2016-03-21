@@ -35,9 +35,9 @@ class Company extends \yii\db\ActiveRecord
     {
         return [
             [['uid'], 'required'],
-            [['uid'], 'integer'],
+            [['uid', 'tpl'], 'integer'],
             [['latitude', 'longitude'], 'number'],
-            [['company', 'image', 'url', 'address', 'tpl'], 'string', 'max' => 255]
+            [['company', 'image', 'url', 'address',], 'string', 'max' => 255]
         ];
     }
 
