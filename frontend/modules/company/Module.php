@@ -2,7 +2,7 @@
 
 namespace frontend\modules\company;
 
-class companyModule extends \yii\base\Module
+class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'frontend\modules\company\controllers';
    // public $defaultRoute='company';

@@ -47,16 +47,34 @@ class Update
             http_build_query($postData)
         )->post($checkDiffApi);
         $diffFiles=json_decode($diffFiles,true) ? json_decode($diffFiles,true) : false;
+
+    //    var_dump($diffFiles);
+
+
+
+
         if($diffFiles){
-            $updateFiles=array();
-            foreach($diffFiles as $key=>$value){
-                //   $updateFiles=array_merge($updateFiles,$key);
-                $updateFiles[]=$key;
+
+            if(array_key_exists('error!',$diffFiles)){//用in_array()会把键转化为值！
+                $updateFiles=$diffFiles;
+            }else{
+                $updateFiles=array();
+                foreach($diffFiles as $key=>$value){
+                    //   $updateFiles=array_merge($updateFiles,$key);
+                    $updateFiles[]=$key;
+                }
             }
+
             return $updateFiles;
+
         }else{
             return false;
         }
+
+
+
+
+
 
     }
 
@@ -82,8 +100,11 @@ class Update
         $excludeFrontend=[
             $frontend.'/web',
             $frontend.'/.idea',
-            $frontend.'/config',
+            $frontend.'/config/db.php',
+            $frontend.'/config/modules/addmodules.php',
             $frontend.'/assets/phpqrcode',
+            $frontend.'/models/Cloud.php',
+            $frontend.'/models/CloudSearch.php',
             $frontend.'/runtime',
             $frontend.'/modules',
             $frontend.'/controllers/CloudController.php',
@@ -102,6 +123,14 @@ class Update
             $frontend.'/web/tbhome/weui',
         ];
         $webDirs=FileTools::md5Files($frontend.'/web/tbhome', $frontend.'/', '', $excludeWeb);
+
+  /*      $excludeConf=[
+            $frontend.'/config/db.php',
+            $frontend.'/config/modules/addmodules.php',
+        ];
+        $confDirs=FileTools::md5Files($frontend.'/config', $frontend.'/', '', $excludeConf);
+*/
+
 
         $dirs=array_merge($frontendDirs,$webDirs);
 

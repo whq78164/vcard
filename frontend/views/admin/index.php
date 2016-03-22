@@ -20,9 +20,7 @@ use yii\helpers\Url;
 
         <!--div class="col-sm-12 col-md-8 "-->
 
-            <?php
-            if($model->status>9) {
-                ?>
+       
                 <div class="row">
                     <div class="col-md-4">
                         <?= Html::button('一键更新', ['id' => 'update', 'class' => ' btn btn-success']) ?>
@@ -34,9 +32,7 @@ use yii\helpers\Url;
                         <?= Html::button('清除版本信息', ['id' => 'clearv', 'class' => 'btn btn-danger']) ?>
                     </div>
                 </div>
-                <?php
-            }
-            ?>
+    
             <br/>
 
             <div id="ReturnResult">

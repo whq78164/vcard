@@ -34,7 +34,7 @@ class UpdateController extends DbController
         $table='sys';
         $sql="SELECT * FROM {{%$table}} WHERE id=1";
         $sys=Yii::$app->db->createCommand($sql)->queryOne();
-        $version=$sys['version'];
+   //     $version=$sys['version'];
 
         if(Yii::$app->request->isPost){
 
@@ -43,19 +43,18 @@ class UpdateController extends DbController
 
                 require $frontend.'/update.php';
 
-            }elseif($sys['version']<1.0){//手动清除版本信息，重新升级
+            }elseif($sys['version']==0){//手动清除版本信息，重新升级
 
                 require $frontend.'/update.php';
 
             }else{
+                $baseFilName=date('Ymd_His',time());
 
 
-
-
-                $backFilename=$frontend.'/backup/'.date('Ymd_His',time());
-                $updateZip=$frontend.'/runtime/'.date('Ymd_His',time());
+                $backFilename=$frontend.'/backup/'.$baseFilName;
+                $updateZip=$frontend.'/runtime/'.$baseFilName;
                 $updateFilesArr=Update::filesList();
-                $updateSql=$frontend.'/update/update_v'.strval($version).'.php';
+                $updateSql=$frontend.'/update/update_v'.strval($sys['version']).'.php';
 
 
                 if(!$updateFilesArr){
@@ -75,7 +74,6 @@ class UpdateController extends DbController
                         echo '<br/>升级数据库<br/>';
                         require $updateSql;
                     }
-
 
                 }
 

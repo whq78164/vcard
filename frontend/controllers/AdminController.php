@@ -15,7 +15,7 @@ class AdminController extends \yii\web\Controller
 
     public $layout='admin';
     public $remoteMsg;
-    public $postSite='http://www.vcards.top/index.php?r=cloud/site';
+   // public $postSite='http://www.vcards.top/index.php?r=cloud/site';
 
     public function init(){
         parent :: init();
@@ -35,9 +35,7 @@ class AdminController extends \yii\web\Controller
 
     public function actionSite()
     {
-
-
-        $url=$this->postSite;
+        $url=Yii::$app->params['postSite'];
         $response=httpGet($url);
  //       $curl = new curl\Curl();
    //     $response = $curl->get($url);

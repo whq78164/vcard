@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="cloud-form">
+<div class="container">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -21,6 +21,24 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'tel')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'qq')->textInput() ?>
+    <?= $form->field($model, 'server_name')->textInput() ?>
+
+    <br/>
+    <div class="form-group field-cloud-modules">
+        <?=Html::label('已开通的模块列表：', 'for_id',['class'=>'control-label'])?>
+
+        <?= '<br>'.Html::encode($model->modules) ?>
+<?php
+$displyModules=json_decode(stripslashes($model->modules),true);
+$displyModules=$displyModules['modules'];
+?>
+        <?= Html::checkboxList('modules', $displyModules, $listModules, [
+            'class'=>'form-control',
+            'id'=>'class',
+        ]);?>
+        <div class="help-block"></div>
+    </div>
+
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
@@ -30,7 +48,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'icp')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'ip')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'ip')->textInput() ?>
 
 
     <?= $form->field($model, 'welcome')->textarea() ?>

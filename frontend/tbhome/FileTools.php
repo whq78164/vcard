@@ -131,7 +131,11 @@ class FileTools
         $zip=new \ZipArchive();
         $res=$zip->open($file);
         if($res==TRUE){
-            $zip->extractTo($path);
+            if($zip->extractTo($path)){
+                echo '文件解压成功！';
+            }else{
+                echo '解压失败，请检查目录是否可写！';
+            };
             $zip->close();
         }
     }
@@ -173,16 +177,25 @@ class FileTools
 
                         $eachFile=$file.'/'. $files;
 
-                        if(!in_array($file, $exclude)){
+
                             if(filetype($eachFile)=='dir'){
-                                $Md5Arr=array_merge($Md5Arr, self::md5Files($eachFile,$basePath, $replace,$exclude));
+
+                                if(!in_array($eachFile, $exclude)){
+                                    $Md5Arr=array_merge($Md5Arr, self::md5Files($eachFile,$basePath, $replace,$exclude));
+                                }
+
                             }elseif(filetype($eachFile)=='file'){
-                                $eachFilePath=str_replace($basePath,$replace,$eachFile);
-                                $eachFileMd5=md5_file($eachFile);
-                                $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
-                                $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
+
+                                if(!in_array($eachFile, $exclude)) {
+                                    $eachFilePath = str_replace($basePath, $replace, $eachFile);
+                                    $eachFileMd5 = md5_file($eachFile);
+                                    $eachMd5Arr = [$eachFilePath => $eachFileMd5];
+                                    $Md5Arr = array_merge($Md5Arr, $eachMd5Arr);
+                                }
+
+
                             }
-                        }
+
 
 
                     }
@@ -190,13 +203,15 @@ class FileTools
                 closedir($dirHandle);
             }
 
-
+        if(!in_array($file, $exclude)){
             if(is_file($file)){
                 $eachFilePath=str_replace($basePath,$replace,$file);
                 $eachFileMd5=md5_file($file);
                 $eachMd5Arr=[$eachFilePath=>$eachFileMd5];
                 $Md5Arr=array_merge($Md5Arr,$eachMd5Arr);
             }
+        }
+
 
 
             return $Md5Arr;

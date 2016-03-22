@@ -95,6 +95,7 @@ class CloudController extends \yii\web\Controller
             $model->copyright=$_POST['Site']['copyright'];
             $model->icp=$_POST['Site']['icp'];
             $model->ip=$_SERVER['REMOTE_ADDR'];
+            $model->server_name=isset($_SERVER["REMOTE_HOST"])?$_SERVER["REMOTE_HOST"]:'localhost';
 
             if ($model->validate()) {
 
@@ -106,7 +107,9 @@ class CloudController extends \yii\web\Controller
                 }
 
             }else{
-                echo '注册失败，请检查输入是否正确！';
+                $error=$model->errors;
+                $roror=json_encode($error);
+                echo $roror.'注册失败，请检查输入是否正确！';
             }
         }
 

@@ -7,7 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\models\Cloud;
 
-/**
+/*****
  * CloudSearch represents the model behind the search form about `frontend\models\Cloud`.
  */
 class CloudSearch extends Cloud

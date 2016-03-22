@@ -208,6 +208,7 @@ EOF;
             'model' => $model,
             'fileList'=>$updateFiles,
         ]);
+
     }
 
     /**
@@ -308,28 +309,40 @@ EOF;
           //          $fileList=[];
             //        foreach($updateFilesList as $value){$fileList[]=$currentModuleDir.'/'.$value;}
                //     FileTools::createZipFromArr($backFilename.'.zip', $fileList, $currentModuleDir);
-                    Update::backupFiles($backFilename,$modulename);
-                    Update::downZip($updateZip.'.zip', $version, $modulename);
 
-                    \frontend\tbhome\FileTools::extractZip($updateZip.'.zip', $currentModuleDir);
-                    echo '<br/>文件更新成功！<br>';
-                foreach($updateFilesList as $dir){echo '<br>'.$dir;}
-                  unlink($updateZip.'.zip');
 
-                    if(!is_dir(dirname($updateSql))){//或file_exists
-                        mkdir(dirname($updateSql), 0777, true);//true允许创建多级目录。
+
+                    if(array_key_exists('error!', $updateFilesList)){
+                        echo '您的模块不支持升级！';
+                        exit;
+                    }else{
+                        Update::backupFiles($backFilename,$modulename);
+                        Update::downZip($updateZip.'.zip', $version, $modulename);
+
+                        \frontend\tbhome\FileTools::extractZip($updateZip.'.zip', $currentModuleDir);
+                        echo '<br/>文件更新成功！<br>';
+                        foreach($updateFilesList as $dir){echo '<br>'.$dir;}
+                        unlink($updateZip.'.zip');
+
+                        if(!is_dir(dirname($updateSql))){//或file_exists
+                            mkdir(dirname($updateSql), 0777, true);//true允许创建多级目录。
+                        }
+                        if(file_exists($updateSql)){
+                            echo '<br/>升级数据库<br/>';
+                            require $updateSql;
+                            //     unlink($updateSql);
+                        }
                     }
-                    if(file_exists($updateSql)){
-                        echo '<br/>升级数据库<br/>';
-                        require $updateSql;
-                   //     unlink($updateSql);
-                    }
+
+
+
+
+
+
+
 
 
                 }
-
-
-
 
             }
 

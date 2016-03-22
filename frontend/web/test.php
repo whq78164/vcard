@@ -1,5 +1,5 @@
 <?php
-//defined('YII_ENV') or define('YII_ENV', 'dev');
+//defined('YII_ENV') or define('YII_ENV', 'dev');////////////
 //pro模式：高效安全模式(正常使用开启); dev模式：开发模式(出错或调试时开启);
 
 defined('YII_DEBUG') or define('YII_DEBUG',true);

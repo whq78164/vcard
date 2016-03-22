@@ -12,13 +12,18 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('tbhome', 'Clouds'), 'url' =
 $this->params['breadcrumbs'][] = ['label' => $model->sitetitle, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('tbhome', 'Update');
 ?>
-<div class="cloud-update col-md-10">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="row">
+    <div class="col-md-10">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-        'listPage'=> $listPage,
-    ]) ?>
+        <h1><?= Html::encode($this->title) ?></h1>
+
+        <?= $this->render('_form', [
+            'model' => $model,
+            'listPage'=> $listPage,
+            'listModules'=>$listModules,
+        ]) ?>
+
+    </div>
 
 </div>

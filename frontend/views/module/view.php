@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
         if($fileList){
             echo '<div class="alert alert-danger">';
             echo '您的系统文件有更新，请升级！';
-            foreach($fileList as $value){echo ' <br/>'.$value;}
+          foreach($fileList as $value){echo ' <br/>'.$value;}
             echo '</div>';
         }else{
             echo '<div class="alert alert-info">';

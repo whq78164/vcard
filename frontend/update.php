@@ -216,11 +216,37 @@ $this->insert('{{%usermodule}}',[
 ]);
 
 
-$this->update('{{%sys}}', ['version'=>1.10], ['id'=>1]);
-echo '恭喜！系统已更新成功！版本v1.10';
+$this->update('{{%sys}}', ['version'=>1.1], ['id'=>1]);
+echo '恭喜！系统已更新成功！版本v1.1';
 
+/////////////////v1.2
+$this->addColumn('{{%module}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.10');//添加字段
+$this->update('{{%sys}}', ['version'=>1.2], ['id'=>1]);
+echo '恭喜！系统已更新成功！版本v1.2';
 
-/////////////////v1.11
-//$this->alterColumn('{{%module}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.10');//更新字段类型
-//$this->update('{{%sys}}', ['version'=>1.11], ['id'=>1]);
-//echo '恭喜！系统已更新成功！版本v1.                                
+/*
+$this->createTable('{{%cloud}}', [
+    'id' =>  Schema::TYPE_PK,
+    'sitetitle' => Schema::TYPE_STRING . ' NOT NULL',
+    'siteurl' => Schema::TYPE_STRING . ' NOT NULL',
+    'company' => Schema::TYPE_STRING . ' NOT NULL',
+    'tel' => Schema::TYPE_STRING . ' NOT NULL',
+    'qq' => Schema::TYPE_INTEGER . ' NOT NULL',
+    'email' => Schema::TYPE_STRING . ' NOT NULL',
+    'address' =>Schema::TYPE_STRING . ' NOT NULL',
+    'copyright' => Schema::TYPE_STRING . ' NOT NULL',
+    'icp' => Schema::TYPE_STRING . ' NOT NULL',
+    'ip' => Schema::TYPE_STRING . ' NOT NULL',
+    'server_name' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."localhost'",//新增：$_SERVER["SERVER_NAME"]
+    'modules' => Schema::TYPE_STRING." NOT NULL DEFAULT '"."{enable：true}'",//新增
+    'welcome'=>Schema::TYPE_STRING . ' NOT NULL',
+    'pageid1' => Schema::TYPE_STRING . ' NOT NULL',
+    'pageid2' => Schema::TYPE_STRING . ' NOT NULL',
+    'status' => Schema::TYPE_SMALLINT . ' NOT NULL',
+], $tableOptions);
+//$this->createIndex('server_name', '{{%cloud}}', ['server_name']);
+//$this->createIndex('ip', '{{%cloud}}', ['ip']);
+*/
+
+$this->addColumn('{{%cloud}}', 'server_name', Schema::TYPE_STRING." NOT NULL DEFAULT '"."localhost'");//添加字段
+$this->alterColumn('{{%cloud}}', 'modules', Schema::TYPE_STRING." NOT NULL DEFAULT '"."{\"modules\":[\"company\",\"column\"]}'");//添加字段

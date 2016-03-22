@@ -6,9 +6,26 @@
  * Time: 11:49
  */
 $Moduleconfig=[
-//    'company' => ['class' => 'frontend\modules\company\companyModule',],
-    'qrcode' => ['class' => 'frontend\modules\qrcode\qrcodeModule',],
+    'authmenu' => [
+        'class' => 'mdm\admin\Module',
+        'layout' => 'left-menu',//yii2-admin的导航菜单
+        'controllerMap' => [
+            'assignment' => [
+                'class' => 'mdm\admin\controllers\AssignmentController',
+                'userClassName' => 'common\models\User',
+                'idField' => 'id'
+            ]
+        ],
+        'menus' => [
+            'assignment' => [
+                'label' => '授权'//'Grand Access' // change label
+            ],
+            //'route' => null, // disable menu route
+        ]
+    ],
+    'qrcode' => ['class' => 'frontend\modules\qrcode\Module',],
     'column' => ['class' => 'frontend\modules\column\Module',],
+    'company' => ['class' => 'frontend\modules\company\Module',],
  //   'authmenu' => require(__DIR__ . '/authmenu.php'),
 ];
 require(__DIR__ . '/addmodules.php');

@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use common\models\User;
 use Faker\Provider\File;
+use frontend\models\Cloud;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -15,6 +16,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\tbhome\ArrayTools;
 //use frontend\models\Usermodule;
 //use yii\helpers\ArrayHelper;
 
@@ -362,37 +364,27 @@ class SiteController extends Controller
 
     public function actionTest(){
         $frontend=\Yii::getAlias('@frontend');
-        $excludeFrontend=[
-            $frontend.'/web',
-            $frontend.'/.idea',
-            $frontend.'/config',
-            $frontend.'/assets/phpqrcode',
-            $frontend.'/runtime',
-            $frontend.'/modules',
-            $frontend.'/controllers/CloudController.php',
-            $frontend.'/controllers/CloudtableController.php',
-            $frontend.'/views/cloud',
-            $frontend.'/views/cloudtable',
-        ];
-$dirs=\frontend\tbhome\FileTools::md5Files($frontend, $frontend, $frontend, $excludeFrontend);
-$ziplist=array_flip($dirs);
-        //print_r($ziplist);
-        echo $frontend;
-        \frontend\tbhome\FileTools::createZipFromArr($frontend.'/runtime/mmmhhhmm.zip', $ziplist,$frontend.'/');
+$cloud=Cloud::findOne(1);//->attributes;
+$modulesArr=['modules'=>['sds1'=>'company','sds2'=>'qrcode','sds3'=>'column'],'status'=>true];
+        $modulesJson=json_encode($modulesArr);
+        $modules=addslashes($modulesJson);
+        $cloud->modules=$modules;
+        $cloud->save();
+print_r($modulesArr);
+        print_r($modulesJson);
+  //      var_dump(json_encode($modules));
+        $cloud=Cloud::findOne(1);
+        print_r(json_decode(stripslashes($cloud->modules)));
 
-
-
-
-
-
-
-
+   //     var_dump($cloud['modules']);
+//$arr=json_decode($cloud['modules'],true);
+//var_dump($arr);
 
 
         //basename()
-   //     print_r($_SERVER['SERVER_ADDR']);
-     //   print_r($_SERVER["HTTP_HOST"]);
-       // print_r($_SERVER["SERVER_NAME"]);//域名为vcards.top 时输出www.vcards.top
+        print_r($_SERVER['SERVER_ADDR']);
+        print_r($_SERVER["HTTP_HOST"]);
+        print_r($_SERVER["SERVER_NAME"]);//域名为vcards.top 时输出www.vcards.top
 
   //$res=httpGet('http://www.vcards.top/index.php?r=cloud/index');
     //    $res=json_decode($res);

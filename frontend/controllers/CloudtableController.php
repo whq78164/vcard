@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Micropage;
 use yii\helpers\ArrayHelper;
+use frontend\models\Module;
 
 /**
  * CloudtableController implements the CRUD actions for Cloud model.
@@ -68,12 +69,23 @@ class CloudtableController extends Controller
         $mypage=Micropage::find()->where(['uid'=>$uid])->all();
         $listPage=ArrayHelper::map($mypage, 'id', 'page_title');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $modules=Module::find()->all();
+        $listModules=ArrayHelper::map($modules, 'modulename', 'module_label');
+
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->validate()){
+                $model->save();
+                $msg='保存成功！';
+            }else{
+               $msg=json_encode($model->errors);
+            }
+            Yii::$app->getSession()->setFlash('success', $msg);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'listPage'=> $listPage,
+                'listModules'=>$listModules,
             ]);
         }
     }
@@ -92,20 +104,42 @@ class CloudtableController extends Controller
         $mypage=Micropage::find()->where(['uid'=>$uid])->all();
         $listPage=ArrayHelper::map($mypage, 'id', 'page_title');
 
+        $modules=Module::find()->all();
+        $listModules=ArrayHelper::map($modules, 'modulename', 'module_label');
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'listPage'=> $listPage,
-            ]);
-        }
+if($model->load(Yii::$app->request->post())){
+
+
+    if ( $model->validate()) {
+        $modules=$_POST['modules'];
+        $modulesSave=['modules'=>$modules];
+        $modulesSave=addslashes(json_encode($modulesSave));
+        $model->modules=$modulesSave;
+
+        $model->save();
+        $msg='保存成功！';
+
+    }else{
+        $msg=json_encode($model->errors);
+    }
+    return $this->redirect(['update', 'id' => $model->id]);
+
+}else{
+        return $this->render('update', [
+            'model' => $model,
+            'listPage'=> $listPage,
+            'listModules'=>$listModules,
+        ]);
     }
 
+
+
+    }
+
+
     /**
-     * Deletes an existing Cloud model.
+     * Deletes an existing Cloud model......
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed

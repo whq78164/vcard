@@ -553,3 +553,36 @@ $this->insert('{{%usermodule}}',[
     'module_status'=>10,
 
 ]);
+
+
+
+
+
+
+
+
+
+
+
+$this->addColumn('{{%module}}', 'icon', Schema::TYPE_STRING." NOT NULL DEFAULT '"."fa fa-circle-o'");
+$this->addColumn('{{%module}}', 'mark', Schema::TYPE_STRING." NOT NULL DEFAULT '"."New'");
+$this->alterColumn('{{%module}}', 'markclass', Schema::TYPE_STRING." NOT NULL DEFAULT '"."label pull-right bg-green'");
+
+//$this->alterColumn('{{%sys}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.10');//更新字段类型
+//  $this->addColumn('{{%column}}', 'value', Schema::TYPE_STRING.' NOT NULL');
+// $this->insert('{{%module}}',['id'=>1, 'modulename'=>'company','module_label'=>'公司', 'module_des'=>'公司职员管理']);//id字段如不设置，则默认自增
+$this->addColumn('{{%sys}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.0');
+//$this->addColumn('{{%card_info}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
+//$this->addColumn('{{%card_info}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
+//$this->addColumn('{{%company}}', 'longitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
+//$this->addColumn('{{%company}}', 'latitude', Schema::TYPE_DOUBLE.'(10,6) NOT NULL');
+
+$this->alterColumn('{{%company_worker}}', 'qq', Schema::TYPE_STRING." NOT NULL DEFAULT '"."798904845'");
+
+$this->update('{{%sys}}', ['version'=>1.1], ['id'=>1]);
+echo '恭喜！系统已更新成功！版本v1.1';
+
+/////////////////v1.2
+$this->addColumn('{{%module}}', 'version', Schema::TYPE_FLOAT.' NOT NULL DEFAULT 1.10');//添加字段
+$this->update('{{%sys}}', ['version'=>1.2], ['id'=>1]);
+echo '恭喜！系统已更新成功！版本v1.2';

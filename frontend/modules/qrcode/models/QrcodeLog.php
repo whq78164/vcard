@@ -6,7 +6,7 @@ use Yii;
 
 /**
  * This is the model class for table "{{%anti_log}}".
- *
+ ******************99999999999999999
  * @property integer $id
  * @property integer $startid
  * @property integer $endid
